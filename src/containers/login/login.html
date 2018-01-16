@@ -1,0 +1,31 @@
+<ion-content class="login">
+  <ion-list class="login-list">
+
+    <ion-item class="login-input" [class.isFocus]="importBtnIsFocus">
+      <ion-label floating>WIF key or try use import -> </ion-label>
+      <ion-input type="text"></ion-input>
+    </ion-item>
+
+    <button class="login-import"
+            [class.isFocus]="importBtnIsFocus"
+            (click)="openImport()"
+            >
+      {{ importText }}
+    </button>
+
+
+    <ion-item class="pws-input">
+      <ion-label>Password</ion-label>
+      <ion-input type="password"></ion-input>
+    </ion-item>
+
+  </ion-list>
+
+  <div class="login-button">
+    <button ion-button full block>Sign In</button>
+  </div>
+
+  <div class="login-tip">
+    <a>Create account</a>
+  </div>
+</ion-content>

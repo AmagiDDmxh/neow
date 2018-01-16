@@ -1,0 +1,36 @@
+<ion-content class="card-background-page">
+  <ion-card class="card-info">
+    <img class="card-avatar" src="assets/imgs/avatars" alt="">
+    <div class="card-title">{{ user.name }}</div>
+    <div class="card-subtitle">{{ user.address | addressCollapse }}</div>
+  </ion-card>
+
+  <ion-card class="card-nav">
+    <button ion-button>
+      <span>管理钱包</span>
+    </button>
+    <button ion-button>
+      <span>联系人</span>
+    </button>
+    <button ion-button>
+      <span>交易记录</span>
+    </button>
+  </ion-card>
+
+  <ion-card class="card-features">
+    <ion-list>
+      <button ion-item icon-right>
+        最近一笔转入
+        <ion-icon md="ios-arrow-forward-outline" ios="none" item-end></ion-icon>
+      </button>
+      <button ion-item icon-right>
+        提取分红
+        <ion-icon md="ios-arrow-forward-outline" ios="none" item-end></ion-icon>
+      </button>
+      <button ion-item icon-right>
+        智能合约
+        <ion-icon md="ios-arrow-forward-outline" ios="none" item-end></ion-icon>
+      </button>
+    </ion-list>
+  </ion-card>
+</ion-content>
