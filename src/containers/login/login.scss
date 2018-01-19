@@ -1,68 +1,102 @@
 page-login {
-  ion-content .scroll-content {
-    margin-bottom: 67px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    padding-bottom: 0 !important;
-  }
-  ion-list.login-list {
-    position: relative;
-
-    ion-item.login-input {
-      width: 95%;
-      transition: all 0.2s ease-in-out;
-
-      &.isFocus {
-        transform: scale(0.3);
-      }
-
-      &.item-input-has-focus.input-has-focus + button.login-import{
-        width: 0;
-        opacity: 0;
-      }
-
-
-      .item-inner {
-
-      }
+    ion-content .scroll-content {
+        margin-bottom: 67px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        padding-bottom: 0 !important;
     }
-
-    ion-item.pws-input {
-      width: 95%;
+    .title {
+        position: absolute;
+        top: 20px;
     }
-  }
-
-  button.login-import {
-    position: absolute;
-    top: -1px;
-    right: 0;
-    border-radius: 0 50px 50px 0;
-    z-index: 20;
-    height: 55px;
-    background-color: #009cff;
-    color: #fff;
-    padding: 0 6px;
-    font-weight: bolder;
-    width: 60px;
-    transition: all 0.1s ease-in;
-    min-height: 4.4rem;
-
-    &:active, &:focus, &.isFocus {
-      width: 100%;
-      border-radius: 0;
-      background-color: #488aff !important;
+    ion-list.login-list {
+        position: relative;
+        width: 80%;
+        ion-item.login-input {
+            width: 95%;
+            transition: all 0.2s ease-in-out;
+            margin-bottom: 10px;
+            &.isFocus {
+                transform: scale(0.3);
+            }
+            &.item-input-has-focus.input-has-focus+button.login-import {
+                width: 0;
+                opacity: 0;
+            }
+            .item-inner {}
+            &.rounded {
+                width: 100%;
+                -moz-border-radius: 50px;
+                -webkit-border-radius: 50px;
+                border-radius: 50px;
+                border: 1px solid gray;
+            }
+        }
+        ion-item.pws-input {
+            width: 95%;
+        }
     }
-  }
-
-  .login-button {
-    width: 100%;
-  }
-
-  .login-tip {
-    position: absolute;
-    bottom: 20px;
-    cursor: pointer;
-  }
+    button.login-import {
+        position: absolute;
+        top: -1px;
+        right: 0;
+        border-radius: 50px;
+        z-index: 20;
+        height: 55px;
+        background-color: #009cff;
+        color: #fff;
+        padding: 0 6px;
+        font-weight: bolder;
+        width: 60px;
+        transition: all 0.1s ease-in;
+        min-height: 4.4rem;
+        margin: 1px;
+        &:active,
+        &:focus,
+        &.isFocus {
+            width: 100%;
+            border-radius: 50px;
+            background-color: #488aff !important;
+        }
+    }
+    button.login-wif {
+        position: absolute;
+        top: -1px;
+        right: 0;
+        border-radius: 50px;
+        z-index: 30;
+        height: 55px;
+        background-color: #00ff4c;
+        color: #fff;
+        padding: 0 6px;
+        font-weight: bolder;
+        width: 60px;
+        transition: all 0.1s ease-in;
+        min-height: 4.4rem;
+        margin: 1px;
+        &:active,
+        &:focus,
+        &.isFocus {
+            width: 100%;
+            border-radius: 50px;
+            background-color: #488aff !important;
+        }
+    }
+    .login-button {
+        margin-top: 40px;
+        width: 80%;
+        button {
+            border: 1px solid #009cff;
+        }
+    }
+    .login-tip {
+        position: absolute;
+        bottom: 20px;
+        cursor: pointer;
+        a {
+            color: gray;
+        }
+    }
 }

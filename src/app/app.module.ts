@@ -17,6 +17,7 @@ import { ApiProvider } from '../providers/api/api';
 import { LoginPage } from "../containers/login/login";
 import { FileChooser } from '@ionic-native/file-chooser';
 import { WalletProvider } from '../providers/wallet/wallet';
+import { DiscoverPage } from '../containers/discover/discover';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { WalletProvider } from '../providers/wallet/wallet';
     ProfilePage,
     LoginPage,
     NgModelStatus,
-    ExponentialStrengthPipe
+    ExponentialStrengthPipe,
+    DiscoverPage
   ],
   imports: [
     BrowserModule,
@@ -45,6 +47,7 @@ import { WalletProvider } from '../providers/wallet/wallet';
     OnboardingPage,
     ProfilePage,
     LoginPage,
+    DiscoverPage
   ],
   providers: [
     StatusBar,

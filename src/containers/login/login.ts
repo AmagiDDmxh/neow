@@ -19,8 +19,8 @@ import { FileChooser } from "@ionic-native/file-chooser";
 })
 export class LoginPage {
   importBtnIsFocus: boolean = false;
-  importFileName: string = 'import'
-
+  importFileName: string = 'import';
+  importText: string = "";
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -37,7 +37,7 @@ export class LoginPage {
   openImport () {
     this.importBtnIsFocus = true
     this.importFileName = 'Amaaosidmn.json'
-
+    this.importText = '导入钱包文件'
 
     this.fileChooser.open()
       .then(uri => {
@@ -50,7 +50,10 @@ export class LoginPage {
       })
 
   }
-
+  openWIF() {
+    this.importBtnIsFocus = false;
+    this.importText = ''
+  }
   showPrompt (msg: string) {
     let prompt = this.alertCtrl.create({
       title: msg
