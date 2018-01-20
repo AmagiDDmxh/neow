@@ -9,7 +9,7 @@ import { Injectable } from '@angular/core';
 */
 @Injectable()
 export class WalletProvider {
-
+  
   constructor(public http: HttpClient) {
     console.log('Hello WalletProvider Provider');
   }

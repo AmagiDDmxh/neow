@@ -17,7 +17,10 @@ import { ApiProvider } from '../providers/api/api';
 import { LoginPage } from "../containers/login/login";
 import { FileChooser } from '@ionic-native/file-chooser';
 import { WalletProvider } from '../providers/wallet/wallet';
-import { DiscoverPage } from '../containers/discover/discover';
+import { CreateWalletPage } from "../containers/create-wallet/create-wallet";
+import { DiscoverPage } from "../containers/discover/discover";
+import { ReactiveFormsModule } from "@angular/forms";
+import { BackupWalletPage } from "../containers/backup-wallet/backup-wallet";
 
 @NgModule({
   declarations: [
@@ -28,6 +31,9 @@ import { DiscoverPage } from '../containers/discover/discover';
     OnboardingPage,
     ProfilePage,
     LoginPage,
+    CreateWalletPage,
+    DiscoverPage,
+    BackupWalletPage,
     NgModelStatus,
     ExponentialStrengthPipe,
     DiscoverPage
@@ -36,6 +42,7 @@ import { DiscoverPage } from '../containers/discover/discover';
     BrowserModule,
     BrowserAnimationsModule,
     HttpClientModule,
+    ReactiveFormsModule,
     IonicModule.forRoot(MyApp)
   ],
   bootstrap: [IonicApp],
@@ -48,6 +55,9 @@ import { DiscoverPage } from '../containers/discover/discover';
     ProfilePage,
     LoginPage,
     DiscoverPage
+    CreateWalletPage,
+    DiscoverPage,
+    BackupWalletPage
   ],
   providers: [
     StatusBar,

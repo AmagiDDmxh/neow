@@ -4,13 +4,10 @@ import {
   NavParams
 } from 'ionic-angular';
 import { FileChooser } from "@ionic-native/file-chooser";
+import { CreateWalletPage } from '../create-wallet/create-wallet';
 
-/**
- * Generated class for the LoginPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
+import { wallet } from '@cityofzion/neon-js';
+
 
 @IonicPage()
 @Component({
@@ -18,6 +15,7 @@ import { FileChooser } from "@ionic-native/file-chooser";
   templateUrl: 'login.html',
 })
 export class LoginPage {
+  createWalletPage = CreateWalletPage
   importBtnIsFocus: boolean = false;
   importFileName: string = 'import';
   importText: string = "";
@@ -32,28 +30,33 @@ export class LoginPage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad LoginPage');
+    console.log(wallet)
   }
-
+  
   openImport () {
     this.importBtnIsFocus = true
     this.importFileName = 'Amaaosidmn.json'
     this.importText = '导入钱包文件'
 
-    this.fileChooser.open()
-      .then(uri => {
-        this.importBtnIsFocus = true
-        this.importFileName = 'Amaaosidmn.json'
-      })
-      .catch(e => {
-        // this.importBtnIsFocus = false
+    } else {
+      this.fileChooser.open()
+          .then(uri => {
+            this.importBtnIsFocus = true
+            this.importFileName = 'Amaaosidmn.json'
 
-      })
+          })
+          .catch(e => {
+            // this.importBtnIsFocus = false
 
+          })
+    }
   }
+  
   openWIF() {
     this.importBtnIsFocus = false;
     this.importText = ''
   }
+
   showPrompt (msg: string) {
     let prompt = this.alertCtrl.create({
       title: msg
