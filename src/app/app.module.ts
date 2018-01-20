@@ -35,7 +35,8 @@ import { BackupWalletPage } from "../containers/backup-wallet/backup-wallet";
     DiscoverPage,
     BackupWalletPage,
     NgModelStatus,
-    ExponentialStrengthPipe
+    ExponentialStrengthPipe,
+    DiscoverPage
   ],
   imports: [
     BrowserModule,
@@ -53,6 +54,7 @@ import { BackupWalletPage } from "../containers/backup-wallet/backup-wallet";
     OnboardingPage,
     ProfilePage,
     LoginPage,
+    DiscoverPage
     CreateWalletPage,
     DiscoverPage,
     BackupWalletPage

@@ -17,8 +17,8 @@ import { wallet } from '@cityofzion/neon-js';
 export class LoginPage {
   createWalletPage = CreateWalletPage
   importBtnIsFocus: boolean = false;
-  importFileName: string = 'import'
-
+  importFileName: string = 'import';
+  importText: string = "";
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -32,24 +32,11 @@ export class LoginPage {
     console.log('ionViewDidLoad LoginPage');
     console.log(wallet)
   }
-
-  openImport (file) {
-
-    if (window.navigator && file) {
-      var reader = new FileReader();
-      let vm = this;
-
-      reader.onload = function () {
-        try {
-          console.dir(this.result)
-          vm.importBtnIsFocus = true
-          vm.importFileName = file.name
-        } catch (err) {
-          console.dir(err)
-        }
-      }
-
-      reader.readAsText(file)
+  
+  openImport () {
+    this.importBtnIsFocus = true
+    this.importFileName = 'Amaaosidmn.json'
+    this.importText = '导入钱包文件'
 
     } else {
       this.fileChooser.open()
@@ -63,6 +50,11 @@ export class LoginPage {
 
           })
     }
+  }
+  
+  openWIF() {
+    this.importBtnIsFocus = false;
+    this.importText = ''
   }
 
   showPrompt (msg: string) {
