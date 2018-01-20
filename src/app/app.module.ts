@@ -54,9 +54,8 @@ import { BackupWalletPage } from "../containers/backup-wallet/backup-wallet";
     OnboardingPage,
     ProfilePage,
     LoginPage,
-    DiscoverPage
-    CreateWalletPage,
     DiscoverPage,
+    CreateWalletPage,
     BackupWalletPage
   ],
   providers: [

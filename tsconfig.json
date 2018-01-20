@@ -25,7 +25,9 @@
   "exclude": [
     "node_modules",
     "src/**/*.spec.ts",
-    "src/**/__tests__/*.ts"
+    "src/**/__tests__/*.ts",
+    "src/libs/*",
+    "src/libs/**/*.ts"
   ],
   "compileOnSave": false,
   "atom": {

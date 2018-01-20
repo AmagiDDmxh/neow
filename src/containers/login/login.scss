@@ -6,6 +6,7 @@ page-login {
         align-items: center;
         flex-direction: column;
         padding-bottom: 0 !important;
+        overflow-y: hidden;
     }
     .title {
         position: absolute;
@@ -21,17 +22,18 @@ page-login {
             &.isFocus {
                 transform: scale(0.3);
             }
-            &.item-input-has-focus.input-has-focus+button.login-import {
-                width: 0;
+            &.item-input-has-focus.input-has-focus + button.login-import {
                 opacity: 0;
             }
-            .item-inner {}
+            .item-inner {
+                border: none;
+            }
             &.rounded {
                 width: 100%;
                 -moz-border-radius: 50px;
                 -webkit-border-radius: 50px;
                 border-radius: 50px;
-                border: 1px solid gray;
+                border: 1px solid rgb(222, 222, 222);
             }
         }
         ion-item.pws-input {
@@ -40,55 +42,62 @@ page-login {
     }
     button.login-import {
         position: absolute;
-        top: -1px;
-        right: 0;
-        border-radius: 50px;
+        top: 2px;
+        right: 3px;
+        font-size: .2em;
         z-index: 20;
-        height: 55px;
-        background-color: #009cff;
-        color: #fff;
         padding: 0 6px;
-        font-weight: bolder;
-        width: 60px;
-        transition: all 0.1s ease-in;
-        min-height: 4.4rem;
-        margin: 1px;
+        height: 50px;
+        width: 50px;
+        color: #fff;
+        background: linear-gradient(270deg, rgb(47, 177, 213), rgb(47, 177, 213) 6%, rgb(50, 118, 217));
+        box-shadow: rgba(0, 147, 211, 0.5) -3px 0 4px 0px;
+        border-radius: 50px;
+
+        transition: all 0.2s ease-in-out;
+
         &:active,
         &:focus,
         &.isFocus {
+            top: 0;
+            right: 0;
+            height: 55px;
             width: 100%;
             border-radius: 50px;
-            background-color: #488aff !important;
+            box-shadow: none;
+            background: linear-gradient(270deg, rgb(47, 177, 213), rgb(50, 118, 217));
         }
     }
     button.login-wif {
         position: absolute;
-        top: -1px;
-        right: 0;
-        border-radius: 50px;
+        top: 2px;
+        right: 3px;
         z-index: 30;
-        height: 55px;
-        background-color: #00ff4c;
-        color: #fff;
-        padding: 0 6px;
+        background-color: #fff;
+        box-shadow: rgba(27, 119, 179, 0.95) -3px 0 4px 0px;
         font-weight: bolder;
-        width: 60px;
-        transition: all 0.1s ease-in;
-        min-height: 4.4rem;
-        margin: 1px;
+
+        height: 50px;
+        width: 50px;
+        border-radius: 50px;
+
+        transition: all 0.2s ease-in;
+
         &:active,
         &:focus,
         &.isFocus {
-            width: 100%;
-            border-radius: 50px;
             background-color: #488aff !important;
         }
     }
     .login-button {
-        margin-top: 40px;
         width: 80%;
+
+        margin-top: 30px;
         button {
-            border: 1px solid #009cff;
+            border: 1px solid #448aff;
+            &:hover:not(.disable-hover) {
+                background: none;
+            }
         }
     }
     .login-tip {

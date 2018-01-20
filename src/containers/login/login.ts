@@ -6,7 +6,7 @@ import {
 import { FileChooser } from "@ionic-native/file-chooser";
 import { CreateWalletPage } from '../create-wallet/create-wallet';
 
-import { wallet } from '@cityofzion/neon-js';
+// import { wallet } from '@cityofzion/neon-js';
 
 
 @IonicPage()
@@ -18,7 +18,9 @@ export class LoginPage {
   createWalletPage = CreateWalletPage
   importBtnIsFocus: boolean = false;
   importFileName: string = 'import';
-  importText: string = "";
+  importText: string = "导入";
+  isWIF: boolean = true;
+
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -30,31 +32,18 @@ export class LoginPage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad LoginPage');
-    console.log(wallet)
+    // console.log(wallet)
   }
   
   openImport () {
-    this.importBtnIsFocus = true
-    this.importFileName = 'Amaaosidmn.json'
+    this.isWIF = false
+
     this.importText = '导入钱包文件'
-
-    } else {
-      this.fileChooser.open()
-          .then(uri => {
-            this.importBtnIsFocus = true
-            this.importFileName = 'Amaaosidmn.json'
-
-          })
-          .catch(e => {
-            // this.importBtnIsFocus = false
-
-          })
-    }
   }
   
   openWIF() {
-    this.importBtnIsFocus = false;
-    this.importText = ''
+    this.isWIF = true
+    this.importText = '导入'
   }
 
   showPrompt (msg: string) {

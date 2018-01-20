@@ -10,9 +10,10 @@ page-create-wallet {
       flex-direction: row;
       flex-wrap: wrap;
       padding-bottom: 0 !important;
+      overflow-y: hidden;
 
       form {
-        width: 100%;
+        width: 80%;
       }
 
       .cw-tip {
