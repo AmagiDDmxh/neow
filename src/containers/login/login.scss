@@ -18,7 +18,7 @@ page-login {
         transform: scale(0.3);
       }
 
-      &.item-input-has-focus.input-has-focus + button.login-import{
+      &.item-input-has-focus.input-has-focus + .login-import{
         width: 0;
         opacity: 0;
       }
@@ -34,25 +34,35 @@ page-login {
     }
   }
 
-  button.login-import {
-    position: absolute;
-    top: -1px;
-    right: 0;
-    border-radius: 0 50px 50px 0;
-    z-index: 20;
-    height: 55px;
-    background-color: #009cff;
-    color: #fff;
-    padding: 0 6px;
-    font-weight: bolder;
-    width: 60px;
+  .login-import {
     transition: all 0.1s ease-in;
-    min-height: 4.4rem;
 
-    &:active, &:focus, &.isFocus {
-      width: 100%;
-      border-radius: 0;
-      background-color: #488aff !important;
+    label {
+      position: absolute;
+      top: -1px;
+      right: 0;
+      border-radius: 0 50px 50px 0;
+      z-index: 20;
+      height: 55px;
+      background-color: #009cff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #fff;
+      padding: 0 6px;
+      font-weight: bolder;
+      width: 60px;
+      transition: all 0.1s ease-in;
+      min-height: 4.4rem;
+
+      &:active, &:focus, &.isFocus {
+        width: 100%;
+        border-radius: 0;
+        background-color: #488aff !important;
+      }
+    }
+    input[type="file"] {
+      display: none;
     }
   }
 

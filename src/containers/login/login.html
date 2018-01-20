@@ -6,26 +6,29 @@
       <ion-input type="text"></ion-input>
     </ion-item>
 
-    <button class="login-import"
-            [class.isFocus]="importBtnIsFocus"
-            (click)="openImport()"
-            >
-      {{ importText }}
-    </button>
+    <div class="login-import">
+      <label [class.isFocus]="importBtnIsFocus">
+        {{ importFileName }}
+        <input  type="file"
+                accept="application/json, .json"
+                (change)="openImport($event.target.files[0])"/>
+      </label>
+    </div>
+
 
 
     <ion-item class="pws-input">
-      <ion-label>Password</ion-label>
+      <ion-label floating>Password</ion-label>
       <ion-input type="password"></ion-input>
     </ion-item>
 
   </ion-list>
 
   <div class="login-button">
-    <button ion-button full block>Sign In</button>
+    <button ion-button full block>log In</button>
   </div>
 
-  <div class="login-tip">
-    <a>Create account</a>
+  <div class="login-tip" (click)="navCtrl.push(createWalletPage)">
+    <a>Don't have an account yet? Create one.</a>
   </div>
 </ion-content>

@@ -17,6 +17,10 @@ import { ApiProvider } from '../providers/api/api';
 import { LoginPage } from "../containers/login/login";
 import { FileChooser } from '@ionic-native/file-chooser';
 import { WalletProvider } from '../providers/wallet/wallet';
+import { CreateWalletPage } from "../containers/create-wallet/create-wallet";
+import { DiscoverPage } from "../containers/discover/discover";
+import { ReactiveFormsModule } from "@angular/forms";
+import { BackupWalletPage } from "../containers/backup-wallet/backup-wallet";
 
 @NgModule({
   declarations: [
@@ -27,6 +31,9 @@ import { WalletProvider } from '../providers/wallet/wallet';
     OnboardingPage,
     ProfilePage,
     LoginPage,
+    CreateWalletPage,
+    DiscoverPage,
+    BackupWalletPage,
     NgModelStatus,
     ExponentialStrengthPipe
   ],
@@ -34,6 +41,7 @@ import { WalletProvider } from '../providers/wallet/wallet';
     BrowserModule,
     BrowserAnimationsModule,
     HttpClientModule,
+    ReactiveFormsModule,
     IonicModule.forRoot(MyApp)
   ],
   bootstrap: [IonicApp],
@@ -45,6 +53,9 @@ import { WalletProvider } from '../providers/wallet/wallet';
     OnboardingPage,
     ProfilePage,
     LoginPage,
+    CreateWalletPage,
+    DiscoverPage,
+    BackupWalletPage
   ],
   providers: [
     StatusBar,

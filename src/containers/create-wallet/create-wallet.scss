@@ -1,3 +1,29 @@
 page-create-wallet {
+  .cw {
+    text-align: center;
 
+
+    & .scroll-content{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: row;
+      flex-wrap: wrap;
+      padding-bottom: 0 !important;
+
+      form {
+        width: 100%;
+      }
+
+      .cw-tip {
+        a {
+          cursor: pointer;
+        }
+      }
+    }
+
+    .cw-button {
+      width: 100%;
+    }
+  }
 }

@@ -4,13 +4,10 @@ import {
   NavParams
 } from 'ionic-angular';
 import { FileChooser } from "@ionic-native/file-chooser";
+import { CreateWalletPage } from '../create-wallet/create-wallet';
 
-/**
- * Generated class for the LoginPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
+import { wallet } from '@cityofzion/neon-js';
+
 
 @IonicPage()
 @Component({
@@ -18,6 +15,7 @@ import { FileChooser } from "@ionic-native/file-chooser";
   templateUrl: 'login.html',
 })
 export class LoginPage {
+  createWalletPage = CreateWalletPage
   importBtnIsFocus: boolean = false;
   importFileName: string = 'import'
 
@@ -32,23 +30,39 @@ export class LoginPage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad LoginPage');
+    console.log(wallet)
   }
 
-  openImport () {
-    this.importBtnIsFocus = true
-    this.importFileName = 'Amaaosidmn.json'
+  openImport (file) {
 
+    if (window.navigator && file) {
+      var reader = new FileReader();
+      let vm = this;
 
-    this.fileChooser.open()
-      .then(uri => {
-        this.importBtnIsFocus = true
-        this.importFileName = 'Amaaosidmn.json'
-      })
-      .catch(e => {
-        // this.importBtnIsFocus = false
+      reader.onload = function () {
+        try {
+          console.dir(this.result)
+          vm.importBtnIsFocus = true
+          vm.importFileName = file.name
+        } catch (err) {
+          console.dir(err)
+        }
+      }
 
-      })
+      reader.readAsText(file)
 
+    } else {
+      this.fileChooser.open()
+          .then(uri => {
+            this.importBtnIsFocus = true
+            this.importFileName = 'Amaaosidmn.json'
+
+          })
+          .catch(e => {
+            // this.importBtnIsFocus = false
+
+          })
+    }
   }
 
   showPrompt (msg: string) {

@@ -8,6 +8,9 @@
       "dom",
       "es2015"
     ],
+    "paths": {
+      "@neo/*": ["./src/libs/neo-ts/neo"]
+    },
     "module": "es2015",
     "moduleResolution": "node",
     "sourceMap": true,
