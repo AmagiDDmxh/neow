@@ -14,6 +14,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
   templateUrl: 'discover.html',
 })
 export class DiscoverPage {
+  user: object;
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
   }
