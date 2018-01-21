@@ -1,0 +1,11 @@
+button.otcgo-button {
+  .colour {
+    background: linear-gradient(270deg, rgb(47, 177, 213), rgb(47, 177, 213) 6%, rgb(50, 118, 217));
+  }
+
+  &.rounded {
+    border-radius: 30px;
+  }
+}
+
+button.otcgo-button

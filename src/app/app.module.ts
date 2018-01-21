@@ -16,7 +16,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { ApiProvider } from '../providers/api/api';
 import { LoginPage } from "../containers/login/login";
 import { FileChooser } from '@ionic-native/file-chooser';
-import { WalletProvider } from '../providers/wallet/wallet';
+import { WalletProvider } from '../providers/wallet.provider';
 import { CreateWalletPage } from "../containers/create-wallet/create-wallet";
 import { DiscoverPage } from "../containers/discover/discover";
 import { ReactiveFormsModule } from "@angular/forms";

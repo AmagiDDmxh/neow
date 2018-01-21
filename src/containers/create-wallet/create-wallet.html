@@ -6,43 +6,45 @@
 -->
 <ion-header>
 
-  <ion-navbar>
-    <ion-title>Create Wallet</ion-title>
-  </ion-navbar>
+	<ion-navbar>
+		<ion-title>Create Wallet</ion-title>
+	</ion-navbar>
 
 </ion-header>
 
 
-<ion-content class="cw">
-  <!-- CW stand for create-wallet -->
-  <form [formGroup]="walletForm" class="cw" (submit)="createWallet()">
+<ion-content class="cw" padding>
+	<!-- CW stand for create-wallet -->
+	<ion-item class="cw-name">
+		<ion-label floating>Wallet name</ion-label>
+		<ion-input required type="text" [(ngModel)]="name"></ion-input>
+	</ion-item>
 
-    <ion-item class="cw-name">
-      <ion-label floating>Wallet name</ion-label>
-      <ion-input required type="text" formControlName="name"></ion-input>
-    </ion-item>
+	<ion-item class="cw-wif">
+		<ion-label floating>[optional Wif key]</ion-label>
+		<ion-input type="text" [(ngModel)]="wif"></ion-input>
+	</ion-item>
 
-    <ion-item class="cw-wif">
-      <ion-label floating>[optional Wif key]</ion-label>
-      <ion-input type="text" formControlName="wif"></ion-input>
-    </ion-item>
+	<ion-item class="cw-pwd">
+		<ion-label floating>Password</ion-label>
+		<ion-input required type="password" [(ngModel)]="passphrase1"></ion-input>
+	</ion-item>
 
-    <ion-item class="cw-pwd">
-      <ion-label floating>Password</ion-label>
-      <ion-input required type="password" formControlName="passphrase1"></ion-input>
-    </ion-item>
+	<ion-item class="cw-pwd">
+		<ion-label floating>Password Confirm</ion-label>
+		<ion-input required type="password" [(ngModel)]="passphrase2"></ion-input>
+	</ion-item>
 
-    <ion-item class="cw-pwd">
-      <ion-label floating>Password Confirm</ion-label>
-      <ion-input required type="password" formControlName="passphrase2"></ion-input>
-    </ion-item>
+	<ion-item class="cw-protocol">
+		<ion-label>Agree with OTCGO protocol</ion-label>
+		<ion-checkbox color="blue" [(ngModel)]="protocolAgreement"></ion-checkbox>
+	</ion-item>
 
-    <div class="cw-button">
-      <button ion-button type="submit" full block [disabled]="disabledButton">Create Wallet</button>
-    </div>
-  </form>
+	<div class="cw-button">
+		<button ion-button type="submit" full block [disabled]="disabledButton" (click)="createWallet()">Create Wallet</button>
+	</div>
 
-  <div class="cw-tip" (click)="navCtrl.push(loginPage)">
-    <a>Already have an account? click here to login</a>
-  </div>
+	<div class="cw-tip" (click)="navCtrl.push(loginPage)">
+		<a>Already have an account? click here to login</a>
+	</div>
 </ion-content>

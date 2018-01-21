@@ -19,10 +19,12 @@ page-login {
             width: 95%;
             transition: all 0.2s ease-in-out;
             margin-bottom: 10px;
-            &.isFocus {
-                transform: scale(0.3);
-            }
+
             &.item-input-has-focus.input-has-focus + button.login-import {
+                opacity: 0;
+            }
+
+            &.ng-dirty.ng-valid + button.login-import {
                 opacity: 0;
             }
             .item-inner {
@@ -58,7 +60,7 @@ page-login {
 
         &:active,
         &:focus,
-        &.isFocus {
+        &.is-active {
             top: 0;
             right: 0;
             height: 55px;
@@ -68,7 +70,7 @@ page-login {
             background: linear-gradient(270deg, rgb(47, 177, 213), rgb(50, 118, 217));
         }
     }
-    button.login-wif {
+    button.login-encryptedKey-switcher {
         position: absolute;
         top: 2px;
         right: 3px;
@@ -85,7 +87,7 @@ page-login {
 
         &:active,
         &:focus,
-        &.isFocus {
+        &.is-active {
             background-color: #488aff !important;
         }
     }
