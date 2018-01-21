@@ -43,7 +43,9 @@ import { BackupWalletPage } from "../containers/backup-wallet/backup-wallet";
     BrowserAnimationsModule,
     HttpClientModule,
     ReactiveFormsModule,
-    IonicModule.forRoot(MyApp)
+    IonicModule.forRoot(MyApp, {
+      tabsHideOnSubPages: 'true'         //隐藏全部子页面tabs
+    })
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -54,7 +56,7 @@ import { BackupWalletPage } from "../containers/backup-wallet/backup-wallet";
     OnboardingPage,
     ProfilePage,
     LoginPage,
-    DiscoverPage
+    DiscoverPage,
     CreateWalletPage,
     DiscoverPage,
     BackupWalletPage

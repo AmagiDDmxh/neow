@@ -30,7 +30,6 @@ export class LoginPage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad LoginPage');
-    console.log(wallet)
   }
   
   openImport () {
@@ -38,7 +37,6 @@ export class LoginPage {
     this.importFileName = 'Amaaosidmn.json'
     this.importText = '导入钱包文件'
 
-    } else {
       this.fileChooser.open()
           .then(uri => {
             this.importBtnIsFocus = true
@@ -49,7 +47,6 @@ export class LoginPage {
             // this.importBtnIsFocus = false
 
           })
-    }
   }
   
   openWIF() {
