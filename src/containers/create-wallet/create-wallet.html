@@ -16,23 +16,19 @@
 <ion-content class="cw" padding>
 	<!-- CW stand for create-wallet -->
 	<ion-item class="cw-name">
-		<ion-label floating>Wallet name</ion-label>
-		<ion-input required type="text" [(ngModel)]="name"></ion-input>
+		<ion-input placeholder="Wallet name" required type="text" [(ngModel)]="name"></ion-input>
 	</ion-item>
 
 	<ion-item class="cw-wif">
-		<ion-label floating>[optional Wif key]</ion-label>
-		<ion-input type="text" [(ngModel)]="wif"></ion-input>
+		<ion-input placeholder="[optional WIF key]" type="text" [(ngModel)]="wif"></ion-input>
 	</ion-item>
 
 	<ion-item class="cw-pwd">
-		<ion-label floating>Password</ion-label>
-		<ion-input required type="password" [(ngModel)]="passphrase1"></ion-input>
+		<ion-input placeholder="Password" required type="password" [(ngModel)]="passphrase1"></ion-input>
 	</ion-item>
 
 	<ion-item class="cw-pwd">
-		<ion-label floating>Password Confirm</ion-label>
-		<ion-input required type="password" [(ngModel)]="passphrase2"></ion-input>
+		<ion-input placeholder="Password Confirm" required type="password" [(ngModel)]="passphrase2"></ion-input>
 	</ion-item>
 
 	<ion-item class="cw-protocol">
@@ -41,10 +37,12 @@
 	</ion-item>
 
 	<div class="cw-button">
-		<button ion-button type="submit" full block [disabled]="disabledButton" (click)="createWallet()">Create Wallet</button>
+		<button ion-button round type="submit" full block [disabled]="disabledButton" (click)="createWallet()">Create Wallet</button>
 	</div>
 
-	<div class="cw-tip" (click)="navCtrl.push(loginPage)">
-		<a>Already have an account? click here to login</a>
+	<div class="cw-button-white">
+		<button ion-button round type="submit" full block clear (click)="null">Have a wallet? Login</button>
 	</div>
+
+
 </ion-content>

@@ -4,7 +4,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 @Pipe({name: 'addressCollapse'})
 export class ExponentialStrengthPipe implements PipeTransform {
   transform (value: string) {
-    return value.substr(0, 14) + '...' + value.substr(30, 34)
+    return value.substr(0, value.length / 3) + '...' + value.substr(value.length / 3 + value.length / 3, value.length / 3)
   }
 }
 

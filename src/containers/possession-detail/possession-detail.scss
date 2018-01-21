@@ -1,0 +1,56 @@
+page-possession-detail {
+  ion-header.otcgo-header {
+    & * {
+      color: white;
+    }
+
+    .toolbar-background {
+      background: linear-gradient(0deg, #2a72da, #247bda) !important;
+      border: none;
+    }
+
+
+  }
+
+  ion-content.possession-detail-content {
+    & > * {
+      overflow-y: hidden;
+    }
+
+    ion-card.possession-data-card {
+      background: linear-gradient(0deg, rgb(47, 177, 213), #2a72da);
+
+      border-radius: 0;
+
+      position: absolute;
+      top: 0;
+      left: 0;
+
+      height: 300px;
+      width: 100%;
+      margin: 0;
+
+      text-align: center;
+      padding-top: 60px;
+      box-shadow: none;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      color: white;
+
+      .possession-data-amount {
+        position: absolute;
+        top: 0;
+
+        font-size: 4em;
+        text-shadow: 1px 4px 3px rgba(0, 0, 0, 0.3);
+      }
+      .possession-data-approximation {
+        position: absolute;
+        top: 70px;
+      }
+    }
+  }
+}

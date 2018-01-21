@@ -11,7 +11,7 @@ export class WalletProvider {
     console.log()
   }
 
-  setAccount (param: { key }) {
+  setAccount (param: string) {
 
   }
 

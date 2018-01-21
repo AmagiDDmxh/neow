@@ -1,0 +1,17 @@
+.otcgo-header {
+  & ion-navbar.toolbar {
+    .toolbar-background {
+      background: none;
+      border: none;
+    }
+
+    .toolbar-title {
+      text-align: left;
+      padding-left: calc(50% - 44px);
+    }
+  }
+
+  &::after {
+    background: none;
+  }
+}

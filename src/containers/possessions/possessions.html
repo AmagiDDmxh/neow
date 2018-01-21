@@ -1,0 +1,35 @@
+<div id="custom-overlay" [style.display]="splash ? 'flex': 'none'">
+	<div class="flb">
+		<div class="Aligner-item Aligner-item--top"></div>
+		<img src="assets/imgs/logo--white.png">
+		<div class="Aligner-item Aligner-item--bottom"></div>
+	</div>
+</div>
+
+<!--<ion-header>
+  <ion-navbar>
+    <ion-title>Home</ion-title>
+  </ion-navbar>
+</ion-header>-->
+
+<ion-content class="possession-content">
+	<ion-card class="card-info">
+		<div class="card-avatar">
+			<img src="assets/imgs/possession-avatar.svg" alt="">
+		</div>
+		<div class="card-title">{{ address | addressCollapse }}</div>
+	</ion-card>
+
+	<ion-card class="card-list" *ngFor="let balance of balances">
+
+		<ion-item [navPush]="possessionDetailPage" [navParams]="{ name: balance.asset, amount: balance.amount }">
+			<ion-icon name='logo-bitcoin' item-start></ion-icon>
+			{{ balance.asset }}
+			<ion-note item-end>
+				{{ balance.amount }}
+			</ion-note>
+		</ion-item>
+
+	</ion-card>
+
+</ion-content>

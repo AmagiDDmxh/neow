@@ -9,43 +9,29 @@ import 'rxjs/add/operator/switchMap'
 import 'rxjs/add/operator/mapTo'
 import 'rxjs/add/operator/scan'
 import { ApiProvider } from "../../providers/api/api";
-import { NgModel } from "@angular/forms";
+import { PossessionDetailPage } from "../possession-detail/possession-detail";
 
-
-@Directive({
-  selector: '[ngModel]',
-  host: {
-    '[class.valid]': 'valid',
-    '[class.invalid]': 'invalid'
-  }
-})
-export class NgModelStatus {
-  constructor (public control: NgModel) {}
-  get valid () { return this.control.valid }
-  get invalid () { return this.control.invalid }
-}
 
 @Component({
-  selector: 'page-home',
-  templateUrl: 'home.html'
+  selector: 'page-possession',
+  templateUrl: 'possessions.html'
 })
-export class HomePage {
+export class PossessionPage {
   tabBarElement: any;
   splash: boolean = false;
   balances;
-  prop;
-  user: object;
+  possessionDetailPage = PossessionDetailPage
+  address =  'AYA8uKKccDvfBi6FGxRUDpL89f51CodztN'
 
 
   constructor(public navCtrl: NavController, private apiProvider: ApiProvider) {
     this.tabBarElement = document.querySelector('.tabbar')
-    this.user = {
-      address: 'AYA8uKKccDvfBi6FGxRUDpL89f51CodztN',
-      name: 'U name'
-    }
+
+
 
     apiProvider.getBalance('ANsvyS9q1n6SBDVSdB6uFwVeqT512YSAoW').subscribe(res => {
       this.balances = res['balance']
+      console.log(res)
     })
   }
 

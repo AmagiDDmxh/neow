@@ -5,9 +5,10 @@ import {
   NavParams
 } from 'ionic-angular';
 import { LoginPage } from '../login/login'
-import { wallet } from '@cityofzion/neon-js'
+
+// import { wallet } from '@cityofzion/neon-js'
 import { WalletProvider } from "../../providers/wallet.provider";
-import { HomePage } from "../home/home";
+
 
 
 @IonicPage()
@@ -53,15 +54,13 @@ export class CreateWalletPage {
     await i.present()
     setTimeout(async () => {
       try {
-        const account = new wallet.Account(this.wif || wallet.generatePrivateKey())
+        /*const account = new wallet.Account(this.wif || wallet.generatePrivateKey())
         const { WIF } = account
-        const encryptedWIF = wallet.encrypt(WIF, this.passphrase1)
+        const encryptedWIF = wallet.encrypt(WIF, this.passphrase1)*/
 
-        this.walletProvider.setAccount({
-          key: encryptedWIF
-        })
+        // this.walletProvider.setAccount()
 
-        this.walletProvider.downloadWallet()
+        // this.walletProvider.downloadWallet()
 
         await i.dismiss()
 
