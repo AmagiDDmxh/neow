@@ -47,7 +47,8 @@ export class CreateWalletPage {
   ionViewDidLoad () {
     console.dir('ionViewDidLoad CreateWalletPage');
     this.file.writeFile(this.file.dataDirectory, 'iii.txt', 'Hello guys')
-    // this.promptMsg(this.file.dataDirectory)
+
+    this.promptMsg({ message: "The data directory:" + this.file.dataDirectory })
   }
 
   promptMsg(msg) {
@@ -108,10 +109,10 @@ export class CreateWalletPage {
   }
 
 
-  showPrompt ({ title, message }) {
-    const alert = this.alertCtrl.create({
-      title,
-      message
+  showPrompt ({ message }) {
+    const alert = this.toastCtrl.create({
+      message,
+      duration: 3000
     })
 
     return alert.present()

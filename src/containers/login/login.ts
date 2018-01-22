@@ -8,8 +8,6 @@ import { CreateWalletPage } from '../create-wallet/create-wallet';
 
 import { wallet } from '../../libs/neon-js';
 
-console.log("aaoisndioasndo", wallet)
-
 
 @IonicPage()
 @Component({
