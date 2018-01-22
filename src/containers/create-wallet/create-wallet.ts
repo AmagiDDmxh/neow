@@ -6,8 +6,9 @@ import {
 } from 'ionic-angular';
 import { LoginPage } from '../login/login'
 
-// import { wallet } from '@cityofzion/neon-js'
+import { wallet } from '@cityofzion/neon-js'
 import { WalletProvider } from "../../providers/wallet.provider";
+import { BackupWalletPage } from "../backup-wallet/backup-wallet";
 
 
 
@@ -18,6 +19,7 @@ import { WalletProvider } from "../../providers/wallet.provider";
 })
 export class CreateWalletPage {
   loginPage = LoginPage
+  backupWalletPage = BackupWalletPage
   private protocolAgreement: boolean = false
   private wif: string
   private name: string
@@ -35,10 +37,9 @@ export class CreateWalletPage {
   }
 
   get disabledButton () {
-    /*if (this.wif)
+    if (this.wif)
       return !this.passphrase1 || !this.passphrase2 || (this.passphrase1 !== this.passphrase2) || !this.name || !this.protocolAgreement || !this.wif
-    return !this.passphrase1 || !this.passphrase2 || (this.passphrase1 !== this.passphrase2) || !this.name || !this.protocolAgreement*/
-    return false
+    return !this.passphrase1 || !this.passphrase2 || (this.passphrase1 !== this.passphrase2) || !this.name || !this.protocolAgreement
   }
 
   ionViewDidLoad () {
@@ -46,26 +47,32 @@ export class CreateWalletPage {
   }
 
   async createWallet () {
-    /*if (this.passphrase1 && !this.validatePassphraseStrength(this.passphrase1)) return
+    if (this.passphrase1 && !this.validatePassphraseStrength(this.passphrase1)) return
     if (this.passphrase1 !== this.passphrase2) return
-    if (this.wif && !wallet.isWIF(this.wif)) return*/
+    if (this.wif && !wallet.isWIF(this.wif)) return
 
     let i = await this.createLoading('Just say something')
     await i.present()
     setTimeout(async () => {
       try {
-        /*const account = new wallet.Account(this.wif || wallet.generatePrivateKey())
-        const { WIF } = account
-        const encryptedWIF = wallet.encrypt(WIF, this.passphrase1)*/
+        const accountTemp = new wallet.Account(this.wif || wallet.generatePrivateKey())
+        accountTemp.label = this.name
+        const { WIF } = accountTemp
+        const encryptedWIF = wallet.encrypt(WIF, this.passphrase1)
+        const account = new wallet.Account(encryptedWIF)
+        account.isDefault = true
+        account.label = this.name
+        account.decrypt(this.passphrase1)
+        this.walletProvider.addAccount(account)
 
-        // this.walletProvider.setAccount()
-
-        // this.walletProvider.downloadWallet()
+        this.walletProvider.downloadWallet({
+          fileName: this.name + '.otcgo'
+        })
 
         await i.dismiss()
-
+        await this.navCtrl.push(this.backupWalletPage)
       } catch (e) {
-
+        console.log(e)
       }
     }, 500)
   }
@@ -73,13 +80,6 @@ export class CreateWalletPage {
   validatePassphraseStrength (passphrase) {
     return passphrase.length >= 4;
   }
-
-  isOldWallet (jsonStr) {
-    const check = ['address', 'publicKey', 'publicKeyCompressed', 'privateKeyEncrypted']
-    const WalletJSON = JSON.parse(jsonStr)
-    return check.every(i => WalletJSON.hasOwnProperty(i))
-  }
-
 
   createLoading (content) {
     const loading = this.loadingCtrl.create({
@@ -89,6 +89,7 @@ export class CreateWalletPage {
 
     return Promise.resolve(loading)
   }
+
 
   showPrompt ({ title, message }) {
     const alert = this.alertCtrl.create({

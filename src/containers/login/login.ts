@@ -53,6 +53,12 @@ export class LoginPage {
     this.importText = '导入'
   }
 
+  isOldWallet (jsonStr) {
+    const check = ['address', 'publicKey', 'publicKeyCompressed', 'privateKeyEncrypted']
+    const WalletJSON = JSON.parse(jsonStr)
+    return check.every(i => WalletJSON.hasOwnProperty(i))
+  }
+
   openWallet () {
     if (window.navigator) {
       let fileInput = document.querySelector(
@@ -77,7 +83,6 @@ export class LoginPage {
         }
       }
     }
-
   }
 
   readFile (result) {
