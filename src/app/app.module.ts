@@ -23,6 +23,8 @@ import { CreateWalletPage } from "../containers/create-wallet/create-wallet";
 import { BackupWalletPage } from "../containers/backup-wallet/backup-wallet";
 import { PossessionDetailPage } from "../containers/possession-detail/possession-detail";
 import { ReactiveFormsModule } from "@angular/forms";
+import { FileTransfer } from "@ionic-native/file-transfer";
+import { File } from '@ionic-native/file';
 
 @NgModule({
   declarations: [
@@ -65,9 +67,11 @@ import { ReactiveFormsModule } from "@angular/forms";
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    ApiProvider,
     FileChooser,
-    WalletProvider
+    File,
+    FileTransfer,
+    WalletProvider,
+    ApiProvider
   ]
 })
 export class AppModule {}

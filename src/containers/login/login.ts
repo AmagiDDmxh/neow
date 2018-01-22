@@ -6,7 +6,9 @@ import {
 // import { FileChooser } from "@ionic-native/file-chooser";
 import { CreateWalletPage } from '../create-wallet/create-wallet';
 
-import { wallet } from '@cityofzion/neon-js';
+import { wallet } from '@neon';
+
+console.log("aaoisndioasndo", wallet)
 
 
 @IonicPage()

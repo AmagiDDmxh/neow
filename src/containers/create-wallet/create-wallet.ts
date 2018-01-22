@@ -2,14 +2,14 @@ import { Component } from '@angular/core';
 import {
   AlertController,
   IonicPage, LoadingController, NavController,
-  NavParams
+  NavParams, ToastController
 } from 'ionic-angular';
 import { LoginPage } from '../login/login'
 
-import { wallet } from '@cityofzion/neon-js'
+import { wallet } from '@neon'
 import { WalletProvider } from "../../providers/wallet.provider";
 import { BackupWalletPage } from "../backup-wallet/backup-wallet";
-
+import { File } from '@ionic-native/file'
 
 
 @IonicPage()
@@ -31,7 +31,9 @@ export class CreateWalletPage {
     public navParams: NavParams,
     public loadingCtrl: LoadingController,
     public alertCtrl: AlertController,
-    private walletProvider: WalletProvider
+    private walletProvider: WalletProvider,
+    private file: File,
+    public toastCtrl: ToastController
   ) {
 
   }
@@ -43,7 +45,17 @@ export class CreateWalletPage {
   }
 
   ionViewDidLoad () {
-    console.log('ionViewDidLoad CreateWalletPage');
+    console.dir('ionViewDidLoad CreateWalletPage');
+    this.file.writeFile(this.file.dataDirectory, 'iii.txt', 'Hello guys')
+    // this.promptMsg(this.file.dataDirectory)
+  }
+
+  promptMsg(msg) {
+    const p = this.toastCtrl.create({
+      message: msg
+    })
+    p.present()
+
   }
 
   async createWallet () {
@@ -56,15 +68,20 @@ export class CreateWalletPage {
     setTimeout(async () => {
       try {
         const accountTemp = new wallet.Account(this.wif || wallet.generatePrivateKey())
-        accountTemp.label = this.name
-        const { WIF } = accountTemp
+        const { WIF, address } = accountTemp
         const encryptedWIF = wallet.encrypt(WIF, this.passphrase1)
-        const account = new wallet.Account(encryptedWIF)
-        account.isDefault = true
-        account.label = this.name
-        account.decrypt(this.passphrase1)
-        this.walletProvider.addAccount(account)
 
+        const account = new wallet.Account({
+          address,
+          label: this.name,
+          isDefault: true,
+          lock: false,
+          key: encryptedWIF,
+          contract: null,
+          extra: null
+        } as any)
+
+        this.walletProvider.addAccount(account)
         this.walletProvider.downloadWallet({
           fileName: this.name + '.otcgo'
         })

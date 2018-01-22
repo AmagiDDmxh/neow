@@ -1,22 +1,24 @@
 import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 
-import { wallet } from '@cityofzion/neon-js'
+import { wallet } from '@neon'
+import { FileTransfer, FileTransferObject } from "@ionic-native/file-transfer";
 
 @Injectable()
 export class WalletProvider {
-  scrypt = {
+  fileTransferObject: FileTransferObject
+  scrypt = {}
 
-  }
   private _wallet = new wallet.Wallet({
     name: 'otcgoWallet',
-    version: '0.2',
     scrypt: this.scrypt,
-    accounts: [], extra: null
-  })
+    accounts: [],
+    extra: null
+  } as any)
+  file: File
 
-  constructor(public http: HttpClient) {
-
+  constructor(public http: HttpClient, private fileTransfer: FileTransfer) {
+    this.fileTransferObject = this.fileTransfer.create()
   }
 
   addAccount (account) {
@@ -24,18 +26,16 @@ export class WalletProvider {
   }
 
   downloadWallet ({ fileName }) {
-    if (window.navigator) {
-      const file = new Blob([this._wallet.export()], { type: 'text/plant' })
-      const aLink = document.createElement('a')
-      aLink.href = window.URL.createObjectURL(file)
-      aLink.download = fileName
-      aLink.click()
 
-      console.log('[DOWNLOADED_FROM_BROWSER]:', file)
 
-      window.URL.revokeObjectURL(aLink.href)
-      return true
-    }
+    const file = new Blob([this._wallet.export()], { type: 'text/plant' })
+    const aLink = document.createElement('a')
+    aLink.href = window.URL.createObjectURL(file)
+    aLink.download = fileName
+
+
+    // window.URL.revokeObjectURL(aLink.href)
+    return true
 
   }
 
