@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 
-import { wallet } from '@neon'
+import { wallet } from '../libs/neon-js'
 import { FileTransfer, FileTransferObject } from "@ionic-native/file-transfer";
 
 @Injectable()

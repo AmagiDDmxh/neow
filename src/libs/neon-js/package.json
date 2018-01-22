@@ -1,0 +1,106 @@
+{
+  "_from": "@cityofzion/neon-js",
+  "_id": "@cityofzion/neon-js@3.1.0",
+  "_inBundle": false,
+  "_integrity": "sha512-hz7nuoErpE2Pnh71RN/7o65kAbJ/VhV58zU197INIYPdAAPpHCrYpW8CMBEABUTRON6SztLE3jKIMarmiGyY9w==",
+  "_location": "/@cityofzion/neon-js",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "@cityofzion/neon-js",
+    "name": "@cityofzion/neon-js",
+    "escapedName": "@cityofzion%2fneon-js",
+    "scope": "@cityofzion",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/@cityofzion/neon-js/-/neon-js-3.1.0.tgz",
+  "_shasum": "fe1c1799e4ade4768d704ec2c6ab3eed1418e49a",
+  "_spec": "@cityofzion/neon-js",
+  "_where": "D:\\awesomeAngular\\iweather",
+  "author": {
+    "name": "Ethan Fast",
+    "email": "ejhfast@gmail.com",
+    "url": "https://github.com/Ejhfast"
+  },
+  "browser": "lib/browser.js",
+  "bugs": {
+    "url": "https://github.com/CityOfZion/neon-js/issues"
+  },
+  "bundleDependencies": false,
+  "dependencies": {
+    "axios": "^0.16.2",
+    "bignumber.js": "^5.0.0",
+    "bs58": "^4.0.1",
+    "bs58check": "^2.1.1",
+    "crypto-js": "^3.1.9-1",
+    "elliptic": "^6.4.0",
+    "js-scrypt": "^0.2.0",
+    "loglevel": "^1.6.1",
+    "loglevel-plugin-prefix": "^0.7.2",
+    "secure-random": "^1.1.1",
+    "semver": "^5.4.1",
+    "wif": "^2.0.6"
+  },
+  "deprecated": false,
+  "description": "Javascript libraries for neo wallet using https://github.com/neochainio/neowallet/blob/master/js/wallet.js as the original source.",
+  "devDependencies": {
+    "axios-mock-adapter": "^1.9.0",
+    "babel-core": "^6.25.0",
+    "babel-loader": "^7.1.1",
+    "babel-plugin-transform-object-rest-spread": "^6.23.0",
+    "babel-preset-env": "^1.5.2",
+    "chai": "^4.0.2",
+    "chai-as-promised": "^7.1.0",
+    "clean-webpack-plugin": "^0.1.17",
+    "eslint": "^3.19.0",
+    "eslint-config-standard": "^10.2.1",
+    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-node": "^5.1.1",
+    "eslint-plugin-promise": "^3.5.0",
+    "eslint-plugin-standard": "^3.0.1",
+    "mocha": "^3.4.2",
+    "webpack": "^3.0.0",
+    "zopfli-webpack-plugin": "^0.1.0"
+  },
+  "files": [
+    "lib/",
+    "src/"
+  ],
+  "homepage": "https://github.com/CityOfZion/neon-js#readme",
+  "keywords": [
+    "neo",
+    "antshares",
+    "javascript",
+    "libraries"
+  ],
+  "license": "MIT",
+  "main": "lib/index.js",
+  "name": "@cityofzion/neon-js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CityOfZion/neon-js.git"
+  },
+  "scripts": {
+    "build:dev": "webpack --env.dev",
+    "build:docs": "cd docs && sphinx-versioning -g ../ -l ./conf.py build docs ../docs/_build/html",
+    "build:prod": "webpack --env.prod",
+    "deploy:docs": "cd docs && sphinx-versioning -g ../ -l ./conf.py push docs gh-pages .",
+    "lint": "eslint ./src/**/*.js ./tests/**/*.js",
+    "prepublishOnly": "npm run lint && npm run build:prod",
+    "rebuild": "rm -rf ./node_modules && npm install && ./node_modules/.bin/webpack",
+    "test": "mocha --compilers js:babel-core/register --require ./tests/common.js --recursive ./tests",
+    "test:integration": "mocha --compilers js:babel-core/register --require ./tests/common.js --recursive ./tests/integration",
+    "test:unit": "mocha --compilers js:babel-core/register --require ./tests/common.js --recursive ./tests/unit",
+    "watch:docs": "cd docs && sphinx-autobuild . _build/html",
+    "watch:test": "mocha --compilers js:babel-core/register --require ./tests/common.js --recursive ./tests/unit --bail --watch"
+  },
+  "types": "src/index.d.ts",
+  "version": "3.1.0"
+}

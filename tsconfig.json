@@ -18,7 +18,7 @@
     ],
     "baseUrl": ".",
     "paths": {
-      "@neon": ["src/libs/neon-js/src/index.js"],
+      "@neon": ["src/libs/neon-js/src/index.d.ts"],
       "@neon/*": ["src/libs/neon-js/src/*"]
     }
   },
