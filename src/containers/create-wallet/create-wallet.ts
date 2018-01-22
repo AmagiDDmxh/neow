@@ -46,17 +46,9 @@ export class CreateWalletPage {
 
   ionViewDidLoad () {
     console.dir('ionViewDidLoad CreateWalletPage');
-    this.file.writeFile(this.file.dataDirectory, 'iii.txt', 'Hello guys')
+    this.file.writeFile(this.file.dataDirectory, 'iii.txt', 'Hello guys', { replace: true })
 
-    this.promptMsg({ message: "The data directory:" + this.file.dataDirectory })
-  }
-
-  promptMsg(msg) {
-    const p = this.toastCtrl.create({
-      message: msg
-    })
-    p.present()
-
+    this.showPrompt({ message: "The data directory:" + this.file.dataDirectory })
   }
 
   async createWallet () {
