@@ -8,7 +8,7 @@ import { LoginPage } from '../login/login'
 
 import { wallet } from '../../libs/neon-js'
 import { WalletProvider } from "../../providers/wallet.provider";
-import { BackupWalletPage } from "../backup-wallet/backup-wallet";
+import { BackupWalletPage } from "./backup-wallet/backup-wallet";
 import { File } from '@ionic-native/file'
 
 
@@ -30,13 +30,10 @@ export class CreateWalletPage {
     public navCtrl: NavController,
     public navParams: NavParams,
     public loadingCtrl: LoadingController,
-    public alertCtrl: AlertController,
     private walletProvider: WalletProvider,
     private file: File,
     public toastCtrl: ToastController
-  ) {
-
-  }
+  ) { }
 
   get disabledButton () {
     if (this.wif)
@@ -46,9 +43,6 @@ export class CreateWalletPage {
 
   ionViewDidLoad () {
     console.dir('ionViewDidLoad CreateWalletPage');
-    this.file.writeFile(this.file.dataDirectory, 'iii.txt', 'Hello guys', { replace: true })
-
-    this.showPrompt({ message: "The data directory:" + this.file.dataDirectory })
   }
 
   async createWallet () {
@@ -75,9 +69,7 @@ export class CreateWalletPage {
         } as any)
 
         this.walletProvider.addAccount(account)
-        this.walletProvider.downloadWallet({
-          fileName: this.name + '.otcgo'
-        })
+        this.walletProvider.downloadWallet({ fileName: this.name + '.otcgo' })
 
         await i.dismiss()
         await this.navCtrl.push(this.backupWalletPage)
@@ -102,12 +94,12 @@ export class CreateWalletPage {
 
 
   showPrompt ({ message }) {
-    const alert = this.toastCtrl.create({
+    const toast = this.toastCtrl.create({
       message,
       duration: 3000
     })
 
-    return alert.present()
+    return toast.present()
   }
 
 }

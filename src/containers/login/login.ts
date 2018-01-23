@@ -3,10 +3,10 @@ import {
   AlertController, IonicPage, NavController,
   NavParams
 } from 'ionic-angular';
-// import { FileChooser } from "@ionic-native/file-chooser";
 import { CreateWalletPage } from '../create-wallet/create-wallet';
 
 import { wallet } from '../../libs/neon-js';
+import { WalletProvider } from "../../providers/wallet.provider";
 
 
 @IonicPage()
@@ -22,11 +22,10 @@ export class LoginPage {
   encKey: string
   passphrase: string
 
-
   constructor (
     public navCtrl: NavController,
     public navParams: NavParams,
-    // private fileChooser: FileChooser,
+    private walletProvider: WalletProvider,
     public alertCtrl: AlertController
   ) {
 
@@ -70,23 +69,20 @@ export class LoginPage {
   fileChange (file) {
     if (file) {
       this.importText = file.name.slice()
-      this._file = file as File
-
       const reader = new FileReader()
       const ng = this
 
       reader.onload = function () {
         try {
-          ng.readFile(JSON.parse(this.result))
-        } catch (e) {
+          ng.walletProvider.login(this.result)
 
+        } catch (e) {
+          console.log(e)
         }
       }
-    }
-  }
 
-  readFile (result) {
-    console.log(result)
+      reader.readAsText(file)
+    }
   }
 
   showPrompt (msg: string) {

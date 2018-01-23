@@ -1,0 +1,1 @@
+export const OLD_WALLET_CHECK_LIST = ['address', 'privateKeyEncrypted', 'publicKey', 'publicKeyCompressed']

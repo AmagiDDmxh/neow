@@ -167,6 +167,7 @@ export class Wallet {
   scrypt: WalletScryptParams
   accounts: Account[]
   extra: object
+  version
 
   constructor (file: WalletFile)
 

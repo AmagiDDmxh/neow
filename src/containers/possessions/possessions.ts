@@ -1,15 +1,8 @@
 import { Component, Directive } from '@angular/core';
-import { NavController } from 'ionic-angular';
-import { Subject } from "rxjs/Subject";
-import { Subscription } from "rxjs/Subscription";
-import { timer } from "rxjs/observable/timer";
-import 'rxjs/add/operator/takeWhile'
-import 'rxjs/add/operator/startWith'
-import 'rxjs/add/operator/switchMap'
-import 'rxjs/add/operator/mapTo'
-import 'rxjs/add/operator/scan'
+import { NavController, ToastController } from 'ionic-angular';
 import { ApiProvider } from "../../providers/api/api";
-import { PossessionDetailPage } from "../possession-detail/possession-detail";
+import { PossessionDetailPage } from "./possession-detail/possession-detail";
+import { File } from "@ionic-native/file";
 
 
 @Component({
@@ -24,14 +17,27 @@ export class PossessionPage {
   address =  'AYA8uKKccDvfBi6FGxRUDpL89f51CodztN'
 
 
-  constructor(public navCtrl: NavController, private apiProvider: ApiProvider) {
+  constructor (
+    public navCtrl: NavController,
+    private apiProvider: ApiProvider,
+    private file: File,
+    private toastCtrl: ToastController
+  ) {
     this.tabBarElement = document.querySelector('.tabbar')
 
+    const externalDataDirectory = this.file.externalDataDirectory
+    this.file
+        .writeFile(externalDataDirectory, 'iii.txt', 'Hello guys')
+        .then(i => {
+          return this.showMsg(i)
+        })
+        .then(() => {
+          this.showMsg("Success!")
+        })
 
 
     apiProvider.getBalance('ANsvyS9q1n6SBDVSdB6uFwVeqT512YSAoW').subscribe(res => {
       this.balances = res['balance']
-      console.log(res)
     })
   }
 
@@ -41,5 +47,14 @@ export class PossessionPage {
       this.splash = false
       this.tabBarElement.style.display = 'flex';
     }, 3000);*/
+  }
+
+  showMsg (message) {
+    const toast = this.toastCtrl.create({
+      message,
+      duration: 2000
+    })
+
+    return toast.present()
   }
 }

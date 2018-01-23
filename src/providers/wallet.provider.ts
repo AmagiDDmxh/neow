@@ -3,6 +3,9 @@ import { Injectable } from '@angular/core'
 
 import { wallet } from '../libs/neon-js'
 import { FileTransfer, FileTransferObject } from "@ionic-native/file-transfer";
+import { File } from '@ionic-native/file';
+import { OLD_WALLET_CHECK_LIST } from "./wallet.consts";
+
 
 @Injectable()
 export class WalletProvider {
@@ -15,9 +18,8 @@ export class WalletProvider {
     accounts: [],
     extra: null
   } as any)
-  file: File
 
-  constructor(public http: HttpClient, private fileTransfer: FileTransfer) {
+  constructor(public http: HttpClient, private fileTransfer: FileTransfer, private file: File) {
     this.fileTransferObject = this.fileTransfer.create()
   }
 
@@ -26,12 +28,15 @@ export class WalletProvider {
   }
 
   downloadWallet ({ fileName }) {
+    const dataDirectory = this.file.dataDirectory
+    this.file.writeFile(dataDirectory, fileName, this._wallet.export(), { replace: true })
 
 
-    const file = new Blob([this._wallet.export()], { type: 'text/plant' })
+
+    /*const file = new Blob([this._wallet.export()], { type: 'text/plant' })
     const aLink = document.createElement('a')
     aLink.href = window.URL.createObjectURL(file)
-    aLink.download = fileName
+    aLink.download = fileName*/
 
 
     // window.URL.revokeObjectURL(aLink.href)
@@ -39,5 +44,21 @@ export class WalletProvider {
 
   }
 
+
+  login (fileStr: string) {
+    const waJSON = JSON.parse(fileStr)
+    if (this.isOldWallet(waJSON))
+
+      this._wallet = wallet.Wallet.import()
+  }
+
+  upgradeOldWallet (waJSON) {
+
+  }
+
+  isOldWallet (items) {
+
+    return OLD_WALLET_CHECK_LIST.every(i => items.hasOwnProperty(i))
+  }
 
 }

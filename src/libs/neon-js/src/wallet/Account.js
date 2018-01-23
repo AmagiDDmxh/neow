@@ -2,6 +2,7 @@ import * as core from './core'
 import { isPrivateKey, isPublicKey, isWIF, isAddress, isNEP2 } from './verify'
 import { encrypt, decrypt } from './nep2'
 import util from 'util'
+import { DEFAULT_ACCOUNT_CONTRACT } from '../consts'
 
 /**
  * @class Account
@@ -27,11 +28,11 @@ class Account {
     } else if (typeof str === 'object') {
       this._encrypted = str.key
       this._address = str.address
-      this.label = str.label
+      this.label = str.label || ''
       this.extra = str.extra
-      this.isDefault = str.isDefault
-      this.lock = str.lock
-      this.contract = str.contract
+      this.isDefault = str.isDefault || false
+      this.lock = str.lock || false
+      this.contract = str.contract || Object.assign({}, DEFAULT_ACCOUNT_CONTRACT)
     } else if (isPrivateKey(str)) {
       this._privateKey = str
     } else if (isPublicKey(str, false)) {
@@ -62,7 +63,8 @@ class Account {
   _updateContractScript () {
     try {
       if (this.contract.script === '') {
-        this.contract.script = core.getVerificationScriptFromPublicKey(this.publicKey)
+        const publicKey = this.publicKey
+        this.contract.script = core.getVerificationScriptFromPublicKey(publicKey)
       }
     } catch (e) { }
   }

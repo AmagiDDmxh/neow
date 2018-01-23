@@ -98,3 +98,7 @@ $list-md-background-color: color($colors, secondary);
 
 @import "roboto";
 @import "noto-sans";
+
+body {
+  font-family: "Open Sans", arial, x-locale-body, sans-serif;
+}
