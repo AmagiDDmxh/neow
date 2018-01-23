@@ -6,6 +6,7 @@ import { File } from '@ionic-native/file'
 import { wallet } from '../libs/neon-js'
 import { OLD_WALLET_CHECK_LIST, NEW_WALLET_CHECK_LIST, OTCGO_WALLET_FILE_NAME } from "./wallet.consts"
 
+/* disabled */
 import { AES, enc } from 'crypto-js'
 import { crypto } from 'jsrsasign'
 
@@ -53,7 +54,7 @@ export class WalletProvider {
 
   set wallet (file) {
     if (this._isWallet(file))
-      this._wallet = wallet.Wallet.import(file)
+      this._wallet = file
   }
 
   get wallet () {
@@ -64,7 +65,7 @@ export class WalletProvider {
   upgradeOldWallet (oldWalletJSON: object, passphrase: string) {
     if (!this.isOldWallet(oldWalletJSON)) return Promise.resolve(new Error('Is not an old wallet, Please check again!'))
 
-    const { privateKeyEncrypted, publicKey } = oldWalletJSON
+    const { privateKeyEncrypted, publicKey } = oldWalletJSON as any
     const privateKey = this._decryptOldWallet(privateKeyEncrypted, passphrase)
 
     if (!this._verifyOldWallet(privateKey, publicKey)) return Promise.resolve(false)
@@ -76,8 +77,7 @@ export class WalletProvider {
   }
 
   writeFile () {
-    const dataDirectory = this.file.dataDirectory
-    this.file.writeFile(dataDirectory, OTCGO_WALLET_FILE_NAME, this.wallet.export())
+    this.file.writeFile(this.dataDirectory, OTCGO_WALLET_FILE_NAME, this.wallet.export())
   }
 
   isOldWallet = (items) => OLD_WALLET_CHECK_LIST.every(i => items.hasOwnProperty(i))

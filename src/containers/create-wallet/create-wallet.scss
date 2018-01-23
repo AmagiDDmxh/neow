@@ -3,8 +3,9 @@ page-create-wallet {
     text-align: center;
 
     .cw-name, .cw-wif, .cw-pwd {
-      border: 1px solid rgb(222, 222, 222);
+      border: 1px solid #efefef;
       padding-left: 0;
+      margin: 0;
 
       & .item-inner {
         border: none;
@@ -20,9 +21,6 @@ page-create-wallet {
       padding-bottom: 0 !important;
       overflow-y: hidden;
 
-      form {
-        width: 80%;
-      }
 
       .cw-tip {
         a {
@@ -32,17 +30,15 @@ page-create-wallet {
     }
 
     .cw-button {
-      width: 100%;
       button {
+        width: 100%;
         background: linear-gradient(270deg, rgb(47, 177, 213), rgb(47, 177, 213) 6%, rgb(50, 118, 217));
       }
-
-
     }
 
     .cw-button-white  {
-      width: 100%;
       button {
+        width: 100%;
         background-color: #fff !important;
         border: 1px solid #448aff;
       }

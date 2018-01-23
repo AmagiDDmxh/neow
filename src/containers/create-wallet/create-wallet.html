@@ -14,6 +14,8 @@
 
 
 <ion-content class="cw" padding>
+
+
 	<!-- CW stand for create-wallet -->
 	<ion-item class="cw-name">
 		<ion-input placeholder="Wallet name" required type="text" [(ngModel)]="name"></ion-input>
@@ -37,10 +39,15 @@
 	</ion-item>
 
 	<div class="cw-button">
-		<button ion-button round type="submit" full block [disabled]="disabledButton" (click)="createWallet()">Create Wallet</button>
+		<button ion-button round full block [disabled]="disabledButton" (click)="createWallet()">
+			Create Wallet
+		</button>
 	</div>
 
 	<div class="cw-button-white">
-		<button [navPush]="loginPage" ion-button round type="submit" full block clear>Have a wallet? Login</button>
+		<button [navPush]="loginPage" ion-button round full block clear>
+			Have a wallet? Login
+		</button>
 	</div>
+
 </ion-content>
