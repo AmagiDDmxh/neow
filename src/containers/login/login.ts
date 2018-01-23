@@ -28,14 +28,9 @@ export class LoginPage {
     public navParams: NavParams,
     private walletProvider: WalletProvider,
     public alertCtrl: AlertController
-  ) {
+  ) { }
 
-  }
-
-  ionViewDidLoad() {
-    // window.wallet = wallet
-    /*console.log('[LOGIN-PAGE]:', wallet.decrypt("U2FsdGVkX18w+RXUmhIlIWpy+3pl+YA4Ocm2nTRK/zwEZwge5Gblta+YNaveEMlvIsdvDdkK3vHKwLea7DgeAXDD2Vtz8CoX+mRpW3kjw7w/ca3NNMoGeyeQ/Faspb3Z", "a"));*/
-  }
+  ionViewDidLoad() {}
 
   get disabledBtn () {
     return (!this.WIFKey || !this.passphrase) && (!this._file)

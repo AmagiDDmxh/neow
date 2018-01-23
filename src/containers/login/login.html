@@ -8,12 +8,14 @@
         </ion-item>
 
         <button class="login-import" [class.is-active]="!isWIFKey" (click)="openImportBox()">
-            {{ importText }}
+            <img src="../../assets/imgs/icon-login_file" alt="" class="icon">
         </button>
 
         <input type="file" id="fileInput" hidden #fileInput (change)="fileChange(fileInput.files[0])">
 
-        <button class="login-encryptedKey-switcher" *ngIf="!isWIFKey" (click)="openWIFKeyBox()">W</button>
+        <button class="login-encryptedKey-switcher" *ngIf="!isWIFKey" (click)="openWIFKeyBox()">
+            <img src="../../assets/imgs/icon-login_WIF" alt="" class="icon">
+        </button>
 
         <ion-item class="pws-input">
             <ion-input type="password" placeholder="请输入交易密码" [(ngModel)]="passphrase" required></ion-input>

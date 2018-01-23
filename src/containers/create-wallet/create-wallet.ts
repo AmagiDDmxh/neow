@@ -69,7 +69,6 @@ export class CreateWalletPage {
         } as any)
 
         this.walletProvider.addAccount(account)
-        this.walletProvider.downloadWallet({ fileName: this.name + '.otcgo' })
 
         await i.dismiss()
         await this.navCtrl.push(this.backupWalletPage)

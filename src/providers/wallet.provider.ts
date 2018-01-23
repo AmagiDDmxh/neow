@@ -28,7 +28,7 @@ export class WalletProvider {
     public http: HttpClient,
     private file: File
   ) {
-    this.dataDirectory = this.file.dataDirectory
+    this.dataDirectory = !window.navigator && this.file.dataDirectory
 
     if (this.isWalletAlreadyExits()) {
       this.readWallet().then((walletStr: string) => {
@@ -48,7 +48,7 @@ export class WalletProvider {
   }
 
   async isWalletAlreadyExits () {
-    return this.file.checkFile(this.dataDirectory, 'OTCGO-mobile-wallet.otcgo')
+    return !window.navigator && this.file.checkFile(this.dataDirectory, 'OTCGO-mobile-wallet.otcgo')
   }
 
   set wallet (file) {
