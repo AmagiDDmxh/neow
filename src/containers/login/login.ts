@@ -7,6 +7,7 @@ import { CreateWalletPage } from '../create-wallet/create-wallet';
 
 import { wallet } from '../../libs/neon-js';
 import { WalletProvider } from "../../providers/wallet.provider";
+import { PossessionPage } from "../possessions/possessions";
 
 
 @IonicPage()
@@ -18,8 +19,8 @@ export class LoginPage {
   private _file: File
   createWalletPage = CreateWalletPage
   importText: string = "导入";
-  isEncKey: boolean = true;
-  encKey: string
+  isWIFKey: boolean = true;
+  WIFKey: string
   passphrase: string
 
   constructor (
@@ -37,29 +38,23 @@ export class LoginPage {
   }
 
   get disabledBtn () {
-    return (!this.encKey || !this.passphrase) && (!this._file)
+    return (!this.WIFKey || !this.passphrase) && (!this._file)
   }
   
   openImportBox () {
-    this.isEncKey = false
+    this.isWIFKey = false
     this.importText = '导入钱包文件'
 
     this.openWallet()
   }
 
-  openEncryptedKeyBox() {
-    this.isEncKey = true
+  openWIFKeyBox() {
+    this.isWIFKey = true
     this.importText = '导入'
   }
 
-  isOldWallet (jsonStr) {
-    const check = ['address', 'publicKey', 'publicKeyCompressed', 'privateKeyEncrypted']
-    const WalletJSON = JSON.parse(jsonStr)
-    return check.every(i => WalletJSON.hasOwnProperty(i))
-  }
-
   openWallet () {
-    if (window.navigator) {
+    if (window.navigator && !this.WIFKey) {
       let fileInput = document.querySelector(
         'page-login input[type=file]#fileInput') as HTMLInputElement
       fileInput.click()
@@ -74,8 +69,11 @@ export class LoginPage {
 
       reader.onload = function () {
         try {
-          ng.walletProvider.login(this.result)
-
+          const JSONFile = JSON.parse(this.result)
+          if (ng.walletProvider.isOldWallet(JSONFile)) {
+            return ng.walletProvider.upgradeOldWallet(JSONFile, ng.passphrase)
+          }
+          ng._file = JSONFile
         } catch (e) {
           console.log(e)
         }
@@ -92,4 +90,18 @@ export class LoginPage {
     prompt.present();
   }
 
+  login () {
+    if (this.WIFKey && this.isWIFKey && this.passphrase) {
+      if (!wallet.isWIF(this.WIFKey)) return this.showPrompt('The WIF format is incorrect!')
+      const account = new wallet.Account(this.WIFKey)
+      account.encrypt(this.passphrase)
+      this.walletProvider.addAccount(account)
+      this.walletProvider.writeFile()
+      return this.navCtrl.push(PossessionPage)
+    }
+
+    if (this._file && this.passphrase && !this.WIFKey && !this.isWIFKey) {
+      // if (this.walletProvider.isOldWallet(this.wa))
+    }
+  }
 }

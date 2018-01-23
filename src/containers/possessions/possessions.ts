@@ -1,8 +1,7 @@
-import { Component, Directive } from '@angular/core';
+import { Component } from '@angular/core';
 import { NavController, ToastController } from 'ionic-angular';
 import { ApiProvider } from "../../providers/api/api";
 import { PossessionDetailPage } from "./possession-detail/possession-detail";
-import { File } from "@ionic-native/file";
 
 
 @Component({
@@ -20,21 +19,9 @@ export class PossessionPage {
   constructor (
     public navCtrl: NavController,
     private apiProvider: ApiProvider,
-    private file: File,
     private toastCtrl: ToastController
   ) {
     this.tabBarElement = document.querySelector('.tabbar')
-
-    const externalDataDirectory = this.file.externalDataDirectory
-    this.file
-        .writeFile(externalDataDirectory, 'iii.txt', 'Hello guys')
-        .then(i => {
-          return this.showMsg(i)
-        })
-        .then(() => {
-          this.showMsg("Success!")
-        })
-
 
     apiProvider.getBalance('ANsvyS9q1n6SBDVSdB6uFwVeqT512YSAoW').subscribe(res => {
       this.balances = res['balance']
