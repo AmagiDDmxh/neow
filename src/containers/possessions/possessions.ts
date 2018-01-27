@@ -1,40 +1,49 @@
-import { Component } from '@angular/core';
-import { NavController, ToastController } from 'ionic-angular';
-import { ApiProvider } from "../../providers/api/api";
-import { PossessionDetailPage } from "./possession-detail/possession-detail";
+import { Component, OnInit } from '@angular/core'
+import {
+  IonicPage, NavController,
+  ToastController
+} from 'ionic-angular'
+import { ApiProvider } from '../../providers/api/api'
+import { PossessionDetailPage } from './possession-detail/possession-detail'
+import { WalletProvider } from '../../providers/wallet.provider'
+import { Account } from '../../libs/neon-js/src/wallet'
 
-
+@IonicPage({
+  name: 'Possessions',
+  segment: 'possessions'
+})
 @Component({
-  selector: 'page-possession',
+  selector: 'page-possessions',
   templateUrl: 'possessions.html'
 })
-export class PossessionPage {
-  tabBarElement: any;
-  splash: boolean = false;
-  balances;
+export class PossessionsPage implements OnInit {
+  splash: boolean = false
+  balances
   possessionDetailPage = PossessionDetailPage
-  address =  'AYA8uKKccDvfBi6FGxRUDpL89f51CodztN'
-
+  account: Account
 
   constructor (
     public navCtrl: NavController,
     private apiProvider: ApiProvider,
-    private toastCtrl: ToastController
-  ) {
-    this.tabBarElement = document.querySelector('.tabbar')
+    private toastCtrl: ToastController,
+    private walletProvider: WalletProvider
+  ) {}
 
-    apiProvider.getBalance('ANsvyS9q1n6SBDVSdB6uFwVeqT512YSAoW').subscribe(res => {
-      this.balances = res['balance']
-    })
+  ngOnInit () {
+    this.account = this.walletProvider.getDefaultAccount()
+
+    this.apiProvider
+        .getBalance(this.account.address)
+        .subscribe(res => {
+          this.balances = res['balance']
+        })
   }
 
-  ionViewDidLoad () {
-    /*this.tabBarElement.style.display = 'flex';
-    setTimeout(() => {
-      this.splash = false
-      this.tabBarElement.style.display = 'flex';
-    }, 3000);*/
+  ionViewCanEnter () {
+    return this.walletProvider.haveAnAccount()
   }
+
+  ionViewDidLoad () {}
 
   showMsg (message) {
     const toast = this.toastCtrl.create({

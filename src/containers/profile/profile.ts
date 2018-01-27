@@ -1,8 +1,11 @@
-import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { Component } from '@angular/core'
+import { IonicPage, NavController, NavParams } from 'ionic-angular'
 import { ManageWalletPage } from './manage-wallet/manage-wallet'
 
-@IonicPage()
+@IonicPage({
+  name: 'Profile',
+  segment: 'profile'
+})
 @Component({
   selector: 'page-profile',
   templateUrl: 'profile.html',

@@ -1,5 +1,6 @@
-import u from '../utils'
-import { Transaction } from "../transactions/index";
+import * as u from '../utils'
+import { Transaction } from '../transactions'
+
 
 export interface Account {
   WIF: string
@@ -167,7 +168,7 @@ export class Wallet {
   scrypt: WalletScryptParams
   accounts: Account[]
   extra: object
-  version
+  version: string
 
   constructor (file: WalletFile)
 

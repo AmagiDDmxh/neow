@@ -1,35 +1,20 @@
-import { BigNumber } from 'bignumber.js'
-
-export declare function ab2str (buf: ArrayBuffer): string
-
-export declare function str2ab (str: string): ArrayBuffer
-
-export declare function hexstring2ab (str: string): number[]
-
-export declare function ab2hexstring (arr: ArrayBuffer): string
-
-export declare function str2hexstring (str: string): string
-
-export declare function hexstring2str (hexstring: string): string
-
-export declare function int2hex (mNumber: number): string
-
-export declare function num2hexstring (
+export function ab2str (buf: ArrayBuffer): string
+export function str2ab (str: string): ArrayBuffer
+export function hexstring2ab (str: string): number[]
+export function ab2hexstring (arr: ArrayBuffer): string
+export function str2hexstring (str: string): string
+export function hexstring2str (hexstring: string): string
+export function int2hex (mNumber: number): string
+export function num2hexstring (
   num: number, size: number, littleEndian?: boolean): string
+export function num2fixed8 (num: number, size?: number): string
+export function fixed82num (fixed8: string): number
+export function num2VarInt (num: number): string
+export function hexXor (str1: string, str2: string): string
+export function reverseArray (arr: Array<number>): Uint8Array
+export function reverseHex (hex: string): string
 
-export declare function num2fixed8 (num: number, size?: number): string
-
-export declare function fixed82num (fixed8: string): number
-
-export declare function num2VarInt (num: number): string
-
-export declare function hexXor (str1: string, str2: string): string
-
-export declare function reverseArray (arr: Array<number>): Uint8Array
-
-export declare function reverseHex (hex: string): string
-
-export declare class StringStream {
+export class StringStream {
   public pter: 0
   public str: string
 
@@ -44,13 +29,11 @@ export declare class StringStream {
   public readVarInt (): string
 }
 
-export declare function hash160 (hex: string): string
+export function hash160 (hex: string): string
+export function hash256 (hex: string): string
+export function sha256 (hex: string): string
 
-export declare function hash256 (hex: string): string
-
-export declare function sha256 (hex: string): string
-
-export class Fixed8 extends BigNumber {
+export class Fixed8 {
 
   public toHex (): string
 

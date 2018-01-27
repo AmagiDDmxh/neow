@@ -12,6 +12,10 @@ import { ImportSuccessPage } from './manage-wallet/add-wallet/import-success/imp
 
 import { ManageWalletPage } from './manage-wallet/manage-wallet'
 
+const COMPONENTS = [
+  ProfilePage,
+]
+
 @NgModule({
   declarations: [
     ProfilePage,
@@ -43,5 +47,6 @@ import { ManageWalletPage } from './manage-wallet/manage-wallet'
     // IonicPageModule.forChild(ManageWalletPage),
 
   ],
+  entryComponents: COMPONENTS
 })
 export class ProfilePageModule {}

@@ -1,7 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { NavController, NavParams, Slides } from 'ionic-angular';
 import { trigger, state, style, animate, transition, keyframes } from '@angular/animations'
-import { PossessionPage } from "../possessions/possessions";
+import { PossessionsPage } from "../possessions/possessions";
 
 /**
  * Generated class for the OnboardingPage page.
@@ -50,8 +50,8 @@ export class OnboardingPage {
   }
 
   async skip () {
-    await this.navCtrl.setRoot(PossessionPage)
-    await this.navCtrl.push(PossessionPage)
+    await this.navCtrl.setRoot(PossessionsPage)
+    await this.navCtrl.push(PossessionsPage)
   }
 
   slideChanged () {

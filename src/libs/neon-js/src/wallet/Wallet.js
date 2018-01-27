@@ -1,6 +1,6 @@
 import fs from 'fs'
 import Account from './Account'
-import { DEFAULT_SCRYPT, DEFAULT_WALLET } from '../consts'
+import { DEFAULT_WALLET } from '../consts'
 import logger from '../logging'
 
 const log = logger('wallet')
@@ -45,7 +45,7 @@ class Wallet {
     /** @type {string} */
     this.version = version
     /** @type {ScryptParams} */
-    this.scrypt = parseWalletScryptParams(scrypt)
+    this.scrypt = scrypt
     /** @type {Account[]} */
     this.accounts = []
     for (const acct of accounts) {
@@ -62,10 +62,10 @@ class Wallet {
    * 3. First Account with an encrypted private key.
    * 4. First Account in the array.
    * Throws error if no accounts available.
-   * @return {Account} Account
+   * @return {Account | boolean} Account
    */
   get defaultAccount () {
-    if (this.accounts.length === 0) throw new Error('No accounts available in this Wallet!')
+    if (this.accounts.length === 0) return false
     for (const acct of this.accounts) {
       if (acct.isDefault) return acct
     }
@@ -181,7 +181,7 @@ class Wallet {
     return JSON.stringify({
       name: this.name,
       version: this.version,
-      scrypt: exportScryptParamsToWallet(this.scrypt),
+      scrypt: this.scrypt,
       accounts: this.accounts.map((acct) => acct.export()),
       extra: this.extra
     })
@@ -213,20 +213,3 @@ class Wallet {
 }
 
 export default Wallet
-
-export const parseWalletScryptParams = (params) => {
-  const parsed = {
-    cost: params.n,
-    blockSize: params.r,
-    parallel: params.p
-  }
-  return Object.assign({}, DEFAULT_SCRYPT, parsed)
-}
-
-export const exportScryptParamsToWallet = (scryptParams) => {
-  return {
-    n: scryptParams.cost,
-    r: scryptParams.blockSize,
-    p: scryptParams.parallel
-  }
-}

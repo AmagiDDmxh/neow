@@ -1,8 +1,8 @@
 import * as core from './core'
 import { isPrivateKey, isPublicKey, isWIF, isAddress, isNEP2 } from './verify'
 import { encrypt, decrypt } from './nep2'
-import util from 'util'
 import { DEFAULT_ACCOUNT_CONTRACT } from '../consts'
+import util from 'util'
 
 /**
  * @class Account
@@ -18,11 +18,7 @@ class Account {
     this.extra = null
     this.isDefault = false
     this.lock = false
-    this.contract = {
-      script: '',
-      parameters: [],
-      deployed: false
-    }
+    this.contract = Object.assign({}, DEFAULT_ACCOUNT_CONTRACT)
     if (!str) {
       this._privateKey = core.generatePrivateKey()
     } else if (typeof str === 'object') {
