@@ -21,7 +21,6 @@ import { File } from '@ionic-native/file';
 import { PossessionsPageModule } from "../containers/possessions/possessions.module";
 import { DiscoverPageModule } from "../containers/discover/discover.module";
 import { ProfilePageModule } from "../containers/profile/profile.module";
-
 @NgModule({
   declarations: [
     MyApp,
