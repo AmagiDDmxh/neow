@@ -15,12 +15,7 @@
     "target": "es5",
     "typeRoots": [
       "./node_modules/@types"
-    ],
-    "baseUrl": ".",
-    "paths": {
-      "@neon": ["src/libs/neon-js/src/index.d.ts"],
-      "@neon/*": ["src/libs/neon-js/src/*"]
-    }
+    ]
   },
   "include": [
     "src/**/*.ts"

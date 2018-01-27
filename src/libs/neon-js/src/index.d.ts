@@ -1,11 +1,17 @@
-import * as wallet from './wallet'
-import * as tx from './transactions'
-import * as sc from './sc'
-import * as rpc from './sc'
 import * as api from './api'
+import * as rpc from './rpc'
+import * as CONST from './consts'
+import * as sc from './sc'
+import * as tx from './transactions'
+import * as wallet from './wallet'
+import * as u from './utils'
 
-export { wallet, tx, sc, rpc, api }
-
-export default {
-
+export {
+  api,
+  rpc,
+  sc,
+  tx,
+  wallet,
+  u,
+  CONST
 }

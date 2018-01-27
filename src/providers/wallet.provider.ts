@@ -7,54 +7,63 @@ import { wallet } from '../libs/neon-js'
 import { OLD_WALLET_CHECK_LIST, NEW_WALLET_CHECK_LIST, OTCGO_WALLET_FILE_NAME } from "./wallet.consts"
 
 /* disabled */
-import { AES, enc } from 'crypto-js'
-import { crypto } from 'jsrsasign'
-
+import * as CryptoJS from 'crypto-js'
+import * as KJ from 'jsrsasign'
+import { Platform } from 'ionic-angular'
 
 @Injectable()
 export class WalletProvider {
   dataDirectory: string
 
-  scrypt = {}
+  scrypt = {
+    n: 16384,
+    r: 8,
+    p: 8,
+  }
 
-  private _wallet = new wallet.Wallet({
-    name: 'OTCGO-mobile-wallet',
-    scrypt: this.scrypt,
-    accounts: [],
-    version: 'beta-0.2',
-    extra: null
-  } as any)
+  private _wallet
 
   constructor (
     public http: HttpClient,
-    private file: File
+    private file: File,
+    private platform: Platform
   ) {
-    this.dataDirectory = !window.navigator && this.file.dataDirectory
+    if (this.platform.is('cordova') || this.platform.is('mobile')) {
+      this.dataDirectory = this.file.dataDirectory
 
-    if (this.isWalletAlreadyExits()) {
-      this.readWallet().then((walletStr: string) => {
-        const walletJSON = JSON.parse(walletStr)
-        this.wallet = new wallet.Wallet(walletJSON)
-      })
+      if (this.isWalletAlreadyExits()) {
+        this.readWallet().then((walletStr: string) => {
+          const walletJSON = JSON.parse(walletStr)
+          this.wallet = walletJSON
+        })
+      }
     }
   }
 
   addAccount (account) {
-    this.wallet.addAccount(account)
-    this.writeFile()
+    this.wallet && this.wallet.addAccount(account)
+  }
+
+  haveAnAccount (): boolean {
+    return !!this.wallet && !!this.wallet.defaultAccount
+  }
+
+  getDefaultAccount () {
+    if (this.haveAnAccount()) return this.wallet.defaultAccount
   }
 
   async readWallet () {
     return await this.file.readAsText(this.dataDirectory, OTCGO_WALLET_FILE_NAME)
   }
 
-  async isWalletAlreadyExits () {
-    return !window.navigator && this.file.checkFile(this.dataDirectory, 'OTCGO-mobile-wallet.otcgo')
+  isWalletAlreadyExits () {
+    return !window.navigator && this.file.checkFile(this.dataDirectory, OTCGO_WALLET_FILE_NAME)
   }
 
   set wallet (file) {
-    if (this._isWallet(file))
-      this._wallet = file
+    if (this.isWallet(file))
+      this._wallet = new wallet.Wallet(file)
+
   }
 
   get wallet () {
@@ -62,40 +71,71 @@ export class WalletProvider {
       return this._wallet
   }
 
-  upgradeOldWallet (oldWalletJSON: object, passphrase: string) {
-    if (!this.isOldWallet(oldWalletJSON)) return Promise.resolve(new Error('Is not an old wallet, Please check again!'))
-
-    const { privateKeyEncrypted, publicKey } = oldWalletJSON as any
-    const privateKey = this._decryptOldWallet(privateKeyEncrypted, passphrase)
-
-    if (!this._verifyOldWallet(privateKey, publicKey)) return Promise.resolve(false)
-
-    const account = new wallet.Account(privateKey)
-    account.encrypt(passphrase)
-    this.wallet.addAccount(account)
-
+  initWallet () {
+    this.wallet = {
+      name: 'OTCGO-mobile-wallet',
+      scrypt: this.scrypt,
+      accounts: [],
+      version: 'beta-0.2',
+      extra: null
+    }
   }
 
-  writeFile () {
+  upgradeAndAddToAccount (oldWalletJSON: object, passphrase: string): Promise<boolean | Error> {
+    if (!this.isOldWallet(oldWalletJSON)) return Promise.reject(new Error('Is not an old wallet, Please check again!'))
+
+    const { privateKeyEncrypted, publicKey } = oldWalletJSON as any
+
+    let privateKey
+
+    try {
+      privateKey = this._decryptOldWallet(privateKeyEncrypted, passphrase)
+      const result = this._verifyOldWallet(privateKey, publicKey)
+
+      if (result) {
+        const account = new wallet.Account(privateKey)
+        account.encrypt(passphrase)
+        this.wallet.addAccount(account)
+        return Promise.resolve(true)
+      } else {
+        return Promise.reject(new Error('Incorrect Password!'))
+      }
+
+    } catch (e) {
+      return Promise.reject(new Error(e))
+    }
+  }
+
+  writeWalletFile () {
     this.file.writeFile(this.dataDirectory, OTCGO_WALLET_FILE_NAME, this.wallet.export())
   }
 
-  isOldWallet = (items) => OLD_WALLET_CHECK_LIST.every(i => items.hasOwnProperty(i))
+  isOldWallet = (items): boolean => OLD_WALLET_CHECK_LIST.every(i => items.hasOwnProperty(i))
 
-  private _decryptOldWallet = (enckey, pwd) => AES.decrypt(enckey, pwd).toString(enc.Utf8)
+  private _decryptOldWallet = (enckey, pwd) => (<any>CryptoJS).AES
+                                                              .decrypt(enckey, pwd)
+                                                              .toString((<any>CryptoJS).enc.Utf8)
 
   private _verifyOldWallet (prvkey, pubkey) {
-    const sha256withECDSA = new crypto.Signature({ 'alg': 'SHA256withECDSA' })
     const msg = 'aaa'
+    const sigval = this._doSign(prvkey, msg)
+    return this._doVerify(pubkey, msg, sigval)
+  }
+
+  private _doSign (prvkey, msg) {
+    const sha256withECDSA = new (<any>KJ).crypto.Signature({ 'alg': 'SHA256withECDSA' })
+
     sha256withECDSA.initSign({
       'ecprvhex': prvkey,
       'eccurvename': 'secp256r1'
     })
     sha256withECDSA.updateString(msg)
 
-    const sigval = sha256withECDSA.sign()
+    return sha256withECDSA.sign()
+  }
 
-    const provSignature = new crypto.Signature({
+  private _doVerify (pubkey, msg, sigval) {
+    const provSignature = new (<any>KJ).crypto.Signature({
       'alg': 'SHA256withECDSA',
       'prov': 'cryptojs/jsrsa'
     })
@@ -107,6 +147,6 @@ export class WalletProvider {
     return provSignature.verify(sigval)
   }
 
-  private _isWallet = (items) => NEW_WALLET_CHECK_LIST.every(i => items.hasOwnProperty(i))
+  isWallet = (items) => NEW_WALLET_CHECK_LIST.every(i => items.hasOwnProperty(i))
 
 }

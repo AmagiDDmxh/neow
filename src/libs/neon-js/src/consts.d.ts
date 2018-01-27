@@ -34,5 +34,4 @@ export namespace TX_VERSION {
   export const CLAIM: number
   export const CONTRACT: number
   export const INVOCATION: number
-
 }

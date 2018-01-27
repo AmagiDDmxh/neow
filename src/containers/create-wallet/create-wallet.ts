@@ -1,18 +1,18 @@
-import { Component } from '@angular/core';
+import { Component } from '@angular/core'
 import {
-  AlertController,
   IonicPage, LoadingController, NavController,
   NavParams, ToastController
-} from 'ionic-angular';
+} from 'ionic-angular'
 import { LoginPage } from '../login/login'
 
 import { wallet } from '../../libs/neon-js'
-import { WalletProvider } from "../../providers/wallet.provider";
-import { BackupWalletPage } from "./backup-wallet/backup-wallet";
-import { File } from '@ionic-native/file'
+import { WalletProvider } from '../../providers/wallet.provider'
+import { BackupWalletPage } from './backup-wallet/backup-wallet'
 
-
-@IonicPage()
+@IonicPage({
+  name: 'CreateWallet',
+  segment: 'create-wallet'
+})
 @Component({
   selector: 'page-create-wallet',
   templateUrl: 'create-wallet.html',
@@ -31,55 +31,67 @@ export class CreateWalletPage {
     public navParams: NavParams,
     public loadingCtrl: LoadingController,
     private walletProvider: WalletProvider,
-    private file: File,
     public toastCtrl: ToastController
   ) { }
 
   get disabledButton () {
     if (this.wif)
-      return !this.passphrase1 || !this.passphrase2 || (this.passphrase1 !== this.passphrase2) || !this.name || !this.protocolAgreement || !this.wif
-    return !this.passphrase1 || !this.passphrase2 || (this.passphrase1 !== this.passphrase2) || !this.name || !this.protocolAgreement
+      return !this.passphrase1 || !this.passphrase2 ||
+        (this.passphrase1 !== this.passphrase2) ||
+        !this.name ||
+        !this.protocolAgreement || !this.wif
+    return !this.passphrase1 || !this.passphrase2 ||
+      (this.passphrase1 !== this.passphrase2) ||
+      !this.name ||
+      !this.protocolAgreement
   }
 
   ionViewDidLoad () {
-    console.dir('ionViewDidLoad CreateWalletPage');
+
   }
 
   async createWallet () {
-    if (this.passphrase1 && !this.validatePassphraseStrength(this.passphrase1)) return
+    if (this.passphrase1 &&
+       !this.validatePassphraseStrength(this.passphrase1))
+      return this.showPrompt('Password too short')
     if (this.passphrase1 !== this.passphrase2) return
     if (this.wif && !wallet.isWIF(this.wif)) return
 
-    let i = await this.createLoading('Just say something')
+    let i = await this.createLoading('Creating wallet!')
+
     await i.present()
-    setTimeout(async () => {
-      try {
-        const accountTemp = new wallet.Account(this.wif || wallet.generatePrivateKey())
-        const { WIF, address } = accountTemp
-        const encryptedWIF = wallet.encrypt(WIF, this.passphrase1)
 
-        const account = new wallet.Account({
-          address,
-          label: this.name,
-          isDefault: true,
-          lock: false,
-          key: encryptedWIF,
-          contract: null,
-          extra: null
-        } as any)
+    try {
+      const accountTemp = new wallet.Account(
+        this.wif || wallet.generatePrivateKey())
+      const { WIF, address } = accountTemp
+      const encryptedWIF = wallet.encrypt(
+        WIF, this.passphrase1)
 
-        this.walletProvider.addAccount(account)
+      const account = new wallet.Account({
+        address,
+        label: this.name,
+        isDefault: true,
+        lock: false,
+        key: encryptedWIF,
+        contract: null,
+        extra: null
+      } as any)
 
-        await i.dismiss()
-        await this.navCtrl.push(this.backupWalletPage)
-      } catch (e) {
-        console.log(e)
-      }
-    }, 500)
+      this.walletProvider.addAccount(account)
+      this.walletProvider.writeWalletFile()
+
+      await i.dismiss()
+      await this.navCtrl.push(this.backupWalletPage)
+    } catch (e) {
+      console.log(e)
+      this.showPrompt(e)
+    }
+
   }
 
   validatePassphraseStrength (passphrase) {
-    return passphrase.length >= 4;
+    return passphrase.length >= 4
   }
 
   createLoading (content) {
@@ -91,8 +103,7 @@ export class CreateWalletPage {
     return Promise.resolve(loading)
   }
 
-
-  showPrompt ({ message }) {
+  showPrompt (message) {
     const toast = this.toastCtrl.create({
       message,
       duration: 3000

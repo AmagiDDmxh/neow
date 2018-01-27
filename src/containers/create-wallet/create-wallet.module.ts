@@ -1,15 +1,16 @@
 import { NgModule } from '@angular/core';
 import { IonicPageModule } from 'ionic-angular';
 import { CreateWalletPage } from './create-wallet';
-import { BackupWalletPage } from './backup-wallet/backup-wallet'
+
+const COMPONENTS = [
+  CreateWalletPage
+]
 
 @NgModule({
-  declarations: [
-    CreateWalletPage,
-    BackupWalletPage
-  ],
+  declarations: COMPONENTS,
   imports: [
     IonicPageModule.forChild(CreateWalletPage),
   ],
+  exports: COMPONENTS
 })
 export class CreateWalletPageModule {}

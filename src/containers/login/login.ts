@@ -1,16 +1,19 @@
 import { Component } from '@angular/core';
 import {
-  AlertController, IonicPage, NavController,
+  AlertController, IonicPage,
+  NavController,
   NavParams
-} from 'ionic-angular';
+} from 'ionic-angular'
 import { CreateWalletPage } from '../create-wallet/create-wallet';
 
 import { wallet } from '../../libs/neon-js';
 import { WalletProvider } from "../../providers/wallet.provider";
-import { PossessionPage } from "../possessions/possessions";
+import { TabsPage } from '../tabs/tabs'
 
-
-@IonicPage()
+@IonicPage({
+  name: 'Login',
+  segment: 'login'
+})
 @Component({
   selector: 'page-login',
   templateUrl: 'login.html',
@@ -22,38 +25,35 @@ export class LoginPage {
   isWIFKey: boolean = true;
   WIFKey: string
   passphrase: string
+  isOldWallet: boolean = false
 
   constructor (
     public navCtrl: NavController,
     public navParams: NavParams,
     private walletProvider: WalletProvider,
-    public alertCtrl: AlertController
+    public alertCtrl: AlertController,
   ) { }
 
-  ionViewDidLoad() {}
+  ionViewDidLoad() {
+    this.walletProvider.initWallet()
+  }
 
   get disabledBtn () {
-    return (!this.WIFKey || !this.passphrase) && (!this._file)
+    if (!this.isOldWallet && this._file) return false
+    if (this.isOldWallet && this._file && this.passphrase) return false
+    if (this.isWIFKey && this.WIFKey && this.passphrase) return false
   }
   
-  openImportBox () {
+  openImportBox (fileInput: HTMLInputElement) {
     this.isWIFKey = false
     this.importText = '导入钱包文件'
 
-    this.openWallet()
+    if (window.navigator && !this.WIFKey) fileInput.click()
   }
 
   openWIFKeyBox() {
     this.isWIFKey = true
     this.importText = '导入'
-  }
-
-  openWallet () {
-    if (window.navigator && !this.WIFKey) {
-      let fileInput = document.querySelector(
-        'page-login input[type=file]#fileInput') as HTMLInputElement
-      fileInput.click()
-    }
   }
 
   fileChange (file) {
@@ -65,12 +65,11 @@ export class LoginPage {
       reader.onload = function () {
         try {
           const JSONFile = JSON.parse(this.result)
-          if (ng.walletProvider.isOldWallet(JSONFile)) {
-            return ng.walletProvider.upgradeOldWallet(JSONFile, ng.passphrase)
-          }
+          ng.isOldWallet = ng.walletProvider.isOldWallet(JSONFile);
           ng._file = JSONFile
         } catch (e) {
           console.log(e)
+          ng.showPrompt(e)
         }
       }
 
@@ -91,12 +90,29 @@ export class LoginPage {
       const account = new wallet.Account(this.WIFKey)
       account.encrypt(this.passphrase)
       this.walletProvider.addAccount(account)
-      this.walletProvider.writeFile()
-      return this.navCtrl.push(PossessionPage)
+      this.walletProvider.writeWalletFile()
+      return this.navCtrl.setRoot(TabsPage)
     }
 
-    if (this._file && this.passphrase && !this.WIFKey && !this.isWIFKey) {
-      // if (this.walletProvider.isOldWallet(this.wa))
+    if (this._file && !this.isWIFKey && !this.WIFKey) {
+      console.log('Is Old wallet?',this.walletProvider.isOldWallet(this._file))
+      if (this.walletProvider.isOldWallet(this._file)) {
+        this.walletProvider.upgradeAndAddToAccount(this._file, this.passphrase)
+            .then(_ => {
+              console.log('Upgrade success')
+              this.navCtrl.setRoot(TabsPage)
+            })
+            .catch(e => {
+              console.log(e)
+              this.showPrompt('Incorrect Password! Retry again.')
+            })
+      }
+
+      if (this.walletProvider.isWallet(this._file)) {
+        console.log('Login success')
+        this.walletProvider.wallet = this._file
+        this.navCtrl.setRoot(TabsPage)
+      }
     }
   }
 }

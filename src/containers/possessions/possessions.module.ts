@@ -1,17 +1,19 @@
-import { NgModule } from '@angular/core';
-import { IonicPageModule } from 'ionic-angular';
-import { PossessionPage } from "./possessions";
-import { PossessionDetailPageModule } from "./possession-detail/possession-detail.module";
-import { AddressCollapsePipe } from "../../pipes/address-collapse/address-collapse.pipe";
+import { NgModule } from '@angular/core'
+import { PossessionsPage } from './possessions'
+import { PossessionDetailPage } from './possession-detail/possession-detail'
+import { IonicPageModule } from 'ionic-angular'
+import { PipesModule } from '../../pipes/pipes.module'
+
+const COMPONENTS = [
+  PossessionsPage,
+]
 
 @NgModule({
-  declarations: [
-    PossessionPage,
-    AddressCollapsePipe
-  ],
+  declarations: COMPONENTS,
   imports: [
-    PossessionDetailPageModule,
-    IonicPageModule.forChild(PossessionPage),
+    PipesModule,
+    IonicPageModule.forChild(PossessionsPage)
   ],
+  exports: COMPONENTS
 })
 export class PossessionsPageModule {}
