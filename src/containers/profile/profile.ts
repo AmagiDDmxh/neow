@@ -1,8 +1,6 @@
-import { Component } from '@angular/core';
-import {
-  IonicPage, NavController,
-  NavParams
-} from 'ionic-angular'
+import { Component } from '@angular/core'
+import { IonicPage, NavController, NavParams } from 'ionic-angular'
+import { ManageWalletPage } from './manage-wallet/manage-wallet'
 
 @IonicPage({
   name: 'Profile',
@@ -15,6 +13,7 @@ import {
 })
 export class ProfilePage {
   user: {};
+  manageWalletPage = ManageWalletPage;
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
     this.user = {
