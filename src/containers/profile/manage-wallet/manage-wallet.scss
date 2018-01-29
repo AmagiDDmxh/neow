@@ -1,19 +1,25 @@
 page-manage-wallet {
-    ion-content .scroll-content {
-        display: flex;
-        justify-content: flex-start;
-        align-items: center;
-        flex-direction: column;
+
+  ion-content {
+    background-image: url('../../../assets/imgs/bg-manage-wallet.png');
+    background-position: center top;
+    background-size: cover;
+    .scroll-content {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      flex-direction: column;
     }
-    .mw {
-        .add-wallet-button {
-            width: 92%;
-            position: absolute;
-            bottom: 100px;
-            button {
-                background: linear-gradient(270deg, rgb(47, 177, 213), rgb(50, 118, 217));
-                color: aliceblue;
-            }
-        }
+  }
+  .mw {
+    .add-wallet-button {
+      width: 92%;
+      position: absolute;
+      bottom: 100px;
+      button {
+        background: linear-gradient(270deg, rgb(47, 177, 213), rgb(50, 118, 217));
+        color: aliceblue;
+      }
     }
+  }
 }

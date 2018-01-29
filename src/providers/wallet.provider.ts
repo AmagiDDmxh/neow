@@ -42,10 +42,11 @@ export class WalletProvider {
 
   addAccount (account) {
     this.wallet && this.wallet.addAccount(account)
+
   }
 
   haveAnAccount (): boolean {
-    return !!this.wallet && !!this.wallet.defaultAccount
+    return !!this.wallet && !!this.wallet.accounts
   }
 
   getDefaultAccount () {

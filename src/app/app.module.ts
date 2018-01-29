@@ -8,6 +8,9 @@ import { StatusBar } from '@ionic-native/status-bar'
 import { SplashScreen } from '@ionic-native/splash-screen'
 import { File } from '@ionic-native/file'
 
+import { ApolloModule } from 'apollo-angular'
+import { HttpLinkModule } from 'apollo-angular-link-http'
+
 import {
   IonicApp, IonicModule, IonicErrorHandler,
   DeepLinkConfig
@@ -25,10 +28,12 @@ import { PossessionsPage } from '../containers/possessions/possessions'
 
 import { LoginPageModule } from '../containers/login/login.module'
 import { PossessionsPageModule } from '../containers/possessions/possessions.module'
-import { LoginPage } from '../containers/login/login'
 import { DiscoverPage } from '../containers/discover/discover'
 import { CreateWalletPageModule } from '../containers/create-wallet/create-wallet.module'
 import { BackupWalletPage } from '../containers/create-wallet/backup-wallet/backup-wallet'
+import { ProfilePageModule } from '../containers/profile/profile.module'
+import { ComponentsModule } from '../components/components.module'
+
 
 
 @NgModule({
@@ -41,6 +46,8 @@ import { BackupWalletPage } from '../containers/create-wallet/backup-wallet/back
     BrowserAnimationsModule,
     HttpClientModule,
     ReactiveFormsModule,
+    ApolloModule,
+    HttpLinkModule,
     IonicModule.forRoot(MyApp, {
         tabbarPlacement: 'bottom',
         preloadModules: true
@@ -82,7 +89,9 @@ import { BackupWalletPage } from '../containers/create-wallet/backup-wallet/back
     ),
     LoginPageModule,
     PossessionsPageModule,
-    CreateWalletPageModule
+    CreateWalletPageModule,
+    ProfilePageModule,
+    ComponentsModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [

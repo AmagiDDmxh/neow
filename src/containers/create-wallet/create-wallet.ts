@@ -54,8 +54,10 @@ export class CreateWalletPage {
     if (this.passphrase1 &&
        !this.validatePassphraseStrength(this.passphrase1))
       return this.showPrompt('Password too short')
-    if (this.passphrase1 !== this.passphrase2) return
-    if (this.wif && !wallet.isWIF(this.wif)) return
+    if (this.passphrase1 !== this.passphrase2)
+      return
+    if (this.wif && !wallet.isWIF(this.wif))
+      return this.showPrompt('WIF 错误')
 
     let i = await this.createLoading('Creating wallet!')
 
@@ -65,8 +67,7 @@ export class CreateWalletPage {
       const accountTemp = new wallet.Account(
         this.wif || wallet.generatePrivateKey())
       const { WIF, address } = accountTemp
-      const encryptedWIF = wallet.encrypt(
-        WIF, this.passphrase1)
+      const encryptedWIF = wallet.encrypt(WIF, this.passphrase1)
 
       const account = new wallet.Account({
         address,

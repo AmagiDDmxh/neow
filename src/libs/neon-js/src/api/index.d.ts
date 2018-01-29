@@ -1,7 +1,7 @@
 import { Balance, Claims } from '../wallet'
 import { TransactionOutput } from '../transactions'
 import { Transaction } from '../transactions'
-import { RPCResponse } from "../rpc";
+import { RPCResponse } from '../rpc'
 
 interface apiConfig {
   net: string,
@@ -37,150 +37,181 @@ interface Prices {
   [key: string]: number
 }
 
-export module api {
-  //coinmarketcap
-  export namespace cmc {
-    export function getPrice (coin?: string, currency?: string): Promise<number>
+//coinmarketcap
 
-    export function getPrices (
-      coin?: string[], currency?: string): Promise<Prices>
-  }
+export function getPrice (
+  coin?: string, currency?: string): Promise<number>
 
-  //core
-  export function getBalanceFrom (config: apiConfig, api: object): apiConfig
+export function getPrices (
+  coin?: string[], currency?: string): Promise<Prices>
 
-  export function getClaimsFrom (config: apiConfig, api: object): apiConfig
+//core
+export function getBalanceFrom (
+  config: apiConfig, api: object): apiConfig
 
-  export function getRPCEndpointFrom (config: apiConfig, api: object): apiConfig
+export function getClaimsFrom (
+  config: apiConfig, api: object): apiConfig
 
-  export function getTransactionHistoryFrom (
-    config: apiConfig, api: object): apiConfig
+export function getRPCEndpointFrom (
+  config: apiConfig, api: object): apiConfig
 
-  export function getWalletDBHeightFrom (
-    config: apiConfig, api: object): apiConfig
+export function getTransactionHistoryFrom (
+  config: apiConfig, api: object): apiConfig
 
-  export function getMaxClaimAmountFrom (
-    config: apiConfig, api: object): apiConfig
+export function getWalletDBHeightFrom (
+  config: apiConfig, api: object): apiConfig
 
-  export function createTx (config: apiConfig, txType: string): apiConfig
+export function getMaxClaimAmountFrom (
+  config: apiConfig, api: object): apiConfig
 
-  export function signTx (config: apiConfig): apiConfig
+export function createTx (
+  config: apiConfig, txType: string): apiConfig
 
-  export function sendTx (config: apiConfig): apiConfig
+export function signTx (config: apiConfig): apiConfig
 
-  export function makeIntent (
-    assetAmts: AssetAmounts, address: string): TransactionOutput[]
+export function sendTx (config: apiConfig): apiConfig
 
-  export function sendAsset (config: apiConfig): apiConfig
+export function makeIntent (
+  assetAmts: AssetAmounts,
+  address: string
+): TransactionOutput[]
 
-  export function claimGas (config: apiConfig): apiConfig
+export function sendAsset (config: apiConfig): apiConfig
 
-  export function doInvoke (config: apiConfig): apiConfig
+export function claimGas (config: apiConfig): apiConfig
 
-  //neonDB
-  export namespace neonDB {
-    export function getAPIEndpoint (net: string): string
+export function doInvoke (config: apiConfig): apiConfig
 
-    export function getBalance (net: string, address: string): Promise<Balance>
+//neonDB
+export namespace neonDB {
+  export function getAPIEndpoint (net: string): string
 
-    export function getClaims (net: string, address: string): Promise<Claims>
+  export function getBalance (
+    net: string, address: string): Promise<Balance>
 
-    export function getRPCEndpoint (net: string): Promise<string>
+  export function getClaims (
+    net: string, address: string): Promise<Claims>
 
-    export function getTransactionHistory (
-      net: string, address: string): Promise<History>
+  export function getRPCEndpoint (net: string): Promise<string>
 
-    export function getWalletDBHeight (net: string): Promise<number>
+  export function getTransactionHistory (
+    net: string, address: string): Promise<History>
 
-    export function doClaimAllGas (
-      net: string,
-      privateKey: string
-    ): Promise<RPCResponse>
-    export function doClaimAllGas (
-      net: string,
-      publicKey: string,
-      signingFunction: (unsigned: Transaction, publicKey: string) => Transaction
-    ): Promise<RPCResponse>
+  export function getWalletDBHeight (net: string): Promise<number>
 
-    export function doMintTokens (
-      net: string,
-      scriptHash: string,
-      fromWif: string,
-      neo: number,
-      gasCost: number
-    ): Promise<RPCResponse>
-    export function doMintTokens (
-      net: string,
-      scriptHash: string,
-      publicKey: string,
-      neo: number,
-      gasCost: number,
-      signingFunction: (unsigned: Transaction, publicKey: string) => Transaction
-    ): Promise<RPCResponse>
+  export function doClaimAllGas (
+    net: string,
+    privateKey: string
+  ): Promise<RPCResponse>
+  export function doClaimAllGas (
+    net: string,
+    publicKey: string,
+    signingFunction: (
+      unsigned: Transaction,
+      publicKey: string
+    ) => Transaction
+  ): Promise<RPCResponse>
 
-    export function doSendAsset (
-      net: string,
-      toAddress: string,
-      from: string,
-      assetAmounts: AssetAmounts
-    ): Promise<RPCResponse>
-    export function doSendAsset (
-      net: string,
-      toAddress: string,
-      publicKey: string,
-      assetAmounts: AssetAmounts,
-      signingFunction: (unsigned: Transaction, publicKey: string) => Transaction
-    ): Promise<RPCResponse>
-  }
+  export function doMintTokens (
+    net: string,
+    scriptHash: string,
+    fromWif: string,
+    neo: number,
+    gasCost: number
+  ): Promise<RPCResponse>
+  export function doMintTokens (
+    net: string,
+    scriptHash: string,
+    publicKey: string,
+    neo: number,
+    gasCost: number,
+    signingFunction: (
+      unsigned: Transaction,
+      publicKey: string
+    ) => Transaction
+  ): Promise<RPCResponse>
 
-  //neoscan
-  export namespace neoscan {
-    export function getAPIEndpoint (net: string): string
-
-    export function getRPCEndpoint (net: string): Promise<string>
-
-    export function getBalance (net: string, address: string): Promise<Balance>
-
-    export function getClaims (net: string, address: string): Promise<Claims>
-  }
-
-  //nep5
-  export namespace nep5 {
-    export function getTokenInfo (
-      url: string,
-      scriptHash: string
-    ): Promise<{ name: string, symbol: string, decimals: number, totalSupply: number }>
-
-    export function getTokenBalance (
-      url: string, scriptHash: string, address: string): Promise<number>
-
-    export function getToken (
-      url: string, scriptHash: string, address?: string): Promise<object>
-
-    export function doTransferToken (
-      net: string,
-      scriptHash: string,
-      fromWif: string,
-      toAddress: string,
-      transferAmount: number,
-      gasCost?: number,
-      signingFunction?: (
-        unsigned: Transaction, publicKey: string) => Transaction
-    ): Promise<RPCResponse>
-  }
-
-  // switch
-  export function setApiSwitch (newSetting: number): void
-
-  export function setSwitchFreeze (newSetting: boolean): void
+  export function doSendAsset (
+    net: string,
+    toAddress: string,
+    from: string,
+    assetAmounts: AssetAmounts
+  ): Promise<RPCResponse>
+  export function doSendAsset (
+    net: string,
+    toAddress: string,
+    publicKey: string,
+    assetAmounts: AssetAmounts,
+    signingFunction: (
+      unsigned: Transaction,
+      publicKey: string
+    ) => Transaction
+  ): Promise<RPCResponse>
 }
+
+//neoscan
+export namespace neoscan {
+  export function getAPIEndpoint (net: string): string
+
+  export function getRPCEndpoint (net: string): Promise<string>
+
+  export function getBalance (
+    net: string, address: string): Promise<Balance>
+
+  export function getClaims (
+    net: string, address: string): Promise<Claims>
+}
+
+//nep5
+export namespace nep5 {
+  export function getTokenInfo (
+    url: string,
+    scriptHash: string
+  ): Promise<{ name: string, symbol: string, decimals: number, totalSupply: number }>
+
+  export function getTokenBalance (
+    url: string, scriptHash: string,
+    address: string
+  ): Promise<number>
+
+  export function getToken (
+    url: string, scriptHash: string,
+    address?: string
+  ): Promise<object>
+
+  export function doTransferToken (
+    net: string,
+    scriptHash: string,
+    fromWif: string,
+    toAddress: string,
+    transferAmount: number,
+    gasCost?: number,
+    signingFunction?: (
+      unsigned: Transaction,
+      publicKey: string
+    ) => Transaction
+  ): Promise<RPCResponse>
+}
+
+// switch
+export function setApiSwitch (newSetting: number): void
+
+export function setSwitchFreeze (newSetting: boolean): void
+
 export interface semantic {
   get: {
-    price: (coin?: string, currency?: string) => Promise<number>
-    prices: (coins?: string[], currency?: string) => Promise<object>
-    balance: (net: string, address: string) => Promise<Balance>
-    claims: (net: string, address: string) => Promise<Claims>
-    transactionHistory: (net: string, address: string) => Promise<History>
+    price: (
+      coin?: string, currency?: string) => Promise<number>
+    prices: (
+      coins?: string[],
+      currency?: string
+    ) => Promise<object>
+    balance: (
+      net: string, address: string) => Promise<Balance>
+    claims: (
+      net: string, address: string) => Promise<Claims>
+    transactionHistory: (
+      net: string, address: string) => Promise<History>
     tokenBalance: (
       net: string,
       scriptHash: string

@@ -85,6 +85,13 @@ export class LoginPage {
   }
 
   login () {
+    // For dev
+    if (this.WIFKey === 'test') {
+      this.walletProvider.addAccount('ANsvyS9q1n6SBDVSdB6uFwVeqT512YSAoW')
+      console.log('Enter Dev Mode')
+      return this.navCtrl.setRoot(TabsPage)
+    }
+
     if (this.WIFKey && this.isWIFKey && this.passphrase) {
       if (!wallet.isWIF(this.WIFKey)) return this.showPrompt('The WIF format is incorrect!')
       const account = new wallet.Account(this.WIFKey)

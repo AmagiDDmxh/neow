@@ -59,7 +59,7 @@ export class ImportFilePage {
         try {
           const JSONFile = JSON.parse(this.result)
           if (ng.walletProvider.isOldWallet(JSONFile)) {
-            return ng.walletProvider.upgradeOldWallet(JSONFile, ng.passphrase)
+            return ng.walletProvider.upgradeAndAddToAccount(JSONFile, ng.passphrase)
           }
           ng._file = JSONFile
         } catch (e) {

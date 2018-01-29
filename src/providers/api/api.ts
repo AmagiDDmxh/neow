@@ -1,45 +1,55 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http'
+import { Injectable } from '@angular/core'
+import { Apollo } from 'apollo-angular'
+import { HttpLink } from 'apollo-angular-link-http'
+import { InMemoryCache } from 'apollo-cache-inmemory'
+import gql from 'graphql-tag'
 
-/*
-  Generated class for the ApiProvider provider.
+import 'rxjs/add/operator/map'
+import 'rxjs/add/observable/of'
+import { Observable } from 'rxjs/Observable'
+import { TRANSACTIONS } from '../../shared/mocks/datas'
 
-  See https://angular.io/guide/dependency-injection for more info on providers
-  and Angular DI.
-*/
+const environment = 'dev'
+
 @Injectable()
 export class ApiProvider {
   apiUrl = 'https://neoscan.io/api/main_net/v1'
+  mainNeonDB = 'http://api.wallet.cityofzion.io'
+  testnetNeonDB = 'http://api.wallet.cityofzion.io'
+  mainScanApi = 'https://api.neoscan.io/api/main_net'
+  neoverseApi = '//explorer.neoverse.io/graphql'
 
-  constructor(public http: HttpClient) {
+  apolloClient
 
+
+
+  constructor (public http: HttpClient, private apollo: Apollo, private httpLink: HttpLink) {
+    this.apolloClient = this.apollo.create({
+      link: this.httpLink.create({ uri: 'http://explorer.neoverse.io/graphql' }),
+      cache: new InMemoryCache()
+    })
   }
 
   getHeight() {
     return this.http.get(`${this.apiUrl}/get_height`)
   }
 
-  /** Get Balance
-   * @param {string} hash_string from the address
-   * @return {
-   *   "address": "has_string",
-   *   "balance": [
-   *     {
-   *       "asset": "name_string",
-   *       "amount": float,
-   *       "unspent": [
-   *         {
-   *           "txid": "tx_id_string",
-   *           "value": {float},
-   *           "n": {integer}
-   *         }
-   *       ]
-   *     }
-   *   ]
-   * }
-  */
-  getBalance(hash_string) {
-    return this.http.get(`${this.apiUrl}/get_balance/${hash_string}`)
+  getBalance(address) {
+    return this.http.get(`${this.apiUrl}/get_balance/${address}`)
+  }
+
+  getTransactionHistory (address): Observable<object> {
+    if (environment === 'dev') {
+      return Observable.of(TRANSACTIONS)
+    }
+    return this.http
+               .get(`${this.mainScanApi}/v1/get_address_neon/${address}`)
+  }
+
+  getBlock (height): Observable<Object> {
+    return this.http
+               .get(`${this.mainScanApi}/v1/get_block/${height}`)
   }
 
 }

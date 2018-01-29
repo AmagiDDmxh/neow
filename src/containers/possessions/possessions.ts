@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core'
 import {
-  IonicPage, NavController,
+  IonicPage, Loading, LoadingController, NavController,
   ToastController
 } from 'ionic-angular'
 import { ApiProvider } from '../../providers/api/api'
@@ -20,30 +20,39 @@ export class PossessionsPage implements OnInit {
   splash: boolean = false
   balances
   possessionDetailPage = PossessionDetailPage
-  account: Account
+  account: Account | any = {
+    isDefault: true,
+    address: 'ANsvyS9q1n6SBDVSdB6uFwVeqT512YSAoW'
+  }
+  loading: Loading = this.loadingCtrl.create()
 
   constructor (
     public navCtrl: NavController,
     private apiProvider: ApiProvider,
     private toastCtrl: ToastController,
-    private walletProvider: WalletProvider
+    private walletProvider: WalletProvider,
+    private loadingCtrl: LoadingController
   ) {}
 
   ngOnInit () {
-    this.account = this.walletProvider.getDefaultAccount()
+    try {
+      this.account = this.walletProvider.getDefaultAccount() || console.log(this.account)
+    } catch (e) {
+      console.log(e)
+    }
 
+    this.loading.present()
     this.apiProvider
         .getBalance(this.account.address)
         .subscribe(res => {
           this.balances = res['balance']
+          this.loading.dismissAll()
         })
   }
 
   ionViewCanEnter () {
     return this.walletProvider.haveAnAccount()
   }
-
-  ionViewDidLoad () {}
 
   showMsg (message) {
     const toast = this.toastCtrl.create({
