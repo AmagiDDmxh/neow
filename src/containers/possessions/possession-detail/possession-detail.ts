@@ -1,10 +1,11 @@
 import { Component } from '@angular/core'
 import {
+  NavParams,
   IonicPage,
   NavController,
-  NavParams
+  ModalController, LoadingController,
 } from 'ionic-angular'
-import { ApiProvider } from '../../../providers/api/api'
+import { ApiProvider } from '../../../providers/api/api.provider'
 import { WalletProvider } from '../../../providers/wallet.provider'
 
 import 'rxjs/add/operator/filter'
@@ -17,6 +18,8 @@ import 'rxjs/add/operator/filter'
 export class PossessionDetailPage {
   possessionData
   address
+  tokenCurrentPrice
+  loading = this.loadingCtrl.create()
   items = [
     {
       title: 'Courgette daikon',
@@ -51,31 +54,68 @@ export class PossessionDetailPage {
     public navCtrl: NavController,
     public navParams: NavParams,
     private api: ApiProvider,
-    private walletProvider: WalletProvider
+    private walletProvider: WalletProvider,
+    private modalCtrl: ModalController,
+    private loadingCtrl: LoadingController
   ) {
 
     this.initData()
         .then(() => {
-          this.api.getTransactionHistory(this.address)
+          this.api
+              .getTransactionHistory(this.address)
               .map(res => res['data'].filter(this.filterByName(this.possessionData)).map(this.parseTx))
-              .subscribe(data => {
-                console.log(data)
-                this.items = data
-              })
+              .subscribe(
+                data => {
+                  this.items = data
+                  this.loading.dismissAll()
+                },
+                null,
+                () => {
+                  this.loading.dismissAll()
+                }
+              )
+
+          this.api
+              .getPrice(this.possessionData.name)
+              .subscribe(
+                price => {
+                  console.log(price)
+                  this.tokenCurrentPrice = price
+                },
+                error => {
+                  if (this.possessionData.name.toLowerCase() === 'neo')
+                    this.tokenCurrentPrice = 1024
+                  else
+                    this.tokenCurrentPrice = 512
+                  this.loading.dismissAll()
+                  console.log(error)
+                },
+                () => {
+                  this.loading.dismissAll()
+                }
+              )
         })
         .catch(e => console.log(e))
 
-    console.log('oo')
+    console.log('rr')
   }
 
   initData () {
     this.address = 'ANsvyS9q1n6SBDVSdB6uFwVeqT512YSAoW'
     this.possessionData = this.navParams.data
+    this.loading.present()
     return Promise.resolve()
   }
 
   ionViewDidLoad () {
     console.log('ionViewDidLoad PossessionDetailPage')
+  }
+
+  presentActionSheet() {
+    const sendModal = this.modalCtrl.create('SendModalComponent', {
+      balances: this.possessionData.amount
+    }, { cssClass: 'inset-modal' });
+    sendModal.present();
   }
 
   private parseData (data) {
@@ -89,7 +129,6 @@ export class PossessionDetailPage {
   private parseTx (data) {
     const [subtitle, title] = data['time'].split(' ')
     const time = { subtitle, title }
-    console.log(Object.assign({}, data, { time }))
     return Object.assign({}, data, { time })
   }
 }

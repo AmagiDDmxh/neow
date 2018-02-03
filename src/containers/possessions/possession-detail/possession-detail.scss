@@ -21,7 +21,7 @@ page-possession-detail {
 
       border-radius: 0;
 
-      position: absolute;
+      position: fixed;
       top: 0;
       left: 0;
 
@@ -43,7 +43,7 @@ page-possession-detail {
         position: absolute;
         top: 2px;
 
-        font-size: 4em;
+        font-size: 6rem;
         text-shadow: 1px 4px 3px rgba(0, 0, 0, 0.3);
       }
       .possession-data-approximation {
@@ -71,4 +71,29 @@ page-possession-detail {
       margin-top: 300px;
     }
   }
+
+  .toolbar-background {
+    color: red !important;
+  }
+  ion-modal .modal-wrapper {
+    transform: translateY(30%) !important;
+  }
+  ion-page.modal {
+    padding: 30px;
+    background: transparent;
+  }
+  .modal-backdrop-bg {
+    background-color: #000;
+    opacity: 0;
+  }
+  .active .modal-backdrop-bg {
+    opacity: 0;
+  }
+}
+
+ion-modal.inset-modal {
+  // transparent background overlay
+  background-color: transparent;
+  transition: opacity .25s ease-in-out;
+  padding: 40% 0 0;
 }

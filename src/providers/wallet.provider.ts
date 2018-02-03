@@ -19,6 +19,7 @@ export class WalletProvider {
     n: 16384,
     r: 8,
     p: 8,
+    size: 64
   }
 
   private _wallet
@@ -42,7 +43,6 @@ export class WalletProvider {
 
   addAccount (account) {
     this.wallet && this.wallet.addAccount(account)
-
   }
 
   haveAnAccount (): boolean {

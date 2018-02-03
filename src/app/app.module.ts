@@ -19,7 +19,7 @@ import {
 import { MyApp } from './app.component'
 
 import { TabsPage } from '../containers/tabs/tabs'
-import { ApiProvider } from '../providers/api/api'
+import { ApiProvider } from '../providers/api/api.provider'
 import { WalletProvider } from '../providers/wallet.provider'
 
 import { CreateWalletPage } from '../containers/create-wallet/create-wallet'
@@ -33,6 +33,7 @@ import { CreateWalletPageModule } from '../containers/create-wallet/create-walle
 import { BackupWalletPage } from '../containers/create-wallet/backup-wallet/backup-wallet'
 import { ProfilePageModule } from '../containers/profile/profile.module'
 import { ComponentsModule } from '../components/components.module'
+import { NeoPriceProvider } from '../providers/api/neoprice.provider'
 
 
 
@@ -49,8 +50,9 @@ import { ComponentsModule } from '../components/components.module'
     ApolloModule,
     HttpLinkModule,
     IonicModule.forRoot(MyApp, {
-        tabbarPlacement: 'bottom',
-        preloadModules: true
+      tabbarPlacement: 'bottom',
+      preloadModules: true,
+      backButtonText: ''
       }, <DeepLinkConfig>{
         links: [
           {
@@ -91,7 +93,7 @@ import { ComponentsModule } from '../components/components.module'
     PossessionsPageModule,
     CreateWalletPageModule,
     ProfilePageModule,
-    ComponentsModule
+    ComponentsModule,
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -104,7 +106,8 @@ import { ComponentsModule } from '../components/components.module'
     { provide: ErrorHandler, useClass: IonicErrorHandler },
     File,
     WalletProvider,
-    ApiProvider
+    ApiProvider,
+    NeoPriceProvider
   ]
 })
 export class AppModule {

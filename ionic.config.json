@@ -4,11 +4,5 @@
   "type": "ionic-angular",
   "integrations": {
     "cordova": {}
-  },
-  "proxies": [
-    {
-      "path": "/graphql",
-      "proxyUrl": "http://neoverse.io/graphql"
-    }
-  ]
+  }
 }

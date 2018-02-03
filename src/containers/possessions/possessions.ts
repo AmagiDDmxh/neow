@@ -3,10 +3,11 @@ import {
   IonicPage, Loading, LoadingController, NavController,
   ToastController
 } from 'ionic-angular'
-import { ApiProvider } from '../../providers/api/api'
+import { ApiProvider } from '../../providers/api/api.provider'
 import { PossessionDetailPage } from './possession-detail/possession-detail'
 import { WalletProvider } from '../../providers/wallet.provider'
 import { Account } from '../../libs/neon-js/src/wallet'
+import { ASSETS } from '../../shared/consts'
 
 @IonicPage({
   name: 'Possessions',
@@ -16,10 +17,11 @@ import { Account } from '../../libs/neon-js/src/wallet'
   selector: 'page-possessions',
   templateUrl: 'possessions.html'
 })
-export class PossessionsPage implements OnInit {
+export class PossessionsPage {
   splash: boolean = false
   balances
   possessionDetailPage = PossessionDetailPage
+
   account: Account | any = {
     isDefault: true,
     address: 'ANsvyS9q1n6SBDVSdB6uFwVeqT512YSAoW'
@@ -34,7 +36,7 @@ export class PossessionsPage implements OnInit {
     private loadingCtrl: LoadingController
   ) {}
 
-  ngOnInit () {
+  ionViewDidLoad () {
     try {
       this.account = this.walletProvider.getDefaultAccount() || console.log(this.account)
     } catch (e) {
@@ -42,10 +44,12 @@ export class PossessionsPage implements OnInit {
     }
 
     this.loading.present()
+
     this.apiProvider
-        .getBalance(this.account.address)
+        .getBalances(this.account.address)
         .subscribe(res => {
-          this.balances = res['balance']
+          console.log(res)
+          this.balances = this.parseBalances(res['balances'])
           this.loading.dismissAll()
         })
   }
@@ -61,5 +65,20 @@ export class PossessionsPage implements OnInit {
     })
 
     return toast.present()
+  }
+
+  private parseBalances (balances) {
+    return Object.entries(balances)
+                 .map(
+                   ([assetId, amount])=> ({
+                     amount,
+                     assetId,
+                     name: ASSETS[assetId]
+                   })
+                 )
+  }
+
+  openQRCode () {
+    this.navCtrl.push('payment-qrcode', { address: this.account.address })
   }
 }

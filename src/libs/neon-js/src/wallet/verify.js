@@ -97,10 +97,8 @@ export const isAddress = (address) => {
     if (shaChecksum !== programHash.substr(42, 8)) return false
     // As other chains use similar checksum methods, we need to attempt to transform the programHash back into the address
     const scriptHash = reverseHex(programHash.slice(2, 42))
-    if (getAddressFromScriptHash(scriptHash) !== address) {
-      // address is not valid Neo address, could be btc, ltc etc.
-      return false
-    }
-    return true
-  } catch (e) { return false }
+    return getAddressFromScriptHash(scriptHash) === address;
+  } catch (e) {
+    return false
+  }
 }
