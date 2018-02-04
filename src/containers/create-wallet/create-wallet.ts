@@ -5,7 +5,7 @@ import {
 } from 'ionic-angular'
 import { LoginPage } from '../login/login'
 
-import { wallet } from '../../libs/neon-js'
+import { wallet } from '../../libs/neon'
 import { WalletProvider } from '../../providers/wallet.provider'
 import { BackupWalletPage } from './backup-wallet/backup-wallet'
 

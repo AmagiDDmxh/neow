@@ -6,8 +6,10 @@ import {
 import { ApiProvider } from '../../providers/api/api.provider'
 import { PossessionDetailPage } from './possession-detail/possession-detail'
 import { WalletProvider } from '../../providers/wallet.provider'
-import { Account } from '../../libs/neon-js/src/wallet'
-import { ASSETS } from '../../shared/consts'
+
+import { Account } from '../../libs/neon/src/wallet'
+import { ASSET_ENUM } from '../../shared/constants'
+import { dev } from '../../environment'
 
 @IonicPage({
   name: 'Possessions',
@@ -17,15 +19,13 @@ import { ASSETS } from '../../shared/consts'
   selector: 'page-possessions',
   templateUrl: 'possessions.html'
 })
-export class PossessionsPage {
+export class PossessionsPage implements OnInit {
   splash: boolean = false
-  balances
   possessionDetailPage = PossessionDetailPage
 
-  account: Account | any = {
-    isDefault: true,
-    address: 'ANsvyS9q1n6SBDVSdB6uFwVeqT512YSAoW'
-  }
+  balances
+
+  account: Account = this.walletProvider.getDefaultAccount()
   loading: Loading = this.loadingCtrl.create()
 
   constructor (
@@ -36,20 +36,14 @@ export class PossessionsPage {
     private loadingCtrl: LoadingController
   ) {}
 
-  ionViewDidLoad () {
-    try {
-      this.account = this.walletProvider.getDefaultAccount() || console.log(this.account)
-    } catch (e) {
-      console.log(e)
-    }
-
+  ngOnInit () {
     this.loading.present()
 
     this.apiProvider
         .getBalances(this.account.address)
         .subscribe(res => {
-          console.log(res)
-          this.balances = this.parseBalances(res['balances'])
+          this.balances = dev ? this.parseNeonBalances(res['balance']) : this.parseBalances(res['balances'])
+          console.log(this.balances)
           this.loading.dismissAll()
         })
   }
@@ -66,6 +60,17 @@ export class PossessionsPage {
 
     return toast.present()
   }
+  /**
+   * [{ amount: 1, asset: 'NEO', unspent: [] }, ...]
+   * mapTo -> [{ amount: 1, asset: 'NEO', assetId: 'ASI120SAiwq9asunxa....'}, ...]
+  **/
+  private parseNeonBalances (balances) {
+    return balances.map(({ amount, asset }) => ({
+      amount,
+      asset,
+      assetId: ASSET_ENUM[asset]
+    }))
+  }
 
   private parseBalances (balances) {
     return Object.entries(balances)
@@ -73,7 +78,7 @@ export class PossessionsPage {
                    ([assetId, amount])=> ({
                      amount,
                      assetId,
-                     name: ASSETS[assetId]
+                     asset: ASSET_ENUM[assetId]
                    })
                  )
   }

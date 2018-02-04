@@ -20,18 +20,18 @@
 	<ion-card class="possession-data-card">
 		<div class="possession-data-amount">{{ possessionData.amount }}</div>
 		<div class="possession-data-approximation">≈ ￥ {{ possessionData.amount * tokenCurrentPrice }}</div>
-		<button color="light" ion-button round class="otcgo-button" (click)="presentActionSheet()">
+		<button color="light" ion-button round class="otcgo-button" (click)="showSendModal()">
 			Transfer
 		</button>
 	</ion-card>
 
-	{{ items.length ? '' : 'None' }}
+	<h5>{{ transactionHistories.length ? '' : '没有数据' }}</h5>
 
-	<timeline endIcon="call" *ngIf="items.length">
+	<timeline endIcon="call" *ngIf="transactionHistories.length">
 		<h5>交易记录</h5>
-		<timeline-item *ngFor="let item of items" ion-row>
+		<timeline-item *ngFor="let item of transactionHistories" ion-row>
 			<ion-col col-2>
-				<ion-icon name="book"></ion-icon>
+				<ion-icon></ion-icon>
 			</ion-col>
 
 			<ion-col col-4>
@@ -40,18 +40,15 @@
 
 			<ion-col col-6>
 				<div class="content">
-              <span>
-                {{ item.dest === address ? '转入' : '转出' }}
-              </span> {{ item.amount }}
 					<span>
-                {{ possessionData.name }}
-              </span>
+						{{ item.dest === account.address ? '转入' : '转出' }}
+					</span> {{ item.amount }}
+					<span>
+						{{ possessionData.name }}
+					</span>
 				</div>
 			</ion-col>
-
 		</timeline-item>
-
-
 	</timeline>
 
 </ion-content>

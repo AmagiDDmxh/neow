@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core'
 
 import { File } from '@ionic-native/file'
 
-import { wallet } from '../libs/neon-js'
+import { wallet } from '../libs/neon'
 import { OLD_WALLET_CHECK_LIST, NEW_WALLET_CHECK_LIST, OTCGO_WALLET_FILE_NAME } from "./wallet.consts"
 
 /* disabled */
@@ -29,13 +29,12 @@ export class WalletProvider {
     private file: File,
     private platform: Platform
   ) {
-    if (this.platform.is('cordova') || this.platform.is('mobile')) {
+    if (this.platform.is('mobile')) {
       this.dataDirectory = this.file.dataDirectory
 
       if (this.isWalletAlreadyExits()) {
         this.readWallet().then((walletStr: string) => {
-          const walletJSON = JSON.parse(walletStr)
-          this.wallet = walletJSON
+          this.wallet = JSON.parse(walletStr)
         })
       }
     }
@@ -64,7 +63,6 @@ export class WalletProvider {
   set wallet (file) {
     if (this.isWallet(file))
       this._wallet = new wallet.Wallet(file)
-
   }
 
   get wallet () {
@@ -149,5 +147,4 @@ export class WalletProvider {
   }
 
   isWallet = (items) => NEW_WALLET_CHECK_LIST.every(i => items.hasOwnProperty(i))
-
 }

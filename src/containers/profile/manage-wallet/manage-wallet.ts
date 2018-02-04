@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams,AlertController } from 'ionic-angular';
 
-import { wallet } from '../../../libs/neon-js';
+
 import { WalletProvider } from "../../../providers/wallet.provider";
 import { AddWalletPage } from './add-wallet/add-wallet'
 // @IonicPage()

@@ -1,134 +1,117 @@
 import { Component } from '@angular/core'
 import {
-  NavParams,
-  IonicPage,
-  NavController,
-  ModalController, LoadingController,
+	NavParams,
+	IonicPage,
+	NavController,
+	ModalController, LoadingController,
 } from 'ionic-angular'
 import { ApiProvider } from '../../../providers/api/api.provider'
 import { WalletProvider } from '../../../providers/wallet.provider'
 
 import 'rxjs/add/operator/filter'
+import { WalletAccount } from '../../../libs/neon/src/wallet/index'
+
+/* TODO: This code is a mess, Try whenever refactor it MEOW */
+
+interface TransactionHistory {
+	assetId
+	amount
+	dest
+	confirm
+	txid
+	name
+}
 
 @IonicPage()
 @Component({
-  selector: 'page-possession-detail',
-  templateUrl: 'possession-detail.html',
+	selector: 'page-possession-detail',
+	templateUrl: 'possession-detail.html',
 })
 export class PossessionDetailPage {
-  possessionData
-  address
-  tokenCurrentPrice
-  loading = this.loadingCtrl.create()
-  items = [
-    {
-      title: 'Courgette daikon',
-      content: `Parsley amaranth tigernut silver beet maize fennel spinach. Ricebean black-eyed pea maize
-                scallion green bean spinach cabbage jícama bell pepper carrot onion corn plantain garbanzo.
-                Sierra leone bologi komatsuna celery peanut swiss chard silver beet squash dandelion maize
-                chicory burdock tatsoi dulse radish wakame beetroot.`,
-      icon: 'calendar',
-      time: { subtitle: '4/16/2013', title: '21:30' }
-    },
-    {
-      title: 'Courgette daikon',
-      content: `Parsley amaranth tigernut silver beet maize fennel spinach. Ricebean black-eyed pea maize
-                scallion green bean spinach cabbage jícama bell pepper carrot onion corn plantain garbanzo.
-                Sierra leone bologi komatsuna celery peanut swiss chard silver beet squash dandelion maize
-                chicory burdock tatsoi dulse radish wakame beetroot.`,
-      icon: 'calendar',
-      time: { subtitle: 'January', title: '29' }
-    },
-    {
-      title: 'Courgette daikon',
-      content: `Parsley amaranth tigernut silver beet maize fennel spinach. Ricebean black-eyed pea maize
-                scallion green bean spinach cabbage jícama bell pepper carrot onion corn plantain garbanzo.
-                Sierra leone bologi komatsuna celery peanut swiss chard silver beet squash dandelion maize
-                chicory burdock tatsoi dulse radish wakame beetroot.`,
-      icon: 'calendar',
-      time: { title: 'Short Text' }
-    }
-  ]
+	possessionData
+	tokenCurrentPrice
+	transactionHistories: TransactionHistory[]
+	loading = this.loadingCtrl.create()
+	account: WalletAccount = this.walletProvider.getDefaultAccount()
 
-  constructor (
-    public navCtrl: NavController,
-    public navParams: NavParams,
-    private api: ApiProvider,
-    private walletProvider: WalletProvider,
-    private modalCtrl: ModalController,
-    private loadingCtrl: LoadingController
-  ) {
+	constructor (
+		public navCtrl: NavController,
+		public navParams: NavParams,
+		private api: ApiProvider,
+		private walletProvider: WalletProvider,
+		private modalCtrl: ModalController,
+		private loadingCtrl: LoadingController
+	) {
 
-    this.initData()
-        .then(() => {
-          this.api
-              .getTransactionHistory(this.address)
-              .map(res => res['data'].filter(this.filterByName(this.possessionData)).map(this.parseTx))
-              .subscribe(
-                data => {
-                  this.items = data
-                  this.loading.dismissAll()
-                },
-                null,
-                () => {
-                  this.loading.dismissAll()
-                }
-              )
+		this.initData()
+		    .then(() => {
+			    this.api
+			        .getTransactionHistory(this.account.address)
+			        .map(res => res['data'].filter(this.filterByName(this.possessionData)).map(this.parseTx))
+			        .subscribe(
+				        data => {
+					        this.transactionHistories = data
+					        this.loading.dismissAll()
+				        },
+				        null,
+				        () => {
+					        this.loading.dismissAll()
+				        }
+			        )
 
-          this.api
-              .getPrice(this.possessionData.name)
-              .subscribe(
-                price => {
-                  console.log(price)
-                  this.tokenCurrentPrice = price
-                },
-                error => {
-                  if (this.possessionData.name.toLowerCase() === 'neo')
-                    this.tokenCurrentPrice = 1024
-                  else
-                    this.tokenCurrentPrice = 512
-                  this.loading.dismissAll()
-                  console.log(error)
-                },
-                () => {
-                  this.loading.dismissAll()
-                }
-              )
-        })
-        .catch(e => console.log(e))
+			    this.api
+			        .getPrice(this.possessionData.asset)
+			        .subscribe(
+				        price => {
+					        console.log(price)
+					        this.tokenCurrentPrice = price
+				        },
+				        /* Because the CROSS ORIGIN problem set it temporary */
+				        error => {
+					        this.loading.dismissAll()
+					        console.log(error)
 
-    console.log('rr')
-  }
+					        this.tokenCurrentPrice =
+						        (this.possessionData.asset.toLowerCase() === 'neo') ? 1024 : 512
+				        },
+				        () => {
+					        this.loading.dismissAll()
+				        }
+			        )
+		    })
+		    .catch(e => console.log(e))
 
-  initData () {
-    this.address = 'ANsvyS9q1n6SBDVSdB6uFwVeqT512YSAoW'
-    this.possessionData = this.navParams.data
-    this.loading.present()
-    return Promise.resolve()
-  }
+		console.log('rr')
+	}
 
-  ionViewDidLoad () {
-    console.log('ionViewDidLoad PossessionDetailPage')
-  }
+	initData () {
+		this.possessionData = this.navParams.data
+		this.loading.present()
+		return Promise.resolve()
+	}
 
-  presentActionSheet() {
-    const sendModal = this.modalCtrl.create('SendModalComponent', {
-      balances: this.possessionData.amount
-    }, { cssClass: 'inset-modal' });
-    sendModal.present();
-  }
+	ionViewDidLoad () {
 
-  private parseData (data) {
-    return data['data']
-  }
+	}
 
-  private filterByName (possessionData) {
-    return (data) => data.name === possessionData.name
-  }
+	showSendModal () {
+		const sendModal = this.modalCtrl.create(
+			'SendModalComponent',
+			this.possessionData,
+			{ cssClass: 'inset-modal' }
+		)
+		sendModal.present()
+	}
 
-  private parseTx (data) {
-    const [subtitle, title] = data['time'].split(' ')
-    const time = { subtitle, title }
-    return Object.assign({}, data, { time })
-  }
+	private filterByName (possessionData) {
+		return (data) => data.name === possessionData.asset
+	}
+
+	private parseTx (data) {
+		const [subtitle, title] = data['time'].split(' ')
+		return {
+			...data,
+			time: { subtitle, title }
+		}
+	}
 }

@@ -16,7 +16,7 @@
 
 	<ion-card class="card-list" *ngFor="let balance of balances">
 
-		<ion-item [navPush]="possessionDetailPage" [navParams]="{ name: balance.asset, amount: balance.amount }">
+		<ion-item [navPush]="possessionDetailPage" [navParams]="balance">
 			<ion-icon name='logo-bitcoin' item-start></ion-icon>
 			{{ balance.asset }}
 			<ion-note item-end>

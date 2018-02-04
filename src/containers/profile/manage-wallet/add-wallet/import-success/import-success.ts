@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams,AlertController } from 'ionic-angular';
 
-import { wallet } from '../../../../../libs/neon-js';
 import { WalletProvider } from "../../../../../providers/wallet.provider";
-import { ManageWalletPage } from '../../../manage-wallet/manage-wallet'
+import { ManageWalletPage } from '../../manage-wallet'
+
 // @IonicPage()
 @Component({
   selector: 'page-import-success',
@@ -11,7 +11,7 @@ import { ManageWalletPage } from '../../../manage-wallet/manage-wallet'
 
 })
 export class ImportSuccessPage {
-    manageWalletPage = ManageWalletPage
+  manageWalletPage = ManageWalletPage
   constructor(
       public navCtrl: NavController, 
       public navParams: NavParams,

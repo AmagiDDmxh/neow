@@ -24,7 +24,3 @@ export class StopPropagationDirective implements OnInit, OnDestroy {
     this.unSubscriber()
   }
 }
-
-@Directive({
-
-})

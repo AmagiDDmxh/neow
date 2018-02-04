@@ -6,9 +6,12 @@ import {
 } from 'ionic-angular'
 import { CreateWalletPage } from '../create-wallet/create-wallet';
 
-import { wallet } from '../../libs/neon-js';
+import { wallet } from '../../libs/neon';
 import { WalletProvider } from "../../providers/wallet.provider";
 import { TabsPage } from '../tabs/tabs'
+import TEST_WALLET from '../../shared/userWallet'
+
+console.log(TEST_WALLET)
 
 @IonicPage({
   name: 'Login',
@@ -87,8 +90,7 @@ export class LoginPage {
   login () {
     // For dev
     if (this.WIFKey === 'test') {
-      this.walletProvider.addAccount('ANsvyS9q1n6SBDVSdB6uFwVeqT512YSAoW')
-      console.log('Enter Dev Mode')
+      this.walletProvider.wallet = TEST_WALLET
       return this.navCtrl.setRoot(TabsPage)
     }
 
@@ -102,7 +104,6 @@ export class LoginPage {
     }
 
     if (this._file && !this.isWIFKey && !this.WIFKey) {
-      console.log('Is Old wallet?',this.walletProvider.isOldWallet(this._file))
       if (this.walletProvider.isOldWallet(this._file)) {
         this.walletProvider.upgradeAndAddToAccount(this._file, this.passphrase)
             .then(_ => {

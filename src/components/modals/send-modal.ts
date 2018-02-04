@@ -1,84 +1,101 @@
-import { Component } from '@angular/core'
+import { Component, Inject } from '@angular/core'
 import {
-  IonicPage, NavParams,
-  ViewController
+	IonicPage, NavParams,
+	ViewController
 } from 'ionic-angular'
+import { FormBuilder, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms'
+
+import { wallet } from '../../libs/neon'
+import { ApiProvider } from '../../providers/api/api.provider'
+import { TransferPostBody } from '../../providers/api/api.models'
+import { WalletProvider } from '../../providers/wallet.provider'
+import { WalletAccount } from '../../libs/neon/src/wallet/index'
 
 @IonicPage()
 @Component({
-  selector: 'send-modal',
-  template: `
-		<ion-header>
-			<ion-navbar>
-				<ion-buttons end>
-					<button ion-button icon-only (click)="dismiss()">
-						<ion-icon name='close'></ion-icon>
-					</button>
-				</ion-buttons>
-			</ion-navbar>
-		</ion-header>
-
-		<ion-content padding class="send-modal__content" fixed>
-
-			<div class="container">
-				<h5>转账</h5>
-
-				<ion-item class="round">
-					<ion-input placeholder="收款人钱包地址" [(ngModel)]="address"></ion-input>
-				</ion-item>
-				
-				<div class="tooltips">
-					
-				</div>
-
-				<ion-item class="round">
-					<ion-input placeholder="密码" [(ngModel)]="passphrase"></ion-input>
-				</ion-item>
-
-				<ion-item class="round">
-					<ion-checkbox [(ngModel)]="rememberPassphrase"></ion-checkbox>
-				</ion-item>
-				
-				<ion-item class="round">
-					<ion-input placeholder="转账数量" [(ngModel)]="amount"></ion-input>
-				</ion-item>
-				
-				<ion-item class="round">
-					<ion-input placeholder="备注" [(ngModel)]="label"></ion-input>
-				</ion-item>
-
-				<div class="spacer"></div>
-
-				<button ion-button
-				        round
-				        full
-				        (click)="transfer()"
-				        class="otcgo-button--colour">
-					转账
-				</button>
-			</div>
-		</ion-content>
-  `
+	selector: 'send-modal',
+	templateUrl: 'send-modal.html'
 })
 export class SendModalComponent {
-  params
-	address
-	amount
-	label
-	rememberPassphrase
+	sendForm: FormGroup
+	possessionData = this.navParams.data
+	account: WalletAccount = this.walletProvider.getDefaultAccount()
 
-  constructor (
-    public viewCtrl: ViewController,
-    public navParams: NavParams
-  ) {
-    this.params = navParams.data
-  }
+	constructor (
+		public viewCtrl: ViewController,
+		public navParams: NavParams,
+	  private api: ApiProvider,
+	  private walletProvider: WalletProvider,
+	  @Inject(FormBuilder) private fb: FormBuilder
+	) {
+		this.sendForm = this.fb.group({
+			address: ['', [Validators.required, addressValidator]],
+			passphrase: ['', Validators.required],
+			amount: ['', [Validators.required, amountValidator(this.possessionData.amount)]],
+			label: [''],
+		})
 
-  dismiss () {
-    this.viewCtrl.dismiss()
-  }
+		console.log(this.sendForm, this.address)
+	}
 
-  transfer () {
+	get address() { return this.sendForm.get('address') }
+	get passphrase() { return this.sendForm.get('passphrase') }
+	get amount() { return this.sendForm.get('amount') }
+	get label() { return this.sendForm.get('label') }
 
-  }
+	dismiss () {
+		this.viewCtrl.dismiss()
+		this.sendForm.reset()
+	}
+
+	/**
+	 * Address must be check validity and required
+	 * @if address && isAddress(address)
+	 * passphrase been use for signature the walelt file is require
+	 * amount is required and translate to big num
+	 * optional Label
+	 **/
+	transfer () {
+		console.log(this.sendForm)
+		this.address.markAsTouched()
+		this.amount.markAsTouched()
+
+
+		if (!this.sendForm.valid || !this.address.valid || !this.amount.valid || !this.passphrase.valid) {
+			return
+		}
+
+		const { address } = this.account
+
+		this.api.sendAsset(
+			<TransferPostBody>{
+				source: address,
+				dest: this.address,
+				amount: this.amount,
+				assetId: this.possessionData.assetId
+			},
+			this.passphrase.value
+		).then(
+			console.log
+		).catch(
+			console.log
+		)
+
+	}
+}
+
+const { isAddress } = wallet
+
+function addressValidator (addressCtrl: FormControl): ValidationErrors {
+	const value = addressCtrl.value
+	if (!value || !isAddress(value)) return { invalidAddress: true }
+	return null
+}
+
+function amountValidator (maxValue) {
+	return (amountCtrl: FormControl): ValidationErrors | null => {
+		const value = amountCtrl.value
+		if (!value || value <= 0 || value > maxValue) return { invalidAmount: true }
+		return null
+	}
 }
