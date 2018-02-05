@@ -1,25 +1,50 @@
 page-manage-wallet {
-
-  ion-content {
-    background-image: url('../../../assets/imgs/bg-manage-wallet.png');
-    background-position: center top;
-    background-size: cover;
-    .scroll-content {
-      display: flex;
-      justify-content: flex-start;
-      align-items: center;
-      flex-direction: column;
+    ion-content {
+        background-image: url('../../../assets/imgs/bg-manage-wallet.png');
+        background-position: center top;
+        background-size: cover;
+        .scroll-content {
+            display: flex;
+            justify-content: flex-start;
+            align-items: flex-start;
+            flex-direction: column;
+        }
     }
-  }
-  .mw {
-    .add-wallet-button {
-      width: 92%;
-      position: absolute;
-      bottom: 100px;
-      button {
-        background: linear-gradient(270deg, rgb(47, 177, 213), rgb(50, 118, 217));
-        color: aliceblue;
-      }
+    .mw {
+        .uname {
+            margin-top: 30px;
+            margin-left: 30px;
+            margin-bottom: 10px;
+            font-size: 2.4rem;
+        }
+        ion-slides {
+            height: 500px;
+        }
+        .point-card {
+            position: absolute;
+            bottom: 0px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 20px;
+            background: transparent;
+            box-shadow: none;
+            .circle-point {
+                width: 10px;
+                height: 10px;
+                background-color: aliceblue;
+                margin-left: 20px;
+                border-radius: 50px;
+            }
+        }
+        .add-wallet-button {
+            width: 92%;
+            position: absolute;
+            bottom: 100px;
+            button {
+                background: linear-gradient(270deg, rgb(47, 177, 213), rgb(50, 118, 217));
+                color: aliceblue;
+            }
+        }
     }
-  }
 }

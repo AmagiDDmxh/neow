@@ -8,8 +8,8 @@
 
 
 <ion-content class="mw">
-
-    <ion-slides>
+    <span class="uname">{{user}}</span>
+    <ion-slides :initialSlide="1" (ionSlideDidChange)="slideChange()">
         <ion-slide style="background-color: green">
             <h2>Slide 1</h2>
         </ion-slide>
@@ -23,7 +23,9 @@
         </ion-slide>
     </ion-slides>
 
-    <div class="add-wallet-button">
-        <button ion-button round block clear [disabled]="disabledBtn" (click)="navCtrl.push(addWalletPage)">增加钱包</button>
-    </div>
+    <ion-card class="point-card">
+        <div class="circle-point" *ngFor="let item in numWalletArray; let i = index">{{item}}</div>
+        <!-- <div class="circle-point"></div> -->
+        <!-- <div class="circle-point"></div> -->
+    </ion-card>
 </ion-content>

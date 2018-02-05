@@ -59,9 +59,9 @@ export class CreateWalletPage {
     if (this.wif && !wallet.isWIF(this.wif))
       return this.showPrompt('WIF 错误')
 
-    let i = await this.createLoading('Creating wallet!')
+    // let i = await this.createLoading('Creating wallet!')
 
-    await i.present()
+    // await i.present()
 
     try {
       const accountTemp = new wallet.Account(
@@ -82,7 +82,7 @@ export class CreateWalletPage {
       this.walletProvider.addAccount(account)
       this.walletProvider.writeWalletFile()
 
-      await i.dismiss()
+      // await i.dismiss()
       await this.navCtrl.push(this.backupWalletPage)
     } catch (e) {
       console.log(e)
@@ -95,14 +95,14 @@ export class CreateWalletPage {
     return passphrase.length >= 4
   }
 
-  createLoading (content) {
-    const loading = this.loadingCtrl.create({
-      content,
-      spinner: 'crescent'
-    })
+  // createLoading (content) {
+  //   const loading = this.loadingCtrl.create({
+  //     content,
+  //     spinner: 'crescent'
+  //   })
 
-    return Promise.resolve(loading)
-  }
+  //   return Promise.resolve(loading)
+  // }
 
   showPrompt (message) {
     const toast = this.toastCtrl.create({
