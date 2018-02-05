@@ -68,31 +68,30 @@ export class ApiProvider {
 		           .get(`${this.mainScanApi}/v1/get_block/${height}`)
 	}
 
-	sendAsset (body: TransferPostBody, passphrase) {
+	// TODO: Transfer
+	sendAsset (body, passphrase) {
 		return this.postTransfer(body)
-		           .then((res: TransferResBody) => this.parseTransfer(passphrase)(res))
-		           .then((body: SignPostBody) => this.postSign(body))
-
+		           /*.then((res) => this.parseTransfer(passphrase)(res))
+		           .then((body) => this.postSign(body))*/
 	}
 
 	/**
 	 *
 	 **/
-	postTransfer (body: TransferPostBody): Promise<TransferResBody> {
+	postTransfer (transferPostData: TransferPostBody): Observable<TransferResBody> {
 		return this.http
-		           .post(`${this.getApiEndpoint()}/balances/transfer`, body)
-		           .toPromise<TransferResBody>()
+		           .post<TransferResBody>(`${this.getApiEndpoint()}/transfer`, transferPostData)
 
 	}
 
 	private parseTransfer (passphrase) {
-		return (res: TransferResBody): SignPostBody => {
+		return (res) => {
 			const { publicKey, key } = this.walletProvider.getDefaultAccount()
 			const privateKey = getPrivateKeyFromWIF(decrypt(key, passphrase))
 			const { transaction } = res['transaction']
 			const signature = generateSignature(transaction, privateKey)
 
-			return <SignPostBody>{
+			return {
 				publicKey,
 				transaction,
 				signature
@@ -100,8 +99,12 @@ export class ApiProvider {
 		}
 	}
 
-	postSign (body: SignPostBody): Promise<SignResBody> {
-		return this.http.post(`${this.getApiEndpoint()}/sign`, body).toPromise<SignResBody>()
+	postSign (body) {
+		return this.http.post(`${this.getApiEndpoint()}/sign`, body).toPromise()
+	}
+
+	postBroadcast (body) {
+		return this.http.post(`${this.getApiEndpoint()}/broadcast`, body)
 	}
 
 	handleError (error) {

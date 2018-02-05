@@ -13,6 +13,7 @@ import { ImportObservationPage } from './manage-wallet/add-wallet/import-observa
 import { ImportSuccessPage } from './manage-wallet/add-wallet/import-success/import-success'
 
 import { ManageWalletPage } from './manage-wallet/manage-wallet'
+import { ComponentsModule } from '../../components/components.module'
 
 const COMPONENTS = [
   ProfilePage,
@@ -29,7 +30,8 @@ const COMPONENTS = [
   entryComponents: COMPONENTS,
   exports: COMPONENTS,
   imports: [
-    IonicPageModule.forChild(ProfilePage)
+      ComponentsModule,
+      IonicPageModule.forChild(ProfilePage)
   ],
 })
 export class ProfilePageModule { }

@@ -1,0 +1,18 @@
+<!-- TODO: namespace specific -->
+<div
+	class="m-carousel__item"
+	[ngClass]="{
+    'm-carousel__item--card': parent.type === 'card',
+    'is-active': isActive,
+    'is-in-stage': inStage,
+    'is-hover': hover,
+    'is-animating': animating
+  }"
+	[ngStyle]="itemTranslateStyle"
+	(click)="handleItemClick()">
+	<div
+		*ngIf="parent.type === 'card'"
+		class="m-carousel__mask">
+	</div>
+	<ng-content></ng-content>
+</div>

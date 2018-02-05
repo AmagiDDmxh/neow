@@ -9,6 +9,44 @@ page-manage-wallet {
       justify-content: flex-start;
       align-items: center;
       flex-direction: column;
+      margin-bottom: 0 !important;
+    }
+
+    slide-card {
+      width: 95%;
+      text-align: center;
+      left: 20px;
+      right: 20px;
+      top: 20px;
+      bottom: 20px;
+      position: absolute;
+      z-index: 2;
+      display: block;
+      overflow-x: hidden;
+      -webkit-overflow-scrolling: touch;
+      will-change: scroll-position;
+      contain: size style layout;
+
+      .m-carousel {
+        height: 500px;
+
+        &__container {
+          height: 450px;
+          margin-bottom: 20px;
+        }
+
+        &__item {
+          background-color: white;
+          width: 80%;
+          border-radius: 30px;
+
+          box-shadow: 0 2px 30px rgba(0, 147, 221, 0.3);
+        }
+
+        &__mask {
+          border-radius: 30px;
+        }
+      }
     }
   }
   .mw {

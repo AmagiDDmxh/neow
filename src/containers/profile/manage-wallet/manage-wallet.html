@@ -1,29 +1,24 @@
-<ion-header class="otcgo-header">
-
+<ion-header class="otcgo-header manage-wallet">
     <ion-navbar>
         <ion-title>管理钱包</ion-title>
     </ion-navbar>
-
 </ion-header>
 
 
 <ion-content class="mw">
 
-    <ion-slides>
-        <ion-slide style="background-color: green">
-            <h2>Slide 1</h2>
-        </ion-slide>
+    <slide-card>
+        <slide-card-item>
+            1
+        </slide-card-item>
 
-        <ion-slide style="background-color: blue">
-            <h2>Slide 2</h2>
-        </ion-slide>
+        <slide-card-item>
+            2
+        </slide-card-item>
 
-        <ion-slide style="background-color: red">
-            <h2>Slide 3</h2>
-        </ion-slide>
-    </ion-slides>
+        <slide-card-item>
+            3
+        </slide-card-item>
+    </slide-card>
 
-    <div class="add-wallet-button">
-        <button ion-button round block clear [disabled]="disabledBtn" (click)="navCtrl.push(addWalletPage)">增加钱包</button>
-    </div>
 </ion-content>

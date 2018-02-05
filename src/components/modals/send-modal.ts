@@ -35,10 +35,10 @@ export class SendModalComponent {
 			label: [''],
 		})
 
-		console.log(this.sendForm, this.address)
+		console.log(this.sendForm, this.toAddress)
 	}
 
-	get address() { return this.sendForm.get('address') }
+	get toAddress() { return this.sendForm.get('address') }
 	get passphrase() { return this.sendForm.get('passphrase') }
 	get amount() { return this.sendForm.get('amount') }
 	get label() { return this.sendForm.get('label') }
@@ -56,37 +56,32 @@ export class SendModalComponent {
 	 * optional Label
 	 **/
 	transfer () {
-		console.log(this.sendForm)
-		this.address.markAsTouched()
+		this.toAddress.markAsTouched()
 		this.amount.markAsTouched()
 
 
-		if (!this.sendForm.valid || !this.address.valid || !this.amount.valid || !this.passphrase.valid) {
+		if (!this.sendForm.valid || !this.toAddress.valid || !this.amount.valid || !this.passphrase.valid) {
 			return
 		}
 
-		const { address } = this.account
+		const source = this.account.address
+		const dest = this.toAddress.value
+		const amount = this.amount.value
+		const assetId = this.possessionData.assetId
 
-		this.api.sendAsset(
-			<TransferPostBody>{
-				source: address,
-				dest: this.address,
-				amount: this.amount,
-				assetId: this.possessionData.assetId
-			},
-			this.passphrase.value
-		).then(
-			console.log
-		).catch(
-			console.log
-		)
-
+		// TODO: Wait for backend
+		this.api
+		    .postTransfer(<TransferPostBody>{ source, dest, amount, assetId })
+		    .subscribe(
+			    res => console.log('res', res),
+			    err => console.log('err', err)
+		    )
 	}
 }
 
-const { isAddress } = wallet
 
 function addressValidator (addressCtrl: FormControl): ValidationErrors {
+	const { isAddress } = wallet
 	const value = addressCtrl.value
 	if (!value || !isAddress(value)) return { invalidAddress: true }
 	return null
