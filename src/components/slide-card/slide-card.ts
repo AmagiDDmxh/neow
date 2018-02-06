@@ -90,7 +90,8 @@ export class SlideCard extends SlideCardProps {
   }
 
   updateItems () {
-    this.items = this.children.filter(child => child.name === 'SlideCardItem')
+
+    // this.items = this.children.filter(child => child.name === 'SlideCardItem')
   }
 
   resetItemPosition (oldIndex) {
@@ -155,7 +156,6 @@ export class SlideCard extends SlideCardProps {
   }
 
   ngOnChanges () {
-    this.updateItems()
     addResizeListener(this.el.nativeElement.querySelector('.m-carousel'), this.resetItemPosition.bind(this))
     if (this.initialIndex < this.items.length && this.initialIndex >= 0)
       this.activeIndex = this.initialIndex
@@ -170,7 +170,7 @@ export class SlideCard extends SlideCardProps {
   }
 
   ngAfterViewInit () {
-    this.items = Array.from(this.children)
+    this.items = this.children.map(i => i)
     this.ngOnChanges()
   }
 

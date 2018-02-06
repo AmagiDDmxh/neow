@@ -1,61 +1,80 @@
 import { Injectable } from '@angular/core'
 import {
-  HttpClient,
+	HttpClient,
 } from '@angular/common/http'
 import { Observable } from 'rxjs/Observable'
 
 @Injectable()
 export class NeoPriceProvider {
-  CURRENCIES: string[] = ['aud', 'brl', 'cad', 'chf', 'clp', 'cny', 'czk', 'dkk', 'eur', 'gbp', 'hkd', 'huf', 'idr', 'ils', 'inr', 'jpy', 'krw', 'mxn', 'myr', 'nok', 'nzd', 'php', 'pkr', 'pln', 'rub', 'sek', 'sgd', 'thb', 'try', 'twd', 'usd', 'zar']
-  coinMarketCapApi = '//api.coinmarketcap.com/v1'
-  ticker = 'ticker'
+	coinMarketCapApi = '//api.coinmarketcap.com/v1'
+	coincapApi = '//coincap.io'
+	fixerApi = '//api.fixer.io'
+	ticker = 'ticker'
 
-  constructor (private http: HttpClient) {}
+	CURRENCIES: string[] = [ 'aud', 'brl', 'cad', 'chf', 'clp', 'cny', 'czk', 'dkk', 'eur', 'gbp', 'hkd', 'huf', 'idr',
+	                         'ils', 'inr', 'jpy', 'krw', 'mxn', 'myr', 'nok', 'nzd', 'php', 'pkr', 'pln', 'rub', 'sek', 'sgd', 'thb', 'try', 'twd', 'usd', 'zar']
+	NEO_CHAIN_COINS: string[] = ['NEO', 'GAS', 'TNC', 'QLC', 'TKY', 'RHT', 'CPX', 'ACAT', 'ZPT', 'APH', 'DBC', 'RPX', 'BCS']
 
-  getPrice (coin = 'NEO', currency = 'cny') {
-    return this.query(`${this.coinMarketCapApi}/${this.ticker}/${coin}/`, currency)
-               .map(price => price[coin])
-  }
 
-  getPrices (coins = ['NEO'], currency = 'cny') {
-    return this.query(`${this.coinMarketCapApi}/${this.ticker}/`, currency)
-               .map(mapping => {
-                 coins = coins.map((coin) => coin.toUpperCase())
-                 const prices = this.pick(mapping, ...coins)
+	constructor (private http: HttpClient) {}
 
-                 if (!coins.some((coin) => !prices[coin])) return prices
-                 else throw new Error('None of the coin symbols are supported by CoinMarketCap!')
-               })
-  }
+	getPrice (coin = 'NEO', currency = 'cny') {
+		return this.query(`${this.coinMarketCapApi}/${this.ticker}/${coin}/`, currency)
+		           .map(price => price[coin])
+	}
 
-  private query (url, currency) {
-    currency = currency.toLowerCase()
-    if (this.CURRENCIES.includes(currency))
-      return this.http.get(url, {
-        params: {
-          limit: 0,
-          convert: currency
-        }
-      } as any).map((res: any) => {
-        if (res.error) throw new Error(res.error)
-        return this.mapPrices(res, currency)
-      })
-    else
-      return Observable.throw(new ReferenceError(`${currency} 不在可接受的货币列表里!`))
-  }
+	getPrices (currency = 'cny') {
+		return this.query(`${this.coincapApi}/front`, currency)
+	}
 
-  private mapPrices (tickers, currency) {
-    const mappings = {}
+	getExchangeRates (base = 'USD') {
+		return this.http.get(`${this.fixerApi}/latest`, {params: { base: 'USD' }})
+	}
 
-    tickers.forEach(ticker =>
-      mappings[ticker.symbol] = parseFloat(ticker[`price_${currency.toLowerCase()}`])
-    )
+	private query (url, currency) {
+		currency = currency.toLowerCase()
+		if (this.CURRENCIES.includes(currency) && url.includes(this.coincapApi))
+			return this.http.get(url).map(res => {
+				if (res.error) return Observable.throw(new Error(res.error))
+				return this.mapCoinCapPrices(res)
+			})
 
-    return mappings
-  }
+		if (this.CURRENCIES.includes(currency)) {
+			return this.http
+			           .get(url, { params: { limit: 0, convert: currency } } as any)
+			           .map((res: any) => {
+				           if (res.error) throw new Error(res.error)
+				           return this.mapPrices(res, currency)
+			           })
+		} else {
+			return Observable.throw(new ReferenceError(`${currency} 不在可接受的货币列表里!`))
+		}
+	}
 
-  private pick (obj, ...props) {
-    return Object.assign({}, ...props.map(prop => ({ prop: obj[prop] })))
-  }
+	private mapPrices (tickers, currency) {
+		return tickers.filter(data => this.NEO_CHAIN_COINS.includes(data['symbol']))
+		              .map(
+			              ticker => ({
+				              symbol: ticker.symbol,
+				              currentPrice: ticker[`price_${currency}`],
+				              percent_24h_change: ticker['percent_24h_change']
+			              })
+		              )
+	}
+
+	private mapCoinCapPrices (res) {
+		return res.filter(coin => this.NEO_CHAIN_COINS.includes(coin['short']))
+		          .map(
+		          	coin => ({
+			            symbol: coin['short'],
+			            currentPrice: coin['price'],
+			            percent_24h_change: coin['cap24hrChange'],
+		            })
+		          )
+	}
+
+	private pick (obj, ...props) {
+		return Object.assign({}, ...props.map(prop => ({ [prop]: obj[prop] })))
+	}
 
 }

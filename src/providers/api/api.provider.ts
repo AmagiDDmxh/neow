@@ -42,19 +42,19 @@ export class ApiProvider {
 		return this.neoPriceProvider.getPrice(coin, currency)
 	}
 
-	getPrices (coins?: string[], currency?: string) {
-		return this.neoPriceProvider.getPrices(coins, currency)
+	getPrices (currency?: string) {
+		return this.neoPriceProvider.getPrices(currency)
 	}
 
 	getHeight () {
 		return this.http.get(`${this.getApiEndpoint()}/height`)
 	}
 
-	getBalances (address) {
+	getBalances<T>(address): Observable<T> {
 		if (dev) {
-			return this.http.get(`${this.testScanApi}/v1/get_balance/${address}`)
+			return this.http.get<T>(`${this.testScanApi}/v1/get_balance/${address}`)
 		}
-		return this.http.get(`${this.getApiEndpoint()}/address/${address}`)
+		return this.http.get<T>(`${this.getApiEndpoint()}/address/${address}`)
 	}
 
 	getTransactionHistory (address): Observable<object> {
@@ -88,7 +88,7 @@ export class ApiProvider {
 		return (res) => {
 			const { publicKey, key } = this.walletProvider.getDefaultAccount()
 			const privateKey = getPrivateKeyFromWIF(decrypt(key, passphrase))
-			const { transaction } = res['transaction']
+			const { transaction } = res
 			const signature = generateSignature(transaction, privateKey)
 
 			return {

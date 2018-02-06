@@ -2,7 +2,7 @@
 @import "../core/common-theme/var";
 
 @include b(carousel) {
-  overflow-x: hidden;
+  overflow: hidden;
   position: relative;
 
   @include e(container) {

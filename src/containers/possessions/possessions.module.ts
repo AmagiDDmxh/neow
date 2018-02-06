@@ -4,6 +4,7 @@ import { IonicPageModule } from 'ionic-angular'
 import { PipesModule } from '../../pipes/pipes.module'
 import { Clipboard } from '@ionic-native/clipboard'
 import { SocialSharing } from '@ionic-native/social-sharing'
+import { PossessionsProvider } from '../../providers/possessions.provider'
 
 const COMPONENTS = [
   PossessionsPage,
@@ -16,6 +17,6 @@ const COMPONENTS = [
     IonicPageModule.forChild(PossessionsPage)
   ],
   exports: COMPONENTS,
-  providers: [Clipboard, SocialSharing]
+  providers: [Clipboard, SocialSharing, PossessionsProvider]
 })
 export class PossessionsPageModule {}

@@ -3,15 +3,16 @@ import { Component } from '@angular/core';
 import { DiscoverPage } from '../discover/discover';
 import { PossessionsPage } from '../possessions/possessions';
 import { ProfilePage } from '../profile/profile'
-import { NavController } from "ionic-angular";
+import { MarketsPage } from '../markets/markets'
 
 @Component({
   templateUrl: 'tabs.html'
 })
 export class TabsPage {
-  tab1Root = PossessionsPage;
-  tab2Root = DiscoverPage;
-  tab3Root = ProfilePage;
+  possessionsPage = PossessionsPage;
+  marketsPage = MarketsPage
+  discoverPage = DiscoverPage;
+  profilePage = ProfilePage;
 
   constructor () { }
 

@@ -1,7 +1,4 @@
 import { Directive, ElementRef, EventEmitter, OnDestroy, OnInit, Output, Renderer2 } from '@angular/core'
-import { createEventSelectors } from './utils/eventSelectorCreator'
-
-const stopSelector = createEventSelectors('stop')
 
 @Directive({
   selector: '[abort.stop], [beforeinput.stop], [blur.stop], [click.stop], [compositionstart.stop], [compositionupdate.stop], [compositionend.stop], [dblclick.stop], [error.stop], [focus.stop], [focusin.stop], [focusout.stop], [input.stop], [keydown.stop], [keypress.stop], [keyup.stop], [load.stop], [mousedown.stop], [mouseenter.stop], [mouseleave.stop], [mousemove.stop], [mouseout.stop], [mouseover.stop], [mouseup.stop], [resize.stop], [scroll.stop], [select.stop], [unload.stop], [wheel.stop]'

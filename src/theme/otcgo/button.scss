@@ -6,10 +6,16 @@ button.otcgo-button {
 
   &.rounded {
     border-radius: 30px;
+
   }
 
   &--edge {
     border: 1px solid rgb(50, 118, 217);
   }
+
+  &--edge-gray {
+    border: 1px solid rgb(222, 222, 222);
+  }
 }
+
 

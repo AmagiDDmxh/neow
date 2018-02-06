@@ -1,23 +1,138 @@
-import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams,AlertController } from 'ionic-angular';
+import { Component } from '@angular/core'
+import { NavController, NavParams, AlertController, Alert, LoadingController, Loading } from 'ionic-angular'
 
+import { WalletProvider } from '../../../providers/wallet.provider'
+import { PossessionsProvider } from '../../../providers/possessions.provider'
+import { Clipboard } from '@ionic-native/clipboard'
 
-import { WalletProvider } from "../../../providers/wallet.provider";
-import { AddWalletPage } from './add-wallet/add-wallet'
+import { wallet } from '../../../libs/neon'
+
+// TODO: Mess code, Try refactor it MEOW
+
 // @IonicPage()
 @Component({
-  selector: 'page-manage-wallet',
-  templateUrl: 'manage-wallet.html',
+	selector: 'page-manage-wallet',
+	templateUrl: 'manage-wallet.html',
 
 })
 export class ManageWalletPage {
-    addWalletPage = AddWalletPage
-  constructor(
-      public navCtrl: NavController, 
-      public navParams: NavParams,
-      private walletProvider: WalletProvider,
-      public alertCtrl: AlertController
-    ) {
-  }
 
+	accounts = this.possessionsProvider.getAccounts()
+	tempLabel: string = ''
+
+	constructor (
+		private alertCtrl: AlertController,
+		private walletProvider: WalletProvider,
+		private possessionsProvider: PossessionsProvider,
+		private clipBoard: Clipboard,
+		private loadingCtrl: LoadingController
+	) {}
+
+	showKey ({ title, message }) {
+		const prompt = this.alertCtrl.create({
+			title,
+			message,
+			cssClass: 'mw__exports-actions--key',
+			buttons: [
+				{ text: '取消' },
+				{
+					text: '复制',
+					handler: () => {
+						this.clipBoard.copy(message)
+					}
+				},
+			]
+		})
+
+		prompt.present()
+	}
+
+	showPrivateKeyBox (account) {
+		const commonLoading = this.loadingCtrl.create()
+
+		const prompt = this.alertCtrl.create({
+			cssClass: 'mw__exports-actions--box',
+			title: '导出私钥',
+			message: '注意，导出私钥并使用是一件非常危险的事情，建议使用加密私钥（EncryptedKey）代替',
+			inputs: [{ name: 'passphrase', placeholder: '密码', type: 'password' }],
+			buttons: [
+				{ text: '取消' },
+				{
+					text: '确认',
+					handler: ({ passphrase }) => this.parsePassphrase(
+						account.encrypted, passphrase, commonLoading, 'privateKey')
+				}
+			]
+		})
+		prompt.present()
+
+	}
+
+	showWIFKeyBox (account) {
+		const commonLoading = this.loadingCtrl.create()
+		const prompt = this.alertCtrl.create({
+			cssClass: 'mw__exports-actions--box',
+			title: '导出私钥',
+			message: '注意，导出私钥并使用是一件非常危险的事情，建议使用加密私钥（EncryptedKey）代替',
+			inputs: [{ name: 'passphrase', placeholder: '密码', type: 'password' }],
+			buttons: [
+				{ text: '取消' },
+				{
+					text: '确认',
+					handler: ({ passphrase }) => this.parsePassphrase(
+						account.encrypted, passphrase, commonLoading, 'WIF')
+				}
+			]
+		})
+
+		prompt.present()
+	}
+
+	showEncryptedKeyBox (account) {
+		this.showKey({ title: 'EncryptedKey', message: account.encrypted })
+	}
+
+	saveAccount (account) {
+		account.label = this.tempLabel
+		this.tempLabel = ''
+		this.walletProvider.writeWalletFile()
+	}
+
+	parsePassphrase (encryptedKey, passphrase, commonLoading, type) {
+		if (!passphrase) return false
+		commonLoading.present().then(
+			_ => {
+				try {
+					wallet.decryptWIF(encryptedKey, passphrase)
+					      .then(wif => {
+						      commonLoading.dismiss()
+						      let account = new wallet.Account(wif)
+						      if (type === 'privateKey') {
+							      return this.showKey({ title: '私钥', message: account[type] })
+						      }
+						      return this.showKey({ title: 'WIF', message: account[type] })
+					      })
+					      .catch(_ => {
+						      this.handleError(commonLoading)
+					      })
+					return true
+				} catch (error) {
+					this.handleError(commonLoading)
+					return true
+				}
+			}
+		)
+	}
+
+	handleError (commonLoading: Loading) {
+		commonLoading.dismiss()
+
+		const prompt = this.alertCtrl.create({
+			title: '提示',
+			message: '密码错误',
+			buttons: ['OK']
+		})
+
+		prompt.present()
+	}
 }

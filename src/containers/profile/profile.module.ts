@@ -14,6 +14,8 @@ import { ImportSuccessPage } from './manage-wallet/add-wallet/import-success/imp
 
 import { ManageWalletPage } from './manage-wallet/manage-wallet'
 import { ComponentsModule } from '../../components/components.module'
+import { PossessionsProvider } from '../../providers/possessions.provider'
+import { Clipboard } from '@ionic-native/clipboard'
 
 const COMPONENTS = [
   ProfilePage,
@@ -33,5 +35,6 @@ const COMPONENTS = [
       ComponentsModule,
       IonicPageModule.forChild(ProfilePage)
   ],
+  providers: [PossessionsProvider, Clipboard]
 })
 export class ProfilePageModule { }

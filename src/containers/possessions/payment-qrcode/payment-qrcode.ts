@@ -18,15 +18,15 @@ import { SocialSharing } from '@ionic-native/social-sharing'
 
 		    <div class="title">钱包地址</div>
 		    <div class="address">{{ address }}</div>
-        
-		    <button ion-button class="otcgo-button--colour" round full>复制</button>
-		    <button ion-button class="otcgo-button--edge" round clear full>分享</button>
+		    
+		    <button ion-button class="otcgo-button--colour" round full (click)="copy()">复制</button>
+		    <button ion-button class="otcgo-button--edge" round clear full (click)="share()">分享</button>
       </div>
     </ion-content>
   `
 })
 export class PaymentQRCodePage {
-  address = 'asodinasdoin'
+  address: string
 
   constructor (navParams: NavParams, private clipboard: Clipboard, private socialSharing: SocialSharing) {
     this.address = navParams.get('address')

@@ -1,4 +1,4 @@
-import { Component, forwardRef, Inject, Input, OnDestroy, ViewEncapsulation } from '@angular/core'
+import { AfterContentInit, Component, forwardRef, Inject, Input, OnDestroy, ViewEncapsulation } from '@angular/core'
 import { SlideCard } from './slide-card'
 import { isUndefined } from 'util'
 
@@ -8,7 +8,7 @@ const CARD_SCALE = 0.83
 	selector: 'slide-card-item',
 	templateUrl: 'slide-card-item.html',
 })
-export class SlideCardItem implements OnDestroy {
+export class SlideCardItem implements AfterContentInit, OnDestroy {
 	@Input() name: string = 'SlideCardItem'
 	@Input() label: string | number = ''
 
@@ -82,7 +82,6 @@ export class SlideCardItem implements OnDestroy {
 		const parent = this.parent
 		if (parent && parent.type === 'card') {
 			const index = parent.items.indexOf(this)
-			console.log(index)
 			parent.setActiveItem(index)
 		}
 	}

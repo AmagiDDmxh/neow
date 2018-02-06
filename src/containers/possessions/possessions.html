@@ -9,7 +9,7 @@
 <ion-content class="possession-content">
 	<ion-card class="card-info">
 		<div class="card-avatar" (click)="openQRCode()">
-			<img src="assets/imgs/possession-avatar.svg" alt="">
+			<img src="assets/imgs/icon-avatar.svg" alt="">
 		</div>
 		<div class="card-title">{{ account.address | addressCollapse }}</div>
 	</ion-card>
@@ -20,7 +20,7 @@
 			<ion-icon name='logo-bitcoin' item-start></ion-icon>
 			{{ balance.asset }}
 			<ion-note item-end>
-				{{ balance.amount }}
+				{{ balance.amount | currency:'CNY':'symbol':'10.2-10' }}
 			</ion-note>
 		</ion-item>
 

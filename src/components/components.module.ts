@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { TimelineComponentModule } from './timeline/timeline.module'
-import { SendModalComponentModule } from './modals/send-modal.module'
+import { SendModalComponentModule } from './modals/send-modal/send-modal.module'
 import { SlideCardModule } from './slide-card/slide-card-module'
 
 const MODULES = [

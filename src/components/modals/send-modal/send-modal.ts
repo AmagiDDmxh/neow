@@ -5,11 +5,10 @@ import {
 } from 'ionic-angular'
 import { FormBuilder, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms'
 
-import { wallet } from '../../libs/neon'
-import { ApiProvider } from '../../providers/api/api.provider'
-import { TransferPostBody } from '../../providers/api/api.models'
-import { WalletProvider } from '../../providers/wallet.provider'
-import { WalletAccount } from '../../libs/neon/src/wallet/index'
+import { wallet } from '../../../libs/neon'
+import { ApiProvider } from '../../../providers/api/api.provider'
+import { TransferPostBody } from '../../../providers/api/api.models'
+import { WalletProvider } from '../../../providers/wallet.provider'
 
 @IonicPage()
 @Component({
@@ -19,14 +18,14 @@ import { WalletAccount } from '../../libs/neon/src/wallet/index'
 export class SendModalComponent {
 	sendForm: FormGroup
 	possessionData = this.navParams.data
-	account: WalletAccount = this.walletProvider.getDefaultAccount()
+	account = this.walletProvider.getDefaultAccount()
 
 	constructor (
 		public viewCtrl: ViewController,
 		public navParams: NavParams,
-	  private api: ApiProvider,
-	  private walletProvider: WalletProvider,
-	  @Inject(FormBuilder) private fb: FormBuilder
+		private api: ApiProvider,
+		private walletProvider: WalletProvider,
+		@Inject(FormBuilder) private fb: FormBuilder
 	) {
 		this.sendForm = this.fb.group({
 			address: ['', [Validators.required, addressValidator]],
@@ -38,10 +37,13 @@ export class SendModalComponent {
 		console.log(this.sendForm, this.toAddress)
 	}
 
-	get toAddress() { return this.sendForm.get('address') }
-	get passphrase() { return this.sendForm.get('passphrase') }
-	get amount() { return this.sendForm.get('amount') }
-	get label() { return this.sendForm.get('label') }
+	get toAddress () { return this.sendForm.get('address') }
+
+	get passphrase () { return this.sendForm.get('passphrase') }
+
+	get amount () { return this.sendForm.get('amount') }
+
+	get label () { return this.sendForm.get('label') }
 
 	dismiss () {
 		this.viewCtrl.dismiss()
@@ -58,7 +60,6 @@ export class SendModalComponent {
 	transfer () {
 		this.toAddress.markAsTouched()
 		this.amount.markAsTouched()
-
 
 		if (!this.sendForm.valid || !this.toAddress.valid || !this.amount.valid || !this.passphrase.valid) {
 			return
@@ -78,7 +79,6 @@ export class SendModalComponent {
 		    )
 	}
 }
-
 
 function addressValidator (addressCtrl: FormControl): ValidationErrors {
 	const { isAddress } = wallet

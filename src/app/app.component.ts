@@ -20,12 +20,7 @@ export class MyApp {
     this.rootPage = this.walletProvider.haveAnAccount()
       ? 'Tabs'
       : 'Login'
-    const address = 'ANsvyS9q1n6SBDVSdB6uFwVeqT512YSAoW'
 
-    this.api
-        .request('get', `api/v1/balances/${address}`)
-        .subscribe(console.log)
-    
     this.appReady()
   }
 

@@ -34,6 +34,8 @@ import { BackupWalletPage } from '../containers/create-wallet/backup-wallet/back
 import { ProfilePageModule } from '../containers/profile/profile.module'
 import { ComponentsModule } from '../components/components.module'
 import { NeoPriceProvider } from '../providers/api/neoprice.provider'
+import { PossessionsProvider } from '../providers/possessions.provider'
+import { MarketsPageModule } from '../containers/markets/markets.module'
 
 
 
@@ -94,6 +96,7 @@ import { NeoPriceProvider } from '../providers/api/neoprice.provider'
     CreateWalletPageModule,
     ProfilePageModule,
     ComponentsModule,
+    MarketsPageModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -107,7 +110,8 @@ import { NeoPriceProvider } from '../providers/api/neoprice.provider'
     File,
     WalletProvider,
     ApiProvider,
-    NeoPriceProvider
+    NeoPriceProvider,
+    PossessionsProvider
   ]
 })
 export class AppModule {

@@ -13,6 +13,7 @@ const ASSET_HASH = {
   'APH': 'a0777c3ce2b169d4a23bcba4565e3225a0122d95',
   'DBC': 'b951ecbbc5fe37a9c280a76cb0ce0014827294cf',
   'RPX': 'ecc6b20d3ccac1ee9ef109af5a7cdb85706b1df9',
+  'BCS': '546c5872a992b2754ef327154f4c119baabff65f',
   'TestCoin': '025d82f7b00a9ff1cfe709abe3c4741a105d067178e645bc3ebad9bc79af47d4',
   'Hello AntShares Mainnet': '439af8273fbe25fec2f5f2066679e82314fe0776d52a8c1c87e863bd831ced7d',
   '量子股份': '1b504c5fb070aaca3d57c42b5297d811fe6f5a0c5d4cd4496261417cf99013a5',

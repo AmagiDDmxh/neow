@@ -152,6 +152,8 @@ export function encryptAsync (wifKey: string, keyphrase: string, scryptParams?: 
 
 export function decryptAsync (encryptedKey: string, keyphrase: string, scryptParams?: ScryptParams): string
 
+export function decryptWIF (encryptedKey: string, keyphrase: string, scryptParams?: ScryptParams): Promise<string>
+
 //verify
 export function isNEP2 (nep2: string): boolean
 

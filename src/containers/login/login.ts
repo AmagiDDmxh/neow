@@ -11,8 +11,6 @@ import { WalletProvider } from "../../providers/wallet.provider";
 import { TabsPage } from '../tabs/tabs'
 import TEST_WALLET from '../../shared/userWallet'
 
-console.log(TEST_WALLET)
-
 @IonicPage({
   name: 'Login',
   segment: 'login'
@@ -90,7 +88,7 @@ export class LoginPage {
   login () {
     // For dev
     if (this.WIFKey === 'test') {
-      this.walletProvider.wallet = TEST_WALLET
+      this.walletProvider.wallet = JSON.parse(JSON.stringify(TEST_WALLET))
       return this.navCtrl.setRoot(TabsPage)
     }
 
