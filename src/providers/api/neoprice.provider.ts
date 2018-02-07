@@ -37,7 +37,7 @@ export class NeoPriceProvider {
 	private query (url, currency) {
 		currency = currency.toLowerCase()
 		if (this.CURRENCIES.includes(currency) && url.includes(this.coincapApi))
-			return this.http.get(url).map(res => {
+			return this.http.get(url).map((res: any) => {
 				if (res.error != null) return Observable.throw(res.error)
 				return this.mapCoinCapPrices(res)
 			})
