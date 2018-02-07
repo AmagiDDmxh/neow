@@ -3,6 +3,8 @@ import {
 	HttpClient,
 } from '@angular/common/http'
 import { Observable } from 'rxjs/Observable'
+import 'rxjs/add/operator/map';
+
 
 @Injectable()
 export class NeoPriceProvider {
@@ -28,6 +30,7 @@ export class NeoPriceProvider {
 	}
 
 	getExchangeRates (base = 'USD') {
+		console.log('magic')
 		return this.http.get(`${this.fixerApi}/latest`, {params: { base: 'USD' }})
 	}
 
@@ -35,7 +38,7 @@ export class NeoPriceProvider {
 		currency = currency.toLowerCase()
 		if (this.CURRENCIES.includes(currency) && url.includes(this.coincapApi))
 			return this.http.get(url).map(res => {
-				if (res.error) return Observable.throw(new Error(res.error))
+				if (res.error != null) return Observable.throw(res.error)
 				return this.mapCoinCapPrices(res)
 			})
 
@@ -43,7 +46,7 @@ export class NeoPriceProvider {
 			return this.http
 			           .get(url, { params: { limit: 0, convert: currency } } as any)
 			           .map((res: any) => {
-				           if (res.error) throw new Error(res.error)
+				           if (res.error != null) throw new Error(res.error)
 				           return this.mapPrices(res, currency)
 			           })
 		} else {

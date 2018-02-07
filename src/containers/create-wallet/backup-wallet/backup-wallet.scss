@@ -1,0 +1,17 @@
+page-backup-wallet {
+  .backup-wallet {
+    .scroll-content {
+      margin-bottom: 67px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      padding-bottom: 0 !important;
+      overflow-y: hidden;
+
+      .backup-wallet__button {
+        width: 80%;
+      }
+    }
+  }
+}

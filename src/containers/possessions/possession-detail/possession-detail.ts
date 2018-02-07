@@ -9,6 +9,8 @@ import { ApiProvider } from '../../../providers/api/api.provider'
 import { WalletProvider } from '../../../providers/wallet.provider'
 
 import 'rxjs/add/operator/filter'
+import 'rxjs/add/operator/map'
+
 
 /* TODO: This code is a mess, Try whenever refactor it MEOW */
 
@@ -42,13 +44,13 @@ export class PossessionDetailPage {
 		private loadingCtrl: LoadingController
 	) {
 
-		/*this.initData()
+		this.initData()
 		    .then(() => {
 			    this.api
 			        .getTransactionHistory(this.account.address)
 			        .map(res => {
 			        	console.log(res)
-			        	// res['data'].filter(this.filterByName(this.possessionData)).map(this.parseTx)
+			        	return res['data'].filter(this.filterByName(this.possessionData)).map(this.parseTx)
 			        })
 			        .subscribe(
 				        data => {
@@ -71,7 +73,7 @@ export class PossessionDetailPage {
 					        console.log(price)
 					        this.tokenCurrentPrice = price
 				        },
-				        /!* Because the CROSS ORIGIN problem set it temporary *!/
+				        /* Because the CROSS ORIGIN problem set it temporary */
 				        error => {
 					        this.loading.dismissAll()
 					        console.log(error)
@@ -84,7 +86,7 @@ export class PossessionDetailPage {
 				        }
 			        )
 		    })
-		    .catch(e => console.log(e))*/
+		    .catch(e => console.log(e))
 
 		console.log('rr')
 	}

@@ -1,5 +1,5 @@
 page-possessions {
-  ion-content.possession-content {
+  ion-content.possessions-content {
 
     ion-card {
       margin: 0;
@@ -59,14 +59,21 @@ page-possessions {
       margin: 8px auto;
       border-radius: 5px;
       
-      ion-icon {
-        border: 2px solid rgb(222, 222, 222);
-        border-radius: 20px;
+      .possessions__icon {
         height: 40px;
         width: 40px;
         display: flex;
         justify-content: center;
         align-items: center;
+
+        img {
+          width: 30px;
+          height: 30px;
+        }
+      }
+
+      .possessions__symbol {
+        font-size: 2.4rem;
       }
     }
 

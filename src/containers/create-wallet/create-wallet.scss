@@ -1,13 +1,30 @@
 page-create-wallet {
+  .otcgo-header {
+    .toolbar .toolbar-title {
+      padding-left: calc(50% - 70px);
+      font-weight: bold;
+    }
+  }
+
   .cw {
     text-align: center;
 
-    .cw-name, .cw-wif, .cw-pwd {
-      border: 1px solid #efefef;
-      margin: 0;
+    &__form-field {
+      .cw-name, .cw-wif, .cw-pwd {
+        border: 1px solid #efefef;
+        margin-bottom: 10px;
 
-      & .item-inner {
-        border: none;
+        & .item-inner {
+          border: none;
+        }
+      }
+    }
+
+    &__actions {
+      width: 100%;
+
+      & > * {
+        margin-bottom: 10px;
       }
     }
 

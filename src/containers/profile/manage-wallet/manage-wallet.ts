@@ -6,6 +6,7 @@ import { PossessionsProvider } from '../../../providers/possessions.provider'
 import { Clipboard } from '@ionic-native/clipboard'
 
 import { wallet } from '../../../libs/neon'
+import { NeoPriceProvider } from '../../../providers/api/neoprice.provider'
 
 // TODO: Mess code, Try refactor it MEOW
 
@@ -19,13 +20,18 @@ export class ManageWalletPage {
 
 	accounts = this.possessionsProvider.getAccounts()
 	tempLabel: string = ''
+	assetsAmount: number
+	prices
+	GASPrice
+
 
 	constructor (
 		private alertCtrl: AlertController,
 		private walletProvider: WalletProvider,
 		private possessionsProvider: PossessionsProvider,
 		private clipBoard: Clipboard,
-		private loadingCtrl: LoadingController
+		private loadingCtrl: LoadingController,
+	    private neoPriceProvider: NeoPriceProvider
 	) {}
 
 	showKey ({ title, message }) {
@@ -122,6 +128,18 @@ export class ManageWalletPage {
 				}
 			}
 		)
+	}
+
+	openWalletLocation () {
+		console.log('When ever possable, get it a magic str first')
+		this.neoPriceProvider
+		    .getPrices()
+		    .subscribe(
+		    	prices => {
+		    		this.prices = prices
+				    this.GASPrice = prices.find(coin => coin.symbol === 'GAS')
+			    }
+		    )
 	}
 
 	handleError (commonLoading: Loading) {

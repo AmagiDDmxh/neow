@@ -38,9 +38,13 @@
 
             <div class="mw__exports-feature">
                 <h5 text-left>导出</h5>
-                <button ion-button class="otcgo-button--edge-gray mw__exports" clear block icon-right (click)="showPrivateKeyBox(account)">
+                <!--<button ion-button class="otcgo-button&#45;&#45;edge-gray mw__exports" clear block icon-right (click)="showPrivateKeyBox(account)">
                     导出 私钥
                     <ion-icon md="ios-arrow-forward-outline" ios="none" item-end></ion-icon>
+                </button>-->
+
+                <button ion-button class="otcgo-button--edge-gray mw__exports" clear block icon-right (click)="openWalletLocation()">
+                    打开钱包文件所在位置
                 </button>
 
                 <button ion-button class="otcgo-button--edge-gray mw__exports" clear block icon-right (click)="showWIFKeyBox(account)">

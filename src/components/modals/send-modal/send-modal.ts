@@ -1,6 +1,6 @@
 import { Component, Inject } from '@angular/core'
 import {
-	IonicPage, NavParams,
+	IonicPage, NavParams, ToastController,
 	ViewController
 } from 'ionic-angular'
 import { FormBuilder, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms'
@@ -9,6 +9,7 @@ import { wallet } from '../../../libs/neon'
 import { ApiProvider } from '../../../providers/api/api.provider'
 import { TransferPostBody } from '../../../providers/api/api.models'
 import { WalletProvider } from '../../../providers/wallet.provider'
+import { QRScanner, QRScannerStatus } from '@ionic-native/qr-scanner'
 
 @IonicPage()
 @Component({
@@ -25,6 +26,8 @@ export class SendModalComponent {
 		public navParams: NavParams,
 		private api: ApiProvider,
 		private walletProvider: WalletProvider,
+		private qrScanner: QRScanner,
+		private toastCtrl: ToastController,
 		@Inject(FormBuilder) private fb: FormBuilder
 	) {
 		this.sendForm = this.fb.group({
@@ -33,8 +36,6 @@ export class SendModalComponent {
 			amount: ['', [Validators.required, amountValidator(this.possessionData.amount)]],
 			label: [''],
 		})
-
-		console.log(this.sendForm, this.toAddress)
 	}
 
 	get toAddress () { return this.sendForm.get('address') }
@@ -77,6 +78,37 @@ export class SendModalComponent {
 			    res => console.log('res', res),
 			    err => console.log('err', err)
 		    )
+	}
+
+	qrScan () {
+		this.qrScanner
+		    .prepare()
+		    .then((status: QRScannerStatus) => {
+			    if (status.authorized) {
+			    	let scanSub = this.qrScanner.scan().subscribe(text => {
+					    console.log('Scanned something', text)
+					    let toast = this.toastCtrl.create({
+						    message: text,
+						    duration: 5000
+					    })
+					    toast.present()
+
+					    this.qrScanner.hide()
+					    scanSub.unsubscribe()
+				    })
+
+				    this.qrScanner.show()
+
+			    } else if (status.denied) {
+				    // camera permission was permanently denied
+				    // you must use QRScanner.openSettings() method to guide the user to the settings page
+				    // then they can grant the permission from there
+			    } else {
+				    // permission was denied, but not permanently. You can ask for permission again at a later time.
+
+			    }
+		    })
+			.catch(err => console.log(err))
 	}
 }
 
