@@ -1,14 +1,9 @@
 import { Component } from '@angular/core'
-import { IonicPage, Loading, LoadingController, NavController, NavParams } from 'ionic-angular'
+import { IonicPage, Loading, LoadingController, NavController, NavParams, Refresher } from 'ionic-angular'
 import { NeoPriceProvider } from '../../providers/api/neoprice.provider'
 import { ApiProvider } from '../../providers/api/api.provider'
+import { MarketDetailPage } from './market-detail/market-detail'
 
-/**
- * Generated class for the MarketsPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
 
 @IonicPage()
 @Component({
@@ -20,6 +15,7 @@ export class MarketsPage {
 	loading: Loading
 	GASPrice
 	exchangeRates
+	marketDetailPage = MarketDetailPage
 
 	constructor (
 		public navCtrl: NavController,
@@ -36,15 +32,15 @@ export class MarketsPage {
 		this.loading = this.loadingCtrl.create()
 		this.loading.present()
 
-		this.neoPriceProvider.getPrices().subscribe(
+		this.neoPriceProvider.getPrices().then(
 			coins => {
 				this.coins = coins
 				this.GASPrice = this.coins.find(coin => coin['symbol'] === 'GAS').currentPrice
-				this.loading.dismissAll()
+				this.loading.dismiss()
 			}
-		)
+		).catch(console.log)
 
-		this.neoPriceProvider.getExchangeRates().subscribe(res => this.exchangeRates = res['rates'])
+		this.neoPriceProvider.getExchangeRates().then(res => this.exchangeRates = res['rates'])
 	}
 
 	calculateRate (price: number) {
@@ -60,5 +56,17 @@ export class MarketsPage {
 		}
 
 		return splitStr.join('')
+	}
+
+	doRefresh (refresher: Refresher) {
+		this.neoPriceProvider.getPrices().then(
+			coins => {
+				this.coins = coins
+				this.GASPrice = this.coins.find(coin => coin['symbol'] === 'GAS').currentPrice
+				refresher.complete()
+			}
+		)
+
+		this.neoPriceProvider.getExchangeRates().then(res => this.exchangeRates = res['rates'])
 	}
 }

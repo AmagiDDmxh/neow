@@ -36,6 +36,7 @@ import { ComponentsModule } from '../components/components.module'
 import { NeoPriceProvider } from '../providers/api/neoprice.provider'
 import { PossessionsProvider } from '../providers/possessions.provider'
 import { MarketsPageModule } from '../containers/markets/markets.module'
+import { QRScanner } from '@ionic-native/qr-scanner'
 
 
 
@@ -108,6 +109,8 @@ import { MarketsPageModule } from '../containers/markets/markets.module'
     SplashScreen,
     { provide: ErrorHandler, useClass: IonicErrorHandler },
     File,
+    QRScanner,
+
     WalletProvider,
     ApiProvider,
     NeoPriceProvider,

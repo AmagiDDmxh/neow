@@ -10,6 +10,7 @@ import { WalletProvider } from '../../../providers/wallet.provider'
 
 import 'rxjs/add/operator/filter'
 import 'rxjs/add/operator/map'
+import { NeoPriceProvider } from '../../../providers/api/neoprice.provider'
 
 
 /* TODO: This code is a mess, Try whenever refactor it MEOW */
@@ -38,40 +39,35 @@ export class PossessionDetailPage {
 	constructor (
 		public navCtrl: NavController,
 		public navParams: NavParams,
-		private api: ApiProvider,
+		private apiProvider: ApiProvider,
 		private walletProvider: WalletProvider,
+		private neoPriceProvider: NeoPriceProvider,
 		private modalCtrl: ModalController,
 		private loadingCtrl: LoadingController
 	) {
 
 		this.initData()
 		    .then(() => {
-			    this.api
+			    this.apiProvider
 			        .getTransactionHistory(this.account.address)
 			        .map(res => {
-			        	console.log(res)
-			        	return res['data'].filter(this.filterByName(this.possessionData)).map(this.parseTx)
+			        	return res['data']
+					        ? res['data'].filter(this.filterByName(this.possessionData)).map(this.parseTx)
+					        : res['history'].map(this.parseTx)
 			        })
 			        .subscribe(
 				        data => {
-				        	console.log(data)
 					        this.transactionHistories = data
-					        this.loading.dismissAll()
-				        },
-				        err => {
-				        	console.log(err)
-				        },
-				        () => {
 					        this.loading.dismissAll()
 				        }
 			        )
 
-			    this.api
-			        .getPrice(this.possessionData.asset)
-			        .subscribe(
-				        price => {
-					        console.log(price)
-					        this.tokenCurrentPrice = price
+			    this.apiProvider
+			        .getPrices()
+			        .then(
+				        prices => {
+					        this.tokenCurrentPrice = prices.find(coin => coin.symbol === this.possessionData.asset).currentPrice
+					        this.loading.dismissAll()
 				        },
 				        /* Because the CROSS ORIGIN problem set it temporary */
 				        error => {
@@ -80,15 +76,12 @@ export class PossessionDetailPage {
 
 					        this.tokenCurrentPrice =
 						        (this.possessionData.asset.toLowerCase() === 'neo') ? 1024 : 512
-				        },
-				        () => {
-					        this.loading.dismissAll()
 				        }
 			        )
 		    })
 		    .catch(e => console.log(e))
 
-		console.log('rr')
+		console.log('magic')
 	}
 
 	initData () {

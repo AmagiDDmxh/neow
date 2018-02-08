@@ -61,8 +61,11 @@ export class WalletProvider {
   }
 
   set wallet (file) {
-    if (this.isWallet(file))
+    if (this.isWallet(file)) {
       this._wallet = new wallet.Wallet(file)
+      this.platform.is('mobile') && this.writeWalletFile()
+    }
+
   }
 
   get wallet () {

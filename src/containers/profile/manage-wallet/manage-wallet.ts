@@ -13,8 +13,7 @@ import { NeoPriceProvider } from '../../../providers/api/neoprice.provider'
 // @IonicPage()
 @Component({
 	selector: 'page-manage-wallet',
-	templateUrl: 'manage-wallet.html',
-
+	templateUrl: 'manage-wallet.html'
 })
 export class ManageWalletPage {
 
@@ -131,15 +130,46 @@ export class ManageWalletPage {
 	}
 
 	openWalletLocation () {
-		console.log('When ever possable, get it a magic str first')
-		this.neoPriceProvider
-		    .getPrices()
-		    .subscribe(
-		    	prices => {
-		    		this.prices = prices
-				    this.GASPrice = prices.find(coin => coin.symbol === 'GAS')
-			    }
-		    )
+
+	}
+
+	showDeleteActionBox (toBeDeletedAccount) {
+		const alert = this.alertCtrl.create({
+			title: '确定执行删除钱包操作？',
+			buttons: [
+				{ text: '取消' },
+				{ text: '确定', handler: () => {
+					const loading = this.loadingCtrl.create()
+
+					this.deleteAccount(toBeDeletedAccount).then(_=>
+						loading.dismiss().then(_=> this.showDeleteSuccess())
+					)
+					return true
+				}}
+			]
+		})
+
+		alert.present()
+	}
+
+	deleteAccount (toBeDeletedAccount) {
+		const wallet = this.walletProvider.wallet
+		this.walletProvider.wallet = {
+			...wallet,
+			accounts: wallet.accounts.filter(account => JSON.stringify(account) !== JSON.stringify(toBeDeletedAccount))
+		}
+		return Promise.resolve()
+	}
+
+	showDeleteSuccess () {
+		const alert = this.alertCtrl.create({
+			title: '操作完成！',
+			message: '您的钱包已删除。',
+			buttons: [
+				{ text: 'OK' }
+			]
+		})
+		alert.present()
 	}
 
 	handleError (commonLoading: Loading) {

@@ -5,9 +5,11 @@ import { PipesModule } from '../../pipes/pipes.module'
 import { Clipboard } from '@ionic-native/clipboard'
 import { SocialSharing } from '@ionic-native/social-sharing'
 import { PossessionsProvider } from '../../providers/possessions.provider'
+import { PossessionDetailPage } from './possession-detail/possession-detail'
+import { PossessionDetailPageModule } from './possession-detail/possession-detail.module'
 
 const COMPONENTS = [
-  PossessionsPage,
+  PossessionsPage
 ]
 
 @NgModule({
@@ -16,7 +18,10 @@ const COMPONENTS = [
     PipesModule,
     IonicPageModule.forChild(PossessionsPage)
   ],
-  exports: COMPONENTS,
+  entryComponents: COMPONENTS,
+  exports: [
+    PossessionDetailPageModule
+  ],
   providers: [Clipboard, SocialSharing, PossessionsProvider]
 })
 export class PossessionsPageModule {}

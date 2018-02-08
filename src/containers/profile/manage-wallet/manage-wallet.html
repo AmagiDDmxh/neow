@@ -32,8 +32,7 @@
             </div>
 
             <div class="mw__changes-feature">
-                <h5 text-left>修改</h5>
-                <ion-input placeholder="钱包名字" [(ngModel)]="tempLabel"></ion-input>
+                <ion-input placeholder="更改钱包名字" [(ngModel)]="tempLabel"></ion-input>
             </div>
 
             <div class="mw__exports-feature">
@@ -43,9 +42,9 @@
                     <ion-icon md="ios-arrow-forward-outline" ios="none" item-end></ion-icon>
                 </button>-->
 
-                <button ion-button class="otcgo-button--edge-gray mw__exports" clear block icon-right (click)="openWalletLocation()">
+                <!--<button ion-button class="otcgo-button&#45;&#45;edge-gray mw__exports" clear block icon-right (click)="openWalletLocation()">
                     打开钱包文件所在位置
-                </button>
+                </button>-->
 
                 <button ion-button class="otcgo-button--edge-gray mw__exports" clear block icon-right (click)="showWIFKeyBox(account)">
                     导出 WIF
@@ -61,7 +60,7 @@
             <div class="mw__exports-action">
 
                 <button ion-button class="otcgo-button--colour" block round (click)="saveAccount(account)">保存</button>
-                <a>删除钱包</a>
+                <a (click)="showDeleteActionBox(account)">删除钱包</a>
             </div>
         </slide-card-item>
     </slide-card>

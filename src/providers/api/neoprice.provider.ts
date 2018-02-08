@@ -2,13 +2,18 @@ import { Injectable } from '@angular/core'
 import {
 	HttpClient,
 } from '@angular/common/http'
+
 import { Observable } from 'rxjs/Observable'
-import 'rxjs/add/operator/map';
+import 'rxjs/add/observable/throw'
+import 'rxjs/add/operator/map'
+
+
+import { dev } from '../../environment'
 
 
 @Injectable()
 export class NeoPriceProvider {
-	coinMarketCapApi = '//api.coinmarketcap.com/v1'
+	coinMarketCapApi = 'https://api.coinmarketcap.com/v1'
 	coincapApi = '//coincap.io'
 	fixerApi = '//api.fixer.io'
 	ticker = 'ticker'
@@ -20,18 +25,13 @@ export class NeoPriceProvider {
 
 	constructor (private http: HttpClient) {}
 
-	getPrice (coin = 'NEO', currency = 'cny') {
-		return this.query(`${this.coinMarketCapApi}/${this.ticker}/${coin}/`, currency)
-		           .map(price => price[coin])
-	}
-
 	getPrices (currency = 'cny') {
-		return this.query(`${this.coincapApi}/front`, currency)
+		// if (dev) this.query(`${this.coincapApi}/front`, currency).toPromise()
+		return this.query(`/coins`, currency).toPromise()
 	}
 
 	getExchangeRates (base = 'USD') {
-		console.log('magic')
-		return this.http.get(`${this.fixerApi}/latest`, {params: { base: 'USD' }})
+		return this.http.get(`${this.fixerApi}/latest`, {params: { base: 'USD' }}).toPromise()
 	}
 
 	private query (url, currency) {
@@ -60,7 +60,10 @@ export class NeoPriceProvider {
 			              ticker => ({
 				              symbol: ticker.symbol,
 				              currentPrice: ticker[`price_${currency}`],
-				              percent_24h_change: ticker['percent_24h_change']
+				              percent_change_1h: ticker['percent_change_1h'],
+				              percent_change_24h: ticker['percent_change_24h'],
+				              percent_change_7d: ticker['percent_change_7d'],
+
 			              })
 		              )
 	}
@@ -71,13 +74,9 @@ export class NeoPriceProvider {
 		          	coin => ({
 			            symbol: coin['short'],
 			            currentPrice: coin['price'],
-			            percent_24h_change: coin['cap24hrChange'],
+			            percent_change_24h: coin['cap24hrChange'],
 		            })
 		          )
-	}
-
-	private pick (obj, ...props) {
-		return Object.assign({}, ...props.map(prop => ({ [prop]: obj[prop] })))
 	}
 
 }

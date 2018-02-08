@@ -8,6 +8,7 @@
     "clean": "ionic-app-scripts clean",
     "build": "ionic-app-scripts build",
     "lint": "ionic-app-scripts lint",
+    "serve": "ionic-app-scripts serve",
     "ionic:build": "ionic-app-scripts build",
     "ionic:serve": "ionic-app-scripts serve"
   },
@@ -66,7 +67,8 @@
     "lodash": "^4.17.4",
     "rxjs": "5.5.2",
     "sw-toolbox": "3.6.0",
-    "zone.js": "0.8.18"
+    "zone.js": "0.8.18",
+    "webpack": "^3.10.0"
   },
   "devDependencies": {
     "@ionic/app-scripts": "3.1.6",

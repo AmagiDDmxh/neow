@@ -10,6 +10,8 @@ page-create-wallet {
     text-align: center;
 
     &__form-field {
+      width: 90%;
+
       .cw-name, .cw-wif, .cw-pwd {
         border: 1px solid #efefef;
         margin-bottom: 10px;

@@ -5,22 +5,22 @@ import { Observable } from 'rxjs/Observable'
 import 'rxjs/add/operator/map'
 import 'rxjs/add/operator/toPromise'
 import 'rxjs/add/observable/of'
+import 'rxjs/add/observable/fromPromise';
 
-import { TRANSACTIONS } from '../../shared/mocks/datas'
+
 import { NeoPriceProvider } from './neoprice.provider'
-import { SignPostBody, SignResBody, TransferPostBody, TransferResBody } from './api.models'
-import { dev } from '../../environment'
 import { WalletProvider } from '../wallet.provider'
-import { wallet } from '../../libs/neon'
+import { dev } from '../../environment'
+import { TRANSACTIONS } from '../../shared/mocks/datas'
 
-const { generateSignature, decrypt, getPrivateKeyFromWIF } = wallet
+import { wallet } from '../../libs/neon'
+const { generateSignature, getPublicKeyFromPrivateKey } = wallet
+
 
 @Injectable()
 export class ApiProvider {
-	neoscanApi = 'https://neoscan.io/api/main_net/v1'
 	otcgoApi = 'https://api.otcgo.cn'
-	mainScanApi = '//api.neoscan.io/api/main_net'
-	testScanApi = '//neoscan-testnet.io/api/test_net'
+
 
 	constructor (
 		public http: HttpClient,
@@ -32,14 +32,22 @@ export class ApiProvider {
 		return this.http.request(method, url, options)
 	}
 
-	getApiEndpoint () {
-		if (dev)
-			return `${this.otcgoApi}/testnet`
-		return `${this.otcgoApi}/mainnet`
+	getAPIEndpoint () {
+		return dev
+			? `${this.otcgoApi}/testnet`
+			: `${this.otcgoApi}/mainnet`
 	}
 
-	getPrice (coin?: string, currency?: string) {
-		return this.neoPriceProvider.getPrice(coin, currency)
+	getScanAPI () {
+	  return dev
+		  ? 'https://api.neoscan.io/api/main_net'
+		  :'https://neoscan-testnet.io/api/test_net'
+	}
+
+	getNeonDBAPI () {
+		return dev
+			? 'http://api.wallet.cityofzion.io'
+			: 'http://testnet-api.wallet.cityofzion.io'
 	}
 
 	getPrices (currency?: string) {
@@ -47,48 +55,39 @@ export class ApiProvider {
 	}
 
 	getHeight () {
-		return this.http.get(`${this.getApiEndpoint()}/height`)
+		return this.http.get(`${this.getAPIEndpoint()}/height`)
 	}
 
 	getBalances<T>(address): Observable<T> {
-		if (dev) {
-			return this.http.get<T>(`${this.testScanApi}/v1/get_balance/${address}`)
-		}
-		return this.http.get<T>(`${this.getApiEndpoint()}/address/${address}`)
+		return this.http.get<T>(`${this.getAPIEndpoint()}/address/${address}`)
 	}
 
 	getTransactionHistory (address): Observable<object> {
-		if (dev) return Observable.of(TRANSACTIONS)
-		return this.http
-		           .get(`${this.mainScanApi}/v1/get_transaction/${address}`)
+		return dev
+			? Observable.of(TRANSACTIONS)
+			: this.http.get(`/history/${address}`)
 	}
 
 	getBlock (height): Observable<Object> {
 		return this.http
-		           .get(`${this.mainScanApi}/v1/get_block/${height}`)
+		           .get(`${this.getScanAPI()}/v1/get_block/${height}`)
 	}
 
 	// TODO: Transfer
-	sendAsset (body, passphrase) {
+	sendAsset (body, privateKey) {
 		return this.postTransfer(body)
-		           /*.then((res) => this.parseTransfer(passphrase)(res))
-		           .then((body) => this.postSign(body))*/
+		           .then((res) => this.parseTransfer(privateKey)(res))
+		           .then((body) => this.postSign(body))
 	}
 
-	/**
-	 *
-	 **/
-	postTransfer (transferPostData: TransferPostBody): Observable<TransferResBody> {
-		return this.http
-		           .post<TransferResBody>(`${this.getApiEndpoint()}/transfer`, transferPostData)
-
+	postTransfer (transferPostData) {
+		return this.http.post(`${this.getAPIEndpoint()}/transfer`, transferPostData).toPromise()
 	}
 
-	private parseTransfer (passphrase) {
+	private parseTransfer (privateKey) {
 		return (res) => {
-			const { publicKey, key } = this.walletProvider.getDefaultAccount()
-			const privateKey = getPrivateKeyFromWIF(decrypt(key, passphrase))
 			const { transaction } = res
+			const publicKey = getPublicKeyFromPrivateKey(privateKey)
 			const signature = generateSignature(transaction, privateKey)
 
 			return {
@@ -100,11 +99,11 @@ export class ApiProvider {
 	}
 
 	postSign (body) {
-		return this.http.post(`${this.getApiEndpoint()}/sign`, body).toPromise()
+		return this.http.post(`${this.getAPIEndpoint()}/sign`, body).toPromise()
 	}
 
 	postBroadcast (body) {
-		return this.http.post(`${this.getApiEndpoint()}/broadcast`, body)
+		return this.http.post(`${this.getAPIEndpoint()}/broadcast`, body)
 	}
 
 	handleError (error) {

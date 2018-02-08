@@ -25,9 +25,8 @@ export class PossessionsPage implements OnInit {
 	possessionDetailPage = PossessionDetailPage
 
 	balances
-
-	loading: Loading = this.loadingCtrl.create()
 	account
+	loading: Loading = this.loadingCtrl.create()
 
 	constructor (
 		public navCtrl: NavController,
@@ -35,7 +34,7 @@ export class PossessionsPage implements OnInit {
 		private walletProvider: WalletProvider,
 		private loadingCtrl: LoadingController,
 		private possessionsProvider: PossessionsProvider,
-	    private apiProvider: ApiProvider
+		private apiProvider: ApiProvider
 	) {}
 
 	ngOnInit () {
@@ -45,7 +44,7 @@ export class PossessionsPage implements OnInit {
 		    .getBalances()
 		    .subscribe(
 			    res => {
-				    this.balances = dev ? this.parseNeonBalances(res['balance']) : this.parseBalances(res['balances'])
+				    this.balances = this.parseBalances(res['balances'])
 				    this.loading.dismissAll()
 			    },
 			    error => {

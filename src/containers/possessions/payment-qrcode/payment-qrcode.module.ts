@@ -10,6 +10,6 @@ import { NgxQRCodeModule } from '@techiediaries/ngx-qrcode'
     IonicPageModule.forChild(PaymentQRCodePage),
     NgxQRCodeModule
   ],
-  exports: [PaymentQRCodePage]
+  entryComponents: [PaymentQRCodePage],
 })
 export class PaymentQRCodeModule {}

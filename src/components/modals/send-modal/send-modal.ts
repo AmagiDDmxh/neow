@@ -1,15 +1,17 @@
 import { Component, Inject } from '@angular/core'
 import {
-	IonicPage, NavParams, ToastController,
+	AlertController,
+	IonicPage, LoadingController, NavParams, ToastController,
 	ViewController
 } from 'ionic-angular'
 import { FormBuilder, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms'
 
-import { wallet } from '../../../libs/neon'
 import { ApiProvider } from '../../../providers/api/api.provider'
-import { TransferPostBody } from '../../../providers/api/api.models'
 import { WalletProvider } from '../../../providers/wallet.provider'
 import { QRScanner, QRScannerStatus } from '@ionic-native/qr-scanner'
+
+import { wallet } from '../../../libs/neon'
+const { decrypt, getPrivateKeyFromWIF } = wallet
 
 @IonicPage()
 @Component({
@@ -28,6 +30,8 @@ export class SendModalComponent {
 		private walletProvider: WalletProvider,
 		private qrScanner: QRScanner,
 		private toastCtrl: ToastController,
+		private alertCtrl: AlertController,
+		private loadingCtrl: LoadingController,
 		@Inject(FormBuilder) private fb: FormBuilder
 	) {
 		this.sendForm = this.fb.group({
@@ -65,19 +69,43 @@ export class SendModalComponent {
 		if (!this.sendForm.valid || !this.toAddress.valid || !this.amount.valid || !this.passphrase.valid) {
 			return
 		}
+		const loading = this.loadingCtrl.create()
 
 		const source = this.account.address
 		const dest = this.toAddress.value
 		const amount = this.amount.value
 		const assetId = this.possessionData.assetId
+		const passphrase = this.passphrase.value
+
+		let privateKey
+
+		try {
+			privateKey = getPrivateKeyFromWIF(decrypt(this.account.encrypt, passphrase))
+		} catch (e) {
+			loading.dismiss()
+			this.showPrompt({ message: '密码错误！' })
+		}
 
 		// TODO: Wait for backend
 		this.api
-		    .postTransfer(<TransferPostBody>{ source, dest, amount, assetId })
-		    .subscribe(
-			    res => console.log('res', res),
-			    err => console.log('err', err)
+		    .sendAsset({ source, dest, amount, assetId }, privateKey)
+		    .then(
+			    res => {
+			    	console.log('res', res)
+				    loading.dismiss()
+				    this.showPrompt({ message: '转账成功，请等待区块刷新！'})
+			    },
+			    err => {
+			    	console.log(err)
+			    	this.showPrompt({ message: '看起来好像发生了些错误，请稍后再试！'})
+				    loading.dismiss()
+			    }
 		    )
+	}
+
+	showPrompt ({ message }) {
+		const prompt = this.alertCtrl.create({ message })
+		prompt.present()
 	}
 
 	qrScan () {
