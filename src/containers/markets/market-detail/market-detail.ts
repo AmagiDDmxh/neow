@@ -1,6 +1,10 @@
 import { Component } from '@angular/core'
-import { NavParams } from 'ionic-angular'
+import { IonicPage, NavParams } from 'ionic-angular'
 
+@IonicPage({
+	name: 'MarketDetail',
+	segment: 'market-detail'
+})
 @Component({
 	selector: 'page-market-detail',
 	templateUrl: 'market-detail.html'

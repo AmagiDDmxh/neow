@@ -1,17 +1,18 @@
 import { NgModule } from '@angular/core';
-import { TimelineComponentModule } from './timeline/timeline.module'
-import { SendModalComponentModule } from './modals/send-modal/send-modal.module'
-import { SlideCardModule } from './slide-card/slide-card-module'
+import { TimelineModule } from './timeline'
+import { SendModalModule } from './modals'
+import { SlideCardModule } from './slide-card'
+import { ExpansionModule } from './expansion-panel'
 
 const MODULES = [
-	TimelineComponentModule,
-	SendModalComponentModule,
-    SlideCardModule
+	TimelineModule,
+	SendModalModule,
+	SlideCardModule,
+	ExpansionModule,
 ]
 
 @NgModule({
-	declarations: [],
 	imports: MODULES,
-	exports: MODULES
+	exports: MODULES,
 })
 export class ComponentsModule {}

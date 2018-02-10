@@ -1,16 +1,19 @@
 import { Component } from '@angular/core'
-import { NavController, NavParams, AlertController, Alert, LoadingController, Loading } from 'ionic-angular'
+import { NavController, NavParams, AlertController, LoadingController, Loading, IonicPage } from 'ionic-angular'
 
-import { WalletProvider } from '../../../providers/wallet.provider'
-import { PossessionsProvider } from '../../../providers/possessions.provider'
+import { WalletProvider } from '../../../providers/wallet/wallet.provider'
+import { PossessionsProvider } from '../../possessions/possessions.provider'
 import { Clipboard } from '@ionic-native/clipboard'
 
 import { wallet } from '../../../libs/neon'
-import { NeoPriceProvider } from '../../../providers/api/neoprice.provider'
+import { PriceProvider } from '../../../providers/api/price.provider'
 
 // TODO: Mess code, Try refactor it MEOW
 
-// @IonicPage()
+@IonicPage({
+	name: 'ManageWallet',
+	segment: 'manage-wallet'
+})
 @Component({
 	selector: 'page-manage-wallet',
 	templateUrl: 'manage-wallet.html'
@@ -30,7 +33,7 @@ export class ManageWalletPage {
 		private possessionsProvider: PossessionsProvider,
 		private clipBoard: Clipboard,
 		private loadingCtrl: LoadingController,
-	    private neoPriceProvider: NeoPriceProvider
+	    private neoPriceProvider: PriceProvider
 	) {}
 
 	showKey ({ title, message }) {
@@ -100,7 +103,7 @@ export class ManageWalletPage {
 	saveAccount (account) {
 		account.label = this.tempLabel
 		this.tempLabel = ''
-		this.walletProvider.writeWalletFile()
+		this.walletProvider.saveWalletFile()
 	}
 
 	parsePassphrase (encryptedKey, passphrase, commonLoading, type) {
@@ -136,6 +139,7 @@ export class ManageWalletPage {
 	showDeleteActionBox (toBeDeletedAccount) {
 		const alert = this.alertCtrl.create({
 			title: '确定执行删除钱包操作？',
+			message: '',
 			buttons: [
 				{ text: '取消' },
 				{ text: '确定', handler: () => {

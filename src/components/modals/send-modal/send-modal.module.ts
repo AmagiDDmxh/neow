@@ -14,4 +14,4 @@ const COMPONENTS = [
   ],
   exports: COMPONENTS
 })
-export class SendModalComponentModule {}
+export class SendModalModule {}

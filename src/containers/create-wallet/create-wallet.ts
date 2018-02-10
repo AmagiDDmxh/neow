@@ -6,7 +6,7 @@ import {
 import { LoginPage } from '../login/login'
 
 import { wallet } from '../../libs/neon'
-import { WalletProvider } from '../../providers/wallet.provider'
+import { WalletProvider } from '../../providers/wallet/wallet.provider'
 import { BackupWalletPage } from './backup-wallet/backup-wallet'
 
 @IonicPage({
@@ -80,7 +80,7 @@ export class CreateWalletPage {
       } as any)
 
       this.walletProvider.addAccount(account)
-      this.walletProvider.writeWalletFile()
+      this.walletProvider.saveWalletFile()
 
       await i.dismiss()
       await this.navCtrl.push(this.backupWalletPage)

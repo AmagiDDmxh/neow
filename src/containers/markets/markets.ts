@@ -1,6 +1,9 @@
 import { Component } from '@angular/core'
-import { IonicPage, Loading, LoadingController, NavController, NavParams, Refresher } from 'ionic-angular'
-import { NeoPriceProvider } from '../../providers/api/neoprice.provider'
+import {
+	IonicPage, Loading, LoadingController, NavController, NavParams, Refresher,
+	ToastController
+} from 'ionic-angular'
+import { PriceProvider } from '../../providers/api/price.provider'
 import { ApiProvider } from '../../providers/api/api.provider'
 import { MarketDetailPage } from './market-detail/market-detail'
 
@@ -20,7 +23,8 @@ export class MarketsPage {
 	constructor (
 		public navCtrl: NavController,
 		public navParams: NavParams,
-		private neoPriceProvider: NeoPriceProvider,
+		private neoPriceProvider: PriceProvider,
+		private toastCtrl: ToastController,
 		private loadingCtrl: LoadingController
 	) {}
 
@@ -38,7 +42,11 @@ export class MarketsPage {
 				this.GASPrice = this.coins.find(coin => coin['symbol'] === 'GAS').currentPrice
 				this.loading.dismiss()
 			}
-		).catch(console.log)
+		).catch(err => {
+			this.loading.dismiss()
+			this.toastCtrl.create({ message: '对不起，找不到数据！'+err, duration: 4000 }).present()
+			console.log(err)
+		})
 
 		this.neoPriceProvider.getExchangeRates().then(res => this.exchangeRates = res['rates'])
 	}
@@ -64,6 +72,11 @@ export class MarketsPage {
 				this.coins = coins
 				this.GASPrice = this.coins.find(coin => coin['symbol'] === 'GAS').currentPrice
 				refresher.complete()
+				const toast = this.toastCtrl.create({
+					message: '行情数据已更新！',
+					duration: 3000
+				});
+				toast.present();
 			}
 		)
 

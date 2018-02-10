@@ -1,4 +1,6 @@
 button.otcgo-button {
+  background-color: #fff;
+
   &--colour {
     box-shadow: none;
     background: linear-gradient(270deg, rgb(47, 177, 213), rgb(47, 177, 213) 6%, rgb(50, 118, 217));
@@ -6,7 +8,6 @@ button.otcgo-button {
 
   &.rounded {
     border-radius: 30px;
-
   }
 
   &--edge {

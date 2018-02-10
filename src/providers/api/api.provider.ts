@@ -1,47 +1,39 @@
-import { HttpClient } from '@angular/common/http'
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 
-import { Observable } from 'rxjs/Observable'
-import 'rxjs/add/operator/map'
-import 'rxjs/add/operator/toPromise'
-import 'rxjs/add/observable/of'
-import 'rxjs/add/observable/fromPromise';
-
-
-import { NeoPriceProvider } from './neoprice.provider'
-import { WalletProvider } from '../wallet.provider'
-import { dev } from '../../environment'
-import { TRANSACTIONS } from '../../shared/mocks/datas'
-
+import { dev } from '../../environments/environment'
 import { wallet } from '../../libs/neon'
 const { generateSignature, getPublicKeyFromPrivateKey } = wallet
 
+interface IReqOpts {
+	headers?: HttpHeaders | {
+		[header: string]: string | string[];
+	};
+	observe?: 'body';
+	params?: HttpParams | {
+		[param: string]: string | string[];
+	};
+	reportProgress?: boolean;
+	responseType: 'arraybuffer';
+	withCredentials?: boolean;
+}
 
 @Injectable()
 export class ApiProvider {
-	otcgoApi = 'https://api.otcgo.cn'
+	otcgoApi = 'http://api.otcgo.cn'
 
-
-	constructor (
-		public http: HttpClient,
-		private neoPriceProvider: NeoPriceProvider,
-		private walletProvider: WalletProvider
-	) { }
-
-	request (method, url, options?: {}) {
-		return this.http.request(method, url, options)
-	}
+	constructor (public http: HttpClient) { }
 
 	getAPIEndpoint () {
 		return dev
-			? `${this.otcgoApi}/testnet`
-			: `${this.otcgoApi}/mainnet`
+			? `${this.otcgoApi}:9999/testnet`
+			: `${this.otcgoApi}:9999/mainnet`
 	}
 
 	getScanAPI () {
-	  return dev
-		  ? 'https://api.neoscan.io/api/main_net'
-		  :'https://neoscan-testnet.io/api/test_net'
+		return dev
+			? 'https://api.neoscan.io/api/main_net'
+			: 'https://neoscan-testnet.io/api/test_net'
 	}
 
 	getNeonDBAPI () {
@@ -50,37 +42,26 @@ export class ApiProvider {
 			: 'http://testnet-api.wallet.cityofzion.io'
 	}
 
-	getPrices (currency?: string) {
-		return this.neoPriceProvider.getPrices(currency)
+	request (method, url, options?: IReqOpts) {
+		return this.http.request(method, url, options)
 	}
 
-	getHeight () {
-		return this.http.get(`${this.getAPIEndpoint()}/height`)
+	get (endpoint: string, options?: IReqOpts) {
+		return this.http.get(this.getAPIEndpoint() + '/' + endpoint, options)
 	}
 
-	getBalances<T>(address): Observable<T> {
-		return this.http.get<T>(`${this.getAPIEndpoint()}/address/${address}`)
-	}
-
-	getTransactionHistory (address): Observable<object> {
-		return dev
-			? Observable.of(TRANSACTIONS)
-			: this.http.get(`/history/${address}`)
-	}
-
-	getBlock (height): Observable<Object> {
-		return this.http
-		           .get(`${this.getScanAPI()}/v1/get_block/${height}`)
+	post ( endpoint: string, body: any, options?: IReqOpts) {
+		return this.http.post(this.getAPIEndpoint() + '/' + endpoint, body, options)
 	}
 
 	// TODO: Transfer
-	sendAsset (body, privateKey) {
+	doSendAsset (body, privateKey) {
 		return this.postTransfer(body)
 		           .then((res) => this.parseTransfer(privateKey)(res))
 		           .then((body) => this.postSign(body))
 	}
 
-	postTransfer (transferPostData) {
+	private postTransfer (transferPostData) {
 		return this.http.post(`${this.getAPIEndpoint()}/transfer`, transferPostData).toPromise()
 	}
 
@@ -98,11 +79,11 @@ export class ApiProvider {
 		}
 	}
 
-	postSign (body) {
+	private postSign (body) {
 		return this.http.post(`${this.getAPIEndpoint()}/sign`, body).toPromise()
 	}
 
-	postBroadcast (body) {
+	private postBroadcast (body) {
 		return this.http.post(`${this.getAPIEndpoint()}/broadcast`, body)
 	}
 

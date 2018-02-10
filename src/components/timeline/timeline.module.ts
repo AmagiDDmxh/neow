@@ -12,9 +12,10 @@ const COMPONENTS = [
   TimelineTimeComponent
 ]
 
+// TODO(Amagi): Using IonicModule may be become a huge cost right there, Optimize later
 @NgModule({
   declarations: COMPONENTS,
   imports: [IonicModule],
   exports: COMPONENTS
 })
-export class TimelineComponentModule {}
+export class TimelineModule {}

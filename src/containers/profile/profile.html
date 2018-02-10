@@ -10,7 +10,7 @@
         <div class="card-circle-menu__icon unavailable">
             <img src="assets/imgs/icon-profile_notification.svg" alt="">
         </div>
-        <div class="card-circle-menu__icon">
+        <div class="card-circle-menu__icon" (click)="navCtrl.push(settingsPage)">
             <img src="assets/imgs/icon-profile_setting.svg" alt="">
         </div>
         <div class="card-circle-menu__icon unavailable">
@@ -19,7 +19,7 @@
     </ion-card>
 
     <ion-card class="card-nav">
-        <div class="nav-item" (click)="navCtrl.push(manageWalletPage)">
+        <div class="nav-item" (click)="navCtrl.push('ManageWallet')">
             <img class="card-img" src="assets/imgs/icon-profile_manage-wallet.svg" alt="">
             <span class="card-title">管理钱包</span>
         </div>
@@ -46,7 +46,7 @@
 				</div>
 				<ion-icon md="ios-arrow-forward-outline" ios="none" item-end></ion-icon>
 			</button>-->
-            <button ion-item icon-right>
+            <button ion-item icon-right (click)="navCtrl.push('Claims')">
 				提取分红
 				<ion-icon md="ios-arrow-forward-outline" ios="none" item-end></ion-icon>
 			</button>

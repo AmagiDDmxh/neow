@@ -3,13 +3,14 @@ import { IonicPageModule } from 'ionic-angular'
 import { PaymentQRCodePage } from './payment-qrcode'
 import { NgxQRCodeModule } from '@techiediaries/ngx-qrcode'
 
+const COMPONENT = [PaymentQRCodePage]
 
 @NgModule({
-  declarations: [PaymentQRCodePage],
+  declarations: COMPONENT,
   imports: [
     IonicPageModule.forChild(PaymentQRCodePage),
     NgxQRCodeModule
   ],
-  entryComponents: [PaymentQRCodePage],
+  exports: COMPONENT
 })
 export class PaymentQRCodeModule {}

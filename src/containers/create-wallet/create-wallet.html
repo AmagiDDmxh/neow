@@ -33,7 +33,7 @@
 		</div>
 
 		<div class="cw-button-white">
-			<button [navPush]="loginPage" ion-button round full block clear>
+			<button (click)="navCtrl.setRoot(loginPage)" ion-button round full block clear>
 				已有钱包？点击登陆！
 			</button>
 		</div>

@@ -36,6 +36,7 @@ export class PaymentQRCodePage {
     this.clipboard.copy(this.address)
   }
 
+
   share () {
     this.socialSharing.share(this.address)
   }

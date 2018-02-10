@@ -2,7 +2,7 @@ import { Component } from '@angular/core'
 import { Platform } from 'ionic-angular'
 import { StatusBar } from '@ionic-native/status-bar';
 import { TabsPage } from '../containers/tabs/tabs';
-import { WalletProvider } from '../providers/wallet.provider'
+import { WalletProvider } from '../providers/wallet/wallet.provider'
 import { ApiProvider } from '../providers/api/api.provider'
 
 @Component({
@@ -17,10 +17,6 @@ export class MyApp {
     private walletProvider: WalletProvider,
     private api: ApiProvider
   ) {
-    this.rootPage = this.walletProvider.haveAnAccount()
-      ? 'Tabs'
-      : 'Login'
-
     this.appReady()
   }
 
@@ -30,6 +26,9 @@ export class MyApp {
       // Here you can do any higher level native things you might need.
       this.statusBar.styleDefault();
 
+      this.rootPage = this.walletProvider.haveAnAccount()
+        ? 'Tabs'
+        : 'Login'
     });
   }
 }

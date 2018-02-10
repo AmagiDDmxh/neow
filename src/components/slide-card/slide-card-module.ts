@@ -1,18 +1,19 @@
 import { NgModule } from '@angular/core'
+import { CommonModule } from '@angular/common'
 import { SlideCard } from './slide-card'
 import { SlideCardItem } from './slide-card-item'
-import { StopPropagationDirective } from '../directives/directives'
-import { CommonModule } from '@angular/common'
+import { StopPropagationDirective } from '../directives'
 
 const COMPONENTS = [
-  SlideCard,
-  SlideCardItem,
-  StopPropagationDirective
+	SlideCard,
+	SlideCardItem,
+	StopPropagationDirective
 ]
 
 @NgModule({
-  imports: [CommonModule],
-  declarations: COMPONENTS,
-  exports: COMPONENTS
+	imports: [CommonModule],
+	declarations: COMPONENTS,
+	exports: COMPONENTS
 })
-export class SlideCardModule {}
+export class SlideCardModule {
+}

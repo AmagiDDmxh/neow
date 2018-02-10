@@ -8,7 +8,7 @@
 
 	<ion-navbar>
 		<ion-title>
-			{{ possessionData.name }}
+			{{ possessionData.asset }}
 		</ion-title>
 	</ion-navbar>
 
@@ -41,8 +41,8 @@
 			<ion-col col-6>
 				<div class="content">
 					<span>
-						{{ item.dest === account.address ? '转入' : '转出' }}
-					</span> {{ item.amount }}
+						{{ item.operation === 'in' ? '转入' : '转出' }}
+					</span> {{ item.value }}
 					<span>
 						{{ possessionData.name }}
 					</span>

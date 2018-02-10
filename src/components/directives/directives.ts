@@ -1,26 +1,29 @@
 import { Directive, ElementRef, EventEmitter, OnDestroy, OnInit, Output, Renderer2 } from '@angular/core'
 
-const documentEvents = ["abort","beforeinput","blur","click","compositionstart","compositionupdate","compositionend","dblclick","error","focus","focusin","focusout","input","keydown","keypress","keyup","load","mousedown","mouseenter","mouseleave","mousemove","mouseout","mouseover","mouseup","resize","scroll","select","unload","wheel"]
-
-const createEventSelectors = (suga) => documentEvents.map(event => `[${event}.${suga}]`).join(', ')
-
 @Directive({
-  selector: createEventSelectors('stop')
+  selector: '[abort.stop], [beforeinput.stop], [blur.stop], [click.stop], [compositionstart.stop], [compositionupdate.stop], [compositionend.stop], [dblclick.stop], [error.stop], [focus.stop], [focusin.stop], [focusout.stop], [input.stop], [keydown.stop], [keypress.stop], [keyup.stop], [load.stop], [mousedown.stop], [mouseenter.stop], [mouseleave.stop], [mousemove.stop], [mouseout.stop], [mouseover.stop], [mouseup.stop], [resize.stop], [scroll.stop], [select.stop], [unload.stop], [wheel.stop]'
 })
 export class StopPropagationDirective implements OnInit, OnDestroy {
-  unSubscriber
-  @Output('click.stop') stopPropEvent = new EventEmitter()
+  clickUnSubscriber
+  monseEnterSubscriber
+  @Output('click.stop') clickStopPropEvent = new EventEmitter()
+  @Output('monseenter.stop') monseEnterStopPropEvent = new EventEmitter()
 
-  constructor (private renderer: Renderer2, private element: ElementRef) {}
+  constructor (private renderer: Renderer2, private element: ElementRef) { }
 
   ngOnInit () {
-    this.unSubscriber = this.renderer.listen(this.element.nativeElement, 'click', event => {
+    this.clickUnSubscriber = this.renderer.listen(this.element.nativeElement, 'click', event => {
       event.stopPropagation()
-      this.stopPropEvent.emit(event)
+      this.clickStopPropEvent.emit(event)
+    })
+
+    this.monseEnterSubscriber = this.renderer.listen(this.element.nativeElement, 'mouseenter', event => {
+      event.stopPropagation()
+      this.monseEnterStopPropEvent.emit(event)
     })
   }
 
   ngOnDestroy () {
-    this.unSubscriber()
+    this.clickUnSubscriber()
   }
 }

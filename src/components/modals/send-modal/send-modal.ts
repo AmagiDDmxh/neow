@@ -7,7 +7,7 @@ import {
 import { FormBuilder, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms'
 
 import { ApiProvider } from '../../../providers/api/api.provider'
-import { WalletProvider } from '../../../providers/wallet.provider'
+import { WalletProvider } from '../../../providers/wallet/wallet.provider'
 import { QRScanner, QRScannerStatus } from '@ionic-native/qr-scanner'
 
 import { wallet } from '../../../libs/neon'
@@ -88,7 +88,7 @@ export class SendModalComponent {
 
 		// TODO: Wait for backend
 		this.api
-		    .sendAsset({ source, dest, amount, assetId }, privateKey)
+		    .doSendAsset({ source, dest, amount, assetId }, privateKey)
 		    .then(
 			    res => {
 			    	console.log('res', res)

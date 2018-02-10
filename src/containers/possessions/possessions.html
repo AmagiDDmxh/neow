@@ -1,12 +1,18 @@
-<div id="custom-overlay" [style.display]="splash ? 'flex': 'none'">
+
+<!-- TODO(Amagi): This is a fake splash screen -->
+<!--<div id="custom-overlay" [style.display]="splash ? 'flex': 'none'">
 	<div class="flb">
-		<div class="Aligner-item Aligner-item--top"></div>
-		<img src="assets/imgs/logo--white.png">
-		<div class="Aligner-item Aligner-item--bottom"></div>
+		<div class="Aligner-item Aligner-item&#45;&#45;top"></div>
+		<img src="assets/imgs/logo&#45;&#45;white.png">
+		<div class="Aligner-item Aligner-item&#45;&#45;bottom"></div>
 	</div>
-</div>
+</div>-->
 
 <ion-content class="possessions-content">
+	<ion-refresher (ionRefresh)="doRefresh($event)">
+		<ion-refresher-content></ion-refresher-content>
+	</ion-refresher>
+
 	<ion-card class="card-info">
 		<div class="card-avatar" (click)="openQRCode()">
 			<img src="assets/imgs/icon-avatar.svg" alt="">
@@ -18,11 +24,11 @@
 
 		<ion-item [navPush]="possessionDetailPage" [navParams]="balance">
 			<div class="possessions__icon" item-start>
-				<img [src]="'assets/icon/' + balance.asset + '.png'" onerror="this.src='assets/icon/申一币.png'" />
+				<img [src]="'assets/icon/' + balance.name + '.png'" onerror="this.src='assets/icon/申一币.png'" />
 			</div>
-			<p class="possessions__symbol">{{ balance.asset }}</p>
+			<p class="possessions__symbol">{{ balance.name }}</p>
 			<ion-note item-end>
-				{{ balance.amount }}
+				{{ balance.value }}
 			</ion-note>
 		</ion-item>
 

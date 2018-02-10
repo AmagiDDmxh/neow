@@ -10,9 +10,5 @@
   }"
 	[ngStyle]="itemTranslateStyle"
 	(click)="handleItemClick()">
-	<div
-		*ngIf="parent.type === 'card'"
-		class="m-carousel__mask">
-	</div>
 	<ng-content></ng-content>
 </div>

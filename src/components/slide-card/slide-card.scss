@@ -1,5 +1,5 @@
 @import "../core/common-theme/mixins";
-@import "../core/common-theme/var";
+@import "../core/common-theme/_variables";
 
 @include b(carousel) {
   overflow: hidden;

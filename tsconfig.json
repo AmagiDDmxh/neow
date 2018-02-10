@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "allowSyntheticDefaultImports": true,
-    "declaration": true,
+    "declaration": false,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "lib": [
@@ -20,15 +20,19 @@
     "target": "es5",
     "typeRoots": [
       "./node_modules/@types"
+    ],
+    "types": [
+      "jasmine"
     ]
   },
   "include": [
     "src/**/*.ts"
   ],
   "exclude": [
+    "test.ts",
     "node_modules",
-    "src/**/*.spec.ts",
-    "src/**/__tests__/*.ts",
+    "**/*.spec.ts",
+    "**/__tests__/*.ts",
     "src/libs/*",
     "src/libs/**/*.ts"
   ],

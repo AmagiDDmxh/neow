@@ -1,16 +1,14 @@
 import { Component, OnInit } from '@angular/core'
 import {
-	IonicPage, Loading, LoadingController, NavController,
+	IonicPage, Loading, LoadingController, NavController, Refresher,
 	ToastController
 } from 'ionic-angular'
 
 import { PossessionDetailPage } from './possession-detail/possession-detail'
-import { WalletProvider } from '../../providers/wallet.provider'
+import { WalletProvider } from '../../providers/wallet/wallet.provider'
 
-import { ASSET_ENUM } from '../../shared/constants'
-import { dev } from '../../environment'
-import { PossessionsProvider } from '../../providers/possessions.provider'
-import { ApiProvider } from '../../providers/api/api.provider'
+import { PossessionsProvider } from './possessions.provider'
+
 
 @IonicPage({
 	name: 'Possessions',
@@ -25,7 +23,7 @@ export class PossessionsPage implements OnInit {
 	possessionDetailPage = PossessionDetailPage
 
 	balances
-	account
+	account = this.possessionsProvider.account
 	loading: Loading = this.loadingCtrl.create()
 
 	constructor (
@@ -34,30 +32,25 @@ export class PossessionsPage implements OnInit {
 		private walletProvider: WalletProvider,
 		private loadingCtrl: LoadingController,
 		private possessionsProvider: PossessionsProvider,
-		private apiProvider: ApiProvider
 	) {}
-
-	ngOnInit () {
-		this.loading.present()
-
-		this.possessionsProvider
-		    .getBalances()
-		    .subscribe(
-			    res => {
-				    this.balances = this.parseBalances(res['balances'])
-				    this.loading.dismissAll()
-			    },
-			    error => {
-				    this.loading.dismissAll()
-			    }
-		    )
-
-		this.account = this.possessionsProvider.getAccount()
-
-	}
 
 	ionViewCanEnter () {
 		return this.walletProvider.haveAnAccount()
+	}
+
+	ngOnInit () {
+		this.loading.present()
+		this.initData()
+	}
+
+	initData () {
+		this.possessionsProvider.getBalances().then(bals => this.balances = bals).catch(console.log)
+		this.loading.dismiss()
+	}
+
+	doRefresh (e: Refresher) {
+		this.possessionsProvider.getBalances().then(bals => this.balances = bals).catch(console.log)
+		e.complete()
 	}
 
 	showMsg (message) {
@@ -69,28 +62,6 @@ export class PossessionsPage implements OnInit {
 		return toast.present()
 	}
 
-	/**
-	 * [{ amount: 1, asset: 'NEO', unspent: [] }, ...]
-	 * mapTo -> [{ amount: 1, asset: 'NEO', assetId: 'ASI120SAiwq9asunxa....'}, ...]
-	 **/
-	private parseNeonBalances (balances) {
-		return balances.map(({ amount, asset }) => ({
-			amount,
-			asset,
-			assetId: ASSET_ENUM[asset]
-		}))
-	}
-
-	private parseBalances (balances) {
-		return Object.entries(balances)
-		             .map(
-			             ([assetId, amount]) => ({
-				             amount,
-				             assetId,
-				             asset: ASSET_ENUM[assetId]
-			             })
-		             )
-	}
 
 	openQRCode () {
 		this.navCtrl.push('payment-qrcode', { address: this.account.address })

@@ -7,7 +7,7 @@ import {
 import { CreateWalletPage } from '../create-wallet/create-wallet'
 
 import { wallet } from '../../libs/neon'
-import { WalletProvider } from '../../providers/wallet.provider'
+import { WalletProvider } from '../../providers/wallet/wallet.provider'
 import { TabsPage } from '../tabs/tabs'
 import TEST_WALLET from '../../shared/userWallet'
 
@@ -93,11 +93,11 @@ export class LoginPage {
 		}
 
 		if (this.WIFKey && this.isWIFKey && this.passphrase) {
-			if (!wallet.isWIF(this.WIFKey)) return this.showPrompt('The WIF format is incorrect!')
+			if (!wallet.isWIF(this.WIFKey)) return this.showPrompt('WIF 格式错误！')
 			const account = new wallet.Account(this.WIFKey)
 			account.encrypt(this.passphrase)
 			this.walletProvider.addAccount(account)
-			this.walletProvider.writeWalletFile()
+			this.walletProvider.saveWalletFile()
 			return this.navCtrl.setRoot(TabsPage)
 		}
 

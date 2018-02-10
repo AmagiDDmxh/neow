@@ -1,12 +1,5 @@
 import * as u from '../utils'
-import { Transaction } from '../transactions/index'
-export interface Account {
-	WIF: string
-	privateKey: string
-	publicKey: string
-	scriptHash: string
-	address: string
-}
+import { Transaction } from '../transactions'
 
 export interface AssetBalance {
 	balance: u.Fixed8
@@ -60,23 +53,7 @@ export interface WalletAccount {
 }
 
 //Account
-export class Account {
-	constructor (str: string)
-
-	WIF: string
-	privateKey: string
-	publicKey: string
-	scriptHash: string
-	address: string
-
-	getPublicKey (encoded: boolean): string
-
-	encrypt (keyphrase: string, scryptParams?: ScryptParams): Account
-
-	decrypt (keyphrase: string, scryptParams?: ScryptParams): Account
-
-	export (): WalletAccount
-}
+export { Account } from './account'
 
 //Balance
 export class Balance {

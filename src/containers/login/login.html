@@ -36,6 +36,6 @@
 	</div>
 
 	<div class="login-tip">
-		<a [navPush]="createWalletPage">还没有钱包？创建一个！</a>
+		<a (click)="navCtrl.setRoot(createWalletPage)">还没有钱包？创建一个！</a>
 	</div>
 </ion-content>
