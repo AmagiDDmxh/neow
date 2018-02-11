@@ -4,7 +4,7 @@ import { IonicPage, NavController, NavParams,AlertController } from 'ionic-angul
 import { WalletProvider } from "../../../../../providers/wallet/wallet.provider";
 import { ManageWalletPage } from '../../manage-wallet'
 
-// @IonicPage()
+@IonicPage()
 @Component({
   selector: 'page-import-success',
   templateUrl: 'import-success.html',

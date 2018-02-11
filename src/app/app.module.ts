@@ -14,15 +14,14 @@ import {
 
 import { MyApp } from './app.component'
 
-import { ApiProvider } from '../providers/api/api.provider'
-import { WalletProvider } from '../providers/wallet/wallet.provider'
-import { PriceProvider } from '../providers/api/price.provider'
+import { ApiProvider, AccountProvider, WalletProvider, PriceProvider } from '../providers'
 import { PossessionsProvider } from '../containers/possessions/possessions.provider'
 import { QRScanner } from '@ionic-native/qr-scanner'
 import { Clipboard } from '@ionic-native/clipboard'
 import { SocialSharing } from '@ionic-native/social-sharing'
 import { PossessionDetailProvider } from '../containers/possessions/possession-detail/possession-detail.provider'
-
+import { SendModalProvider } from '../components/modals/send-modal/send-modal.provider'
+import { ClaimsProvider } from '../containers/claims/claims.provider'
 
 @NgModule({
   declarations: [
@@ -54,6 +53,9 @@ import { PossessionDetailProvider } from '../containers/possessions/possession-d
     PriceProvider,
     PossessionsProvider,
     PossessionDetailProvider,
+    SendModalProvider,
+    AccountProvider,
+    ClaimsProvider,
     { provide: ErrorHandler, useClass: IonicErrorHandler }
   ]
 })

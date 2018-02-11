@@ -21,11 +21,11 @@ export class PossessionsProvider {
 
 	constructor (private apiProvider: ApiProvider, private walletProvider: WalletProvider) {}
 
-	getBalances(): Promise<IBlances[]>
-	getBalances(address: string): Promise<IBlances[]>
-	getBalances(...args): Promise<IBlances[]>
+	getBalances(): Promise<any>
+	getBalances(address: string): Promise<any>
+	getBalances(...args): Promise<any>
 
-	getBalances(...args): Promise<IBlances[]> {
+	getBalances(...args): Promise<any> {
 		const len = args.length
 		if (len === 0) {
 			const balances = this.apiProvider
@@ -67,20 +67,12 @@ function makeBalances(balancesJson) {
  * [{ amount: 1, asset: 'NEO', unspent: [] }, ...]
  * mapTo -> [{ amount: 1, asset: 'NEO', assetId: 'ASI120SAiwq9asunxa....'}, ...]
  **/
-function parseNeonBalances (balances) {
-	return balances.map(({ amount, asset }) => ({
-		amount,
-		asset,
-		assetId: ASSET_ENUM[asset]
-	}))
-}
-
 function parseBalances (balances) {
 	return Object.keys(balances)
 	             .map(
 		             (hash) => ({
 			             hash,
-			             name: ASSET_ENUM[hash],
+			             asset: ASSET_ENUM[hash],
 			             amount: balances[hash]
 		             })
 	             )

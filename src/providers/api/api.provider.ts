@@ -1,28 +1,21 @@
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http'
+import { HttpClient, HttpHeaders } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 
-import { dev } from '../../environments/environment'
-import { wallet } from '../../libs/neon'
-const { generateSignature, getPublicKeyFromPrivateKey } = wallet
+import { AlertController, LoadingController, ToastController } from 'ionic-angular'
 
-interface IReqOpts {
-	headers?: HttpHeaders | {
-		[header: string]: string | string[];
-	};
-	observe?: 'body';
-	params?: HttpParams | {
-		[param: string]: string | string[];
-	};
-	reportProgress?: boolean;
-	responseType: 'arraybuffer';
-	withCredentials?: boolean;
-}
+import { IReqOpts } from './api.modal'
+import { dev } from '../../environments/environment'
 
 @Injectable()
 export class ApiProvider {
 	otcgoApi = 'http://api.otcgo.cn'
 
-	constructor (public http: HttpClient) { }
+	constructor (
+		private http: HttpClient,
+		private loadingCtrl: LoadingController,
+		private toastCtrl: ToastController,
+		private alertCtrl: AlertController
+	) {}
 
 	getAPIEndpoint () {
 		return dev
@@ -42,53 +35,21 @@ export class ApiProvider {
 			: 'http://testnet-api.wallet.cityofzion.io'
 	}
 
-	request (method, url, options?: IReqOpts) {
-		return this.http.request(method, url, options)
+	request (method, url, options?: any) {
+		return this.http.request(method, this.getAPIEndpoint() + '/' + url, options)
 	}
 
 	get (endpoint: string, options?: IReqOpts) {
 		return this.http.get(this.getAPIEndpoint() + '/' + endpoint, options)
 	}
 
-	post ( endpoint: string, body: any, options?: IReqOpts) {
-		return this.http.post(this.getAPIEndpoint() + '/' + endpoint, body, options)
+	post (endpoint: string, body: any, options?: IReqOpts) {
+		const headers = new HttpHeaders({ 'Content-Type': 'text/plain' })
+		return this.http.post(this.getAPIEndpoint() + '/' + endpoint, body)
 	}
 
-	// TODO: Transfer
-	doSendAsset (body, privateKey) {
-		return this.postTransfer(body)
-		           .then((res) => this.parseTransfer(privateKey)(res))
-		           .then((body) => this.postSign(body))
-	}
-
-	private postTransfer (transferPostData) {
-		return this.http.post(`${this.getAPIEndpoint()}/transfer`, transferPostData).toPromise()
-	}
-
-	private parseTransfer (privateKey) {
-		return (res) => {
-			const { transaction } = res
-			const publicKey = getPublicKeyFromPrivateKey(privateKey)
-			const signature = generateSignature(transaction, privateKey)
-
-			return {
-				publicKey,
-				transaction,
-				signature
-			}
-		}
-	}
-
-	private postSign (body) {
-		return this.http.post(`${this.getAPIEndpoint()}/sign`, body).toPromise()
-	}
-
-	private postBroadcast (body) {
+	broadcast (body) {
 		return this.http.post(`${this.getAPIEndpoint()}/broadcast`, body)
-	}
-
-	handleError (error) {
-
 	}
 
 }

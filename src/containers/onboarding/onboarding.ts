@@ -1,15 +1,11 @@
 import { Component, ViewChild } from '@angular/core';
-import { NavController, NavParams, Slides } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Slides } from 'ionic-angular'
 import { trigger, state, style, animate, transition, keyframes } from '@angular/animations'
 import { PossessionsPage } from "../possessions/possessions";
 
-/**
- * Generated class for the OnboardingPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
-
+@IonicPage({
+  name: 'Onboarding'
+})
 @Component({
   selector: 'page-onboarding',
   templateUrl: 'onboarding.html',

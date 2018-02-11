@@ -49,7 +49,7 @@ export class PossessionDetailPage implements OnInit {
 	}
 
 	initData () {
-		this.possessionDetailProvider.getHistories(this.possessionData.name).then(histories => {
+		this.possessionDetailProvider.getHistories(this.possessionData.asset).then(histories => {
 			this.transactionHistories = histories
 			this.loading.dismissAll()
 		})

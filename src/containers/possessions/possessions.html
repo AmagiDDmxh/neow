@@ -24,11 +24,11 @@
 
 		<ion-item [navPush]="possessionDetailPage" [navParams]="balance">
 			<div class="possessions__icon" item-start>
-				<img [src]="'assets/icon/' + balance.name + '.png'" onerror="this.src='assets/icon/申一币.png'" />
+				<img [src]="'assets/icon/' + balance.asset + '.png'" onerror="this.src='assets/icon/申一币.png'" />
 			</div>
-			<p class="possessions__symbol">{{ balance.name }}</p>
+			<p class="possessions__symbol">{{ balance.asset }}</p>
 			<ion-note item-end>
-				{{ balance.value }}
+				{{ balance.amount }}
 			</ion-note>
 		</ion-item>
 

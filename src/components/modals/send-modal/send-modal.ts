@@ -6,12 +6,9 @@ import {
 } from 'ionic-angular'
 import { FormBuilder, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms'
 
-import { ApiProvider } from '../../../providers/api/api.provider'
-import { WalletProvider } from '../../../providers/wallet/wallet.provider'
 import { QRScanner, QRScannerStatus } from '@ionic-native/qr-scanner'
-
-import { wallet } from '../../../libs/neon'
-const { decrypt, getPrivateKeyFromWIF } = wallet
+import { SendModalProvider } from './send-modal.provider'
+import { isAddress } from './send-modal.provider'
 
 @IonicPage()
 @Component({
@@ -21,17 +18,15 @@ const { decrypt, getPrivateKeyFromWIF } = wallet
 export class SendModalComponent {
 	sendForm: FormGroup
 	possessionData = this.navParams.data
-	account = this.walletProvider.getDefaultAccount()
 
 	constructor (
 		public viewCtrl: ViewController,
 		public navParams: NavParams,
-		private api: ApiProvider,
-		private walletProvider: WalletProvider,
 		private qrScanner: QRScanner,
 		private toastCtrl: ToastController,
 		private alertCtrl: AlertController,
 		private loadingCtrl: LoadingController,
+		private sendModalProvider: SendModalProvider,
 		@Inject(FormBuilder) private fb: FormBuilder
 	) {
 		this.sendForm = this.fb.group({
@@ -43,11 +38,8 @@ export class SendModalComponent {
 	}
 
 	get toAddress () { return this.sendForm.get('address') }
-
 	get passphrase () { return this.sendForm.get('passphrase') }
-
 	get amount () { return this.sendForm.get('amount') }
-
 	get label () { return this.sendForm.get('label') }
 
 	dismiss () {
@@ -62,49 +54,41 @@ export class SendModalComponent {
 	 * amount is required and translate to big num
 	 * optional Label
 	 **/
-	transfer () {
+	async transfer () {
 		this.toAddress.markAsTouched()
 		this.amount.markAsTouched()
 
-		if (!this.sendForm.valid || !this.toAddress.valid || !this.amount.valid || !this.passphrase.valid) {
+		if (!this.sendForm.valid || !this.toAddress.valid
+			|| !this.amount.valid || !this.passphrase.valid) {
 			return
 		}
 		const loading = this.loadingCtrl.create()
+		await loading.present()
 
-		const source = this.account.address
-		const dest = this.toAddress.value
-		const amount = this.amount.value
-		const assetId = this.possessionData.assetId
-		const passphrase = this.passphrase.value
-
-		let privateKey
-
-		try {
-			privateKey = getPrivateKeyFromWIF(decrypt(this.account.encrypt, passphrase))
-		} catch (e) {
-			loading.dismiss()
-			this.showPrompt({ message: '密码错误！' })
-		}
-
-		// TODO: Wait for backend
-		this.api
-		    .doSendAsset({ source, dest, amount, assetId }, privateKey)
-		    .then(
-			    res => {
-			    	console.log('res', res)
-				    loading.dismiss()
-				    this.showPrompt({ message: '转账成功，请等待区块刷新！'})
-			    },
-			    err => {
-			    	console.log(err)
-			    	this.showPrompt({ message: '看起来好像发生了些错误，请稍后再试！'})
-				    loading.dismiss()
+		this.sendModalProvider
+		    .decrypt(this.passphrase.value)
+		    .then(async _=> {
+			    const result = await this.sendModalProvider.doSendAsset({
+				    dests: this.toAddress.value,
+				    amounts: this.amount.value,
+				    assetId: this.possessionData.hash
+			    })
+			    if (result) {
+				    await this.toastCtrl.create({ message: '转账成功', duration: 3000 }).present()
+				    this.dismiss()
 			    }
-		    )
+		    })
+		    .catch(err => {
+		    	console.log(err)
+		    	this.showPrompt({ message: err, title: '错误' })
+		    })
+		    .then(_=> {
+		    	loading.dismissAll()
+		    })
 	}
 
-	showPrompt ({ message }) {
-		const prompt = this.alertCtrl.create({ message })
+	showPrompt (config) {
+		const prompt = this.alertCtrl.create(config)
 		prompt.present()
 	}
 
@@ -141,16 +125,17 @@ export class SendModalComponent {
 }
 
 function addressValidator (addressCtrl: FormControl): ValidationErrors {
-	const { isAddress } = wallet
 	const value = addressCtrl.value
-	if (!value || !isAddress(value)) return { invalidAddress: true }
-	return null
+	return (!value || !isAddress(value))
+		? { invalidAddress: true }
+		: null
 }
 
 function amountValidator (maxValue) {
 	return (amountCtrl: FormControl): ValidationErrors | null => {
 		const value = amountCtrl.value
-		if (!value || value <= 0 || value > maxValue) return { invalidAmount: true }
+		const numberifyMaxValue = Number(maxValue)
+		if (!value || value <= 0 || value > numberifyMaxValue) return { invalidAmount: true }
 		return null
 	}
 }

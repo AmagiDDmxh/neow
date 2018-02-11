@@ -11,6 +11,7 @@ import { WalletProvider } from '../../providers/wallet/wallet.provider'
 import { TabsPage } from '../tabs/tabs'
 import TEST_WALLET from '../../shared/userWallet'
 
+
 @IonicPage({
 	name: 'Login',
 	segment: 'login'

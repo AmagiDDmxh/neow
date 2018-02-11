@@ -8,10 +8,10 @@
 
 
 <ion-content class="aw">
-    <p class="import-tip">请选择导入类型</p>
-    <ion-card class="card-features">
+    <div class="import-tip">请选择导入类型</div>
+    <ion-card class="card-features" *ngFor="let menu of menuList" (click)="menuSelected(menu.pageName)" >
         <ion-list>
-            <button ion-item *ngFor="let menu of menuList" (click)="menuSelected(menu.pageName)" icon-right>
+            <button ion-item icon-right>
 				{{menu.title}}
 				<ion-icon md="ios-arrow-forward-outline" ios="none" item-end></ion-icon>
             </button>

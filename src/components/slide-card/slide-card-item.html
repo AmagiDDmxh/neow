@@ -10,5 +10,6 @@
   }"
 	[ngStyle]="itemTranslateStyle"
 	(click)="handleItemClick()">
+	<div class="m-carousel__mask" *ngIf="!isActive"></div>
 	<ng-content></ng-content>
 </div>

@@ -101,9 +101,11 @@ export class ManageWalletPage {
 	}
 
 	saveAccount (account) {
-		account.label = this.tempLabel
-		this.tempLabel = ''
-		this.walletProvider.saveWalletFile()
+		if (this.tempLabel) {
+			account.label = this.tempLabel
+			this.tempLabel = ''
+			this.walletProvider.saveWalletFile()
+		}
 	}
 
 	parsePassphrase (encryptedKey, passphrase, commonLoading, type) {

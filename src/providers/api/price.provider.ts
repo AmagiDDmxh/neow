@@ -17,6 +17,7 @@ export class PriceProvider {
 	CURRENCIES: string[] = [ 'aud', 'brl', 'cad', 'chf', 'clp', 'cny', 'czk', 'dkk', 'eur', 'gbp', 'hkd', 'huf', 'idr',
 	                         'ils', 'inr', 'jpy', 'krw', 'mxn', 'myr', 'nok', 'nzd', 'php', 'pkr', 'pln', 'rub', 'sek',
 	                         'sgd', 'thb', 'try', 'twd', 'usd', 'zar']
+
 	NEO_CHAIN_COINS: string[] = ['NEO', 'GAS', 'TNC', 'QLC', 'TKY', 'RHT', 'CPX', 'ACAT', 'ZPT', 'APH', 'DBC', 'RPX', 'BCS']
 
 
@@ -27,7 +28,7 @@ export class PriceProvider {
 	}
 
 	getExchangeRates (base = 'USD') {
-		return this.http.get(`${this.fixerApi}/latest`, {params: { base: 'USD' }}).toPromise()
+		return this.http.get(`${this.fixerApi}/latest`, {params: { base }}).toPromise()
 	}
 
 	private query (url, currency) {

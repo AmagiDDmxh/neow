@@ -7,27 +7,20 @@ const { Account } = wallet
 // Abstract Account level from wallet
 @Injectable()
 export class AccountProvider {
-	account = this.walletProvider.wallet.accounts
+	accounts = this.walletProvider.wallet.accounts
 
 	get defaultAccount () {
-		return this.account.find(account => account.isDefault)
+		return this.accounts.find(account => account.isDefault)
 	}
 
 	constructor (private walletProvider: WalletProvider) {}
 
-	getPublicKey (account) {
-		if (account) {
-			const acct = new Account(account)
-			return acct.publicKey
-		}
+	getPublicKey () {
 		return this.defaultAccount.publicKey
 	}
 
-	getPrivateKey (account) {
-		if (account) {
-			const acct = new Account(account)
-			return acct.privateKey
-		}
+	getPrivateKey (passphrase) {
+		this.defaultAccount.decrypt(passphrase)
 		return this.defaultAccount.privateKey
 	}
 

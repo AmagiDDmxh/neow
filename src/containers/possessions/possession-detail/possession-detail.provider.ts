@@ -16,18 +16,15 @@ export class PossessionDetailProvider {
 	constructor (private apiProvider: ApiProvider, private walletProvider: WalletProvider) {}
 
 	getHistories (name) {
-		let assetId = ASSET_ENUM[name]
+		let assetId = '0x' + ASSET_ENUM[name.toUpperCase()]
 
 		return this.apiProvider
 		           .get(API_CONSTANTS.HISTORY + '/' + this.account.address)
 		           .map(res => res['result'])
-		           .map(result => result.filter(item => item.asset === assetId).map(item => parseTx(item)))
+		           .map(result => result.filter(item => item.asset === assetId))
+		           .map(result => result.map(item => parseTx(item)))
 		           .toPromise()
 	}
-}
-
-function filterByName (possessionData) {
-	return (data) => data.name === possessionData.asset
 }
 
 function parseTx (data) {
